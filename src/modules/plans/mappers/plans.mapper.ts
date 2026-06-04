@@ -1,0 +1,96 @@
+import { Plan, PlanFormData } from '../types/plans.types';
+import { CreatePlanPayload } from '../../../core/http/generated/models/createPlanPayload';
+import { UpdatePlanPayload } from '../../../core/http/generated/models/updatePlanPayload';
+
+export const plansMapper = {
+  toApiCreate(formData: PlanFormData): CreatePlanPayload {
+    return {
+      name: formData.name,
+      short_description: formData.short_description || undefined,
+      description: formData.description || undefined,
+      monthly_price: formData.monthly_price,
+      yearly_price: formData.yearly_price,
+      yearly_discount_percent: formData.yearly_discount_percent ?? undefined,
+      is_featured: formData.is_featured,
+      has_trial: formData.has_trial,
+      trial_days: formData.trial_days ?? undefined,
+      display_order: formData.display_order ?? undefined,
+      badge: formData.badge || undefined,
+      color: formData.color || undefined,
+      max_users: formData.max_users ?? undefined,
+      max_clients: formData.max_clients ?? undefined,
+      max_pets: formData.max_pets ?? undefined,
+      max_appointments: formData.max_appointments ?? undefined,
+      max_products: formData.max_products ?? undefined,
+      max_services: formData.max_services ?? undefined,
+      max_stock_items: formData.max_stock_items ?? undefined,
+      max_documents: formData.max_documents ?? undefined,
+      max_attachments: formData.max_attachments ?? undefined,
+      max_storage_mb: formData.max_storage_mb ?? undefined,
+      features: formData.features,
+      is_active: formData.is_active,
+    };
+  },
+
+  toApiUpdate(formData: Partial<PlanFormData>): UpdatePlanPayload {
+    return {
+      name: formData.name,
+      short_description: formData.short_description !== undefined ? (formData.short_description || undefined) : undefined,
+      description: formData.description !== undefined ? (formData.description || undefined) : undefined,
+      monthly_price: formData.monthly_price,
+      yearly_price: formData.yearly_price,
+      yearly_discount_percent: formData.yearly_discount_percent !== undefined ? (formData.yearly_discount_percent ?? undefined) : undefined,
+      is_featured: formData.is_featured,
+      has_trial: formData.has_trial,
+      trial_days: formData.trial_days !== undefined ? (formData.trial_days ?? undefined) : undefined,
+      display_order: formData.display_order !== undefined ? (formData.display_order ?? undefined) : undefined,
+      badge: formData.badge !== undefined ? (formData.badge || undefined) : undefined,
+      color: formData.color !== undefined ? (formData.color || undefined) : undefined,
+      max_users: formData.max_users !== undefined ? (formData.max_users ?? undefined) : undefined,
+      max_clients: formData.max_clients !== undefined ? (formData.max_clients ?? undefined) : undefined,
+      max_pets: formData.max_pets !== undefined ? (formData.max_pets ?? undefined) : undefined,
+      max_appointments: formData.max_appointments !== undefined ? (formData.max_appointments ?? undefined) : undefined,
+      max_products: formData.max_products !== undefined ? (formData.max_products ?? undefined) : undefined,
+      max_services: formData.max_services !== undefined ? (formData.max_services ?? undefined) : undefined,
+      max_stock_items: formData.max_stock_items !== undefined ? (formData.max_stock_items ?? undefined) : undefined,
+      max_documents: formData.max_documents !== undefined ? (formData.max_documents ?? undefined) : undefined,
+      max_attachments: formData.max_attachments !== undefined ? (formData.max_attachments ?? undefined) : undefined,
+      max_storage_mb: formData.max_storage_mb !== undefined ? (formData.max_storage_mb ?? undefined) : undefined,
+      features: formData.features,
+      is_active: formData.is_active,
+    };
+  },
+
+  toUi(apiData: any): Plan {
+    return {
+      id: apiData.id ? Number(apiData.id) : 0,
+      name: apiData.name || '',
+      slug: apiData.slug || '',
+      short_description: apiData.short_description || '',
+      description: apiData.description || '',
+      monthly_price: typeof apiData.monthly_price === 'number' ? apiData.monthly_price : parseFloat(apiData.monthly_price) || 0,
+      yearly_price: typeof apiData.yearly_price === 'number' ? apiData.yearly_price : parseFloat(apiData.yearly_price) || 0,
+      yearly_discount_percent: typeof apiData.yearly_discount_percent === 'number' ? apiData.yearly_discount_percent : 0,
+      is_featured: !!apiData.is_featured,
+      has_trial: !!apiData.has_trial,
+      trial_days: typeof apiData.trial_days === 'number' ? apiData.trial_days : 0,
+      display_order: typeof apiData.display_order === 'number' ? apiData.display_order : 0,
+      badge: apiData.badge || '',
+      color: apiData.color || '',
+      max_users: apiData.max_users !== undefined ? apiData.max_users : null,
+      max_clients: apiData.max_clients !== undefined ? apiData.max_clients : null,
+      max_pets: apiData.max_pets !== undefined ? apiData.max_pets : null,
+      max_appointments: apiData.max_appointments !== undefined ? apiData.max_appointments : null,
+      max_products: apiData.max_products !== undefined ? apiData.max_products : null,
+      max_services: apiData.max_services !== undefined ? apiData.max_services : null,
+      max_stock_items: apiData.max_stock_items !== undefined ? apiData.max_stock_items : null,
+      max_documents: apiData.max_documents !== undefined ? apiData.max_documents : null,
+      max_attachments: apiData.max_attachments !== undefined ? apiData.max_attachments : null,
+      max_storage_mb: apiData.max_storage_mb !== undefined ? apiData.max_storage_mb : null,
+      features: apiData.features || {},
+      is_active: apiData.is_active !== undefined ? !!apiData.is_active : true,
+      created_at: apiData.created_at || apiData.createdAt || new Date().toISOString(),
+      updated_at: apiData.updated_at || apiData.updatedAt,
+    };
+  }
+};

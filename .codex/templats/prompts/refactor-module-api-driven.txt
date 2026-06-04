@@ -1,0 +1,11 @@
+Utilize obrigatoriamente o template:
+
+.codex/templates/refactor-module-api-driven.md
+
+Variáveis:
+
+MODULE_NAME=clients
+ENTITY_NAME=Client
+ENTITY_NAME_PLURAL=Clients
+ENTITY_ROUTE=clients
+GENERATED_GROUP=clients

@@ -1,0 +1,19 @@
+Utilize obrigatoriamente o template:
+
+.codex/templates/consume-orval-generated-module.md
+
+Variáveis:
+
+MODULE_NAME=pets
+ENTITY_NAME=Pets
+ENTITY_NAME_PLURAL=Pets
+ENTITY_ROUTE=pets
+GENERATED_GROUP=pets
+
+Objetivo:
+
+Adaptar completamente o módulo para consumir os endpoints e models gerados pelo Orval em:
+
+src/core/http/generated
+
+Efetue todas as alterações necessárias, remova código obsoleto, elimine types e services duplicados e mantenha compatibilidade total com o padrão arquitetural atual do projeto.

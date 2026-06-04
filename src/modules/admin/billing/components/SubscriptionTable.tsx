@@ -1,0 +1,183 @@
+import React from 'react';
+import { Eye, ShieldAlert, ZapOff, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Subscription } from '../../../../core/http/generated/models';
+import { Badge } from '../../../../shared/components/ui/Badge';
+
+interface SubscriptionTableProps {
+  data: Subscription[];
+  total: number;
+  page: number;
+  lastPage: number;
+  onPageChange: (page: number) => void;
+  onView: (subscription: Subscription) => void;
+  onSuspend: (subscription: Subscription) => void;
+  onReactivate: (subscription: Subscription) => void;
+  onCancel: (subscription: Subscription) => void;
+}
+
+export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
+  data,
+  total,
+  page,
+  lastPage,
+  onPageChange,
+  onView,
+  onSuspend,
+  onReactivate,
+  onCancel,
+}) => {
+  const formatCurrency = (val: number) => {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+  };
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return 'N/A';
+    return new Date(dateStr).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'active':
+        return <Badge variant="success">Ativa</Badge>;
+      case 'trialing':
+        return <Badge variant="info">Trialing</Badge>;
+      case 'suspended':
+        return <Badge variant="warning">Suspensa</Badge>;
+      case 'canceled':
+        return <Badge variant="danger">Cancelada</Badge>;
+      case 'past_due':
+        return <Badge variant="danger">Em Atraso</Badge>;
+      case 'expired':
+        return <Badge variant="neutral">Expirada</Badge>;
+      default:
+        return <Badge variant="neutral">{status}</Badge>;
+    }
+  };
+
+  return (
+    <div className="bg-white border border-slate-200 rounded-[4px] shadow-xs overflow-hidden font-sans" id="subscriptions-table-container">
+      <div className="overflow-x-auto">
+        <table className="w-full text-left border-collapse" id="subscriptions-table">
+          <thead>
+            <tr className="bg-slate-50 border-b border-slate-100 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+              <th className="px-6 py-4">ID</th>
+              <th className="px-6 py-4">Cliente SaaS</th>
+              <th className="px-6 py-4">Plano</th>
+              <th className="px-6 py-4">Status</th>
+              <th className="px-6 py-4">Ciclo</th>
+              <th className="px-6 py-4">Valor</th>
+              <th className="px-6 py-4">Gateway</th>
+              <th className="px-6 py-4">Expiração Período</th>
+              <th className="px-6 py-4">Ações</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100 text-xs text-slate-700 font-medium">
+            {data.length === 0 ? (
+              <tr>
+                <td colSpan={9} className="px-6 py-12 text-center text-slate-400 font-medium">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <AlertTriangle className="h-6 w-6 text-slate-300" />
+                    <span>Nenhuma assinatura localizada com os filtros selecionados.</span>
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              data.map((sub) => (
+                <tr key={sub.id} className="hover:bg-slate-50/50 transition-colors">
+                  <td className="px-6 py-4 font-mono text-[10px] text-slate-400">#{sub.id}</td>
+                  <td className="px-6 py-4 font-bold text-slate-900">
+                    <div>{sub.tenant?.name || 'Inexistente'}</div>
+                    <div className="text-[10px] text-slate-400 font-normal font-mono">{sub.tenant?.email}</div>
+                  </td>
+                  <td className="px-6 py-4 font-semibold">{sub.plan?.name || sub.plan_id}</td>
+                  <td className="px-6 py-4">{getStatusBadge(sub.status)}</td>
+                  <td className="px-6 py-4 uppercase font-bold text-slate-500 font-mono text-[10px]">
+                    {sub.billing_cycle === 'monthly' ? 'Mensal' : 'Anual'}
+                  </td>
+                  <td className="px-6 py-4 font-extrabold text-slate-800">
+                    {formatCurrency(sub.price)}
+                  </td>
+                  <td className="px-6 py-4 uppercase font-bold text-slate-400 font-mono text-[10px]">
+                    {sub.gateway?.replace('_', ' ') || 'N/A'}
+                  </td>
+                  <td className="px-6 py-4 text-slate-400 font-mono text-[10px]">
+                    {formatDate(sub.current_period_ends_at)}
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2">
+                      <button
+                        title="Ver Detalhes"
+                        onClick={() => onView(sub)}
+                        className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-[4px] cursor-pointer transition-all"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </button>
+
+                      {sub.status === 'active' || sub.status === 'trialing' || sub.status === 'past_due' ? (
+                        <>
+                          <button
+                            title="Suspender Assinatura"
+                            onClick={() => onSuspend(sub)}
+                            className="p-1.5 text-amber-500 hover:text-amber-700 hover:bg-amber-50 rounded-[4px] cursor-pointer transition-all"
+                          >
+                            <ZapOff className="h-4 w-4" />
+                          </button>
+                          <button
+                            title="Cancelar Assinatura"
+                            onClick={() => onCancel(sub)}
+                            className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-[4px] cursor-pointer transition-all"
+                          >
+                            <ShieldAlert className="h-4 w-4" />
+                          </button>
+                        </>
+                      ) : sub.status === 'suspended' ? (
+                        <button
+                          title="Reativar Assinatura"
+                          onClick={() => onReactivate(sub)}
+                          className="p-1.5 text-emerald-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-[4px] cursor-pointer transition-all"
+                        >
+                          <CheckCircle2 className="h-4 w-4" />
+                        </button>
+                      ) : null}
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {data.length > 0 && (
+        <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between bg-slate-50/50 text-[11px]" id="subscriptions-pagination">
+          <span className="text-slate-400 font-mono">
+            Mostrando <b>{data.length}</b> de <b>{total}</b> assinaturas cadastradas
+          </span>
+          <div className="flex items-center gap-1 font-sans">
+            <button
+              disabled={page === 1}
+              onClick={() => onPageChange(page - 1)}
+              className="px-2.5 py-1 border border-slate-200 bg-white rounded-[4px] text-slate-600 disabled:opacity-40 select-none hover:bg-slate-50 cursor-pointer text-[10px] font-bold"
+            >
+              ANTERIOR
+            </button>
+            <span className="px-3 text-slate-500 font-bold uppercase tracking-wider">
+              Páge <b>{page}</b> de <b>{lastPage}</b>
+            </span>
+            <button
+              disabled={page === lastPage}
+              onClick={() => onPageChange(page + 1)}
+              className="px-2.5 py-1 border border-slate-200 bg-white rounded-[4px] text-slate-600 disabled:opacity-40 select-none hover:bg-slate-50 cursor-pointer text-[10px] font-bold"
+            >
+              PRÓXIMO
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

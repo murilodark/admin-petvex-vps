@@ -1,0 +1,6 @@
+{
+  "name": "Petvex Admin Global",
+  "description": "Painel de Administração Global do SaaS Petvex, suportando autenticação centralizada, dashboard de controle e perfil de usuário",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

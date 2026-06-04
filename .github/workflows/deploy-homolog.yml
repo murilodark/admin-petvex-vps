@@ -1,0 +1,110 @@
+name: "Deploy Front Homolog"
+
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: homolog
+
+    steps:
+      - name: "Checkout do código"
+        uses: actions/checkout@v4
+
+      - name: "Exportar secrets do ambiente"
+        run: |
+          printf "%s\n" "${{ secrets.SECRETS_HOMOLOG }}" | sed 's/\r$//' >> $GITHUB_ENV
+
+      - name: "Criar arquivo .env"
+        run: |
+          printf "%s\n" "${{ secrets.SECRETS_HOMOLOG }}" | sed 's/\r$//' > .env
+
+      - name: "Configurar Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Configurar known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+
+          for i in 1 2 3 4 5; do
+            echo "Tentativa $i para capturar host key..."
+            ssh-keyscan -T 30 -H "$VPS_HOST" >> ~/.ssh/known_hosts && break
+            sleep 10
+          done
+
+          test -s ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: "Instalar dependências"
+        run: npm ci
+
+      - name: "Build aplicação"
+        run: npm run build
+
+      - name: "Deploy Front Homolog"
+        run: |
+          set -e
+
+          printf "%s\n" "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
+          chmod 600 deploy_key
+
+          ssh -i deploy_key "$USERNAME@$VPS_HOST" "
+            mkdir -p $DEPLOY_PATH/dist &&
+            mkdir -p $DEPLOY_PATH/docker/nginx/conf.d
+          "
+
+          rsync -az --delete \
+            -e "ssh -i deploy_key" \
+            dist/ "$USERNAME@$VPS_HOST:$DEPLOY_PATH/dist/"
+
+          rsync -az \
+            -e "ssh -i deploy_key" \
+            .env "$USERNAME@$VPS_HOST:$DEPLOY_PATH/.env"
+
+          rsync -az \
+            -e "ssh -i deploy_key" \
+            docker-compose.homolog.yml \
+            "$USERNAME@$VPS_HOST:$DEPLOY_PATH/docker-compose.homolog.yml"
+
+          rsync -az \
+            -e "ssh -i deploy_key" \
+            docker/nginx/conf.d/homolog.conf \
+            "$USERNAME@$VPS_HOST:$DEPLOY_PATH/docker/nginx/conf.d/homolog.conf"
+
+          ssh -i deploy_key "$USERNAME@$VPS_HOST" "
+            set -e &&
+            cd $DEPLOY_PATH &&
+            docker compose --env-file .env -f docker-compose.homolog.yml down &&
+            docker compose --env-file .env -f docker-compose.homolog.yml up -d --force-recreate &&
+            docker image prune -af
+          "
+
+          rm -f deploy_key
+
+      - name: "Health Check"
+        run: |
+          for i in {1..20}; do
+            STATUS=$(curl -k -L -s -o /dev/null -w "%{http_code}" "$VITE_FRONT_URL")
+
+            echo "Tentativa $i - Status: $STATUS"
+
+            if [ "$STATUS" = "200" ]; then
+              echo "Aplicação online!"
+              exit 0
+            fi
+
+            sleep 10
+          done
+
+          echo "Health check falhou."
+          exit 1
