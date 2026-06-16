@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, CheckCircle, ShieldX, DollarSign, Wallet, ArrowRight, ShieldCheck } from 'lucide-react';
+import { X, CheckCircle, ShieldX, DollarSign, Wallet, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
 import { Payment } from '../../../../core/http/generated/models';
 import { Badge } from '../../../../shared/components/ui/Badge';
 
@@ -7,12 +7,16 @@ interface PaymentDetailsModalProps {
   payment: Payment | null;
   isOpen: boolean;
   onClose: () => void;
+  onSync?: (paymentId: string) => void;
+  syncingId?: string | null;
 }
 
 export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
   payment,
   isOpen,
   onClose,
+  onSync,
+  syncingId,
 }) => {
   if (!isOpen || !payment) return null;
 
@@ -188,7 +192,25 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
         </div>
 
         {/* Footer toolbar */}
-        <div className="bg-slate-50 border-t border-slate-100 px-6 py-4 flex justify-end" id="payment-detail-footer">
+        <div className="bg-slate-50 border-t border-slate-100 px-6 py-4 flex justify-between items-center" id="payment-detail-footer">
+          <div>
+            {onSync && ['pending', 'failed', 'rejected', 'PENDENTE', 'FALHADO'].includes(payment.status) && (
+              <button
+                id="payment-detail-sync-btn"
+                onClick={() => onSync(payment.id!)}
+                disabled={syncingId !== null}
+                className={`flex items-center gap-2 px-4 py-1.5 rounded-[4px] text-xs font-extrabold cursor-pointer transition-all uppercase ${
+                  syncingId === payment.id
+                    ? 'bg-teal-50 text-teal-700 border border-teal-200 cursor-not-allowed'
+                    : 'bg-teal-600 hover:bg-teal-700 text-white border border-teal-600'
+                }`}
+                title="Consultar gateway e atualizar status do pagamento"
+              >
+                <RefreshCw className={`h-3.5 w-3.5 ${syncingId === payment.id ? 'animate-spin' : ''}`} />
+                {syncingId === payment.id ? 'Sincronizando...' : 'Sincronizar status'}
+              </button>
+            )}
+          </div>
           <button
             id="payment-detail-close-btn"
             onClick={onClose}

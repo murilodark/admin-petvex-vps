@@ -1,5 +1,5 @@
 import React from 'react';
-import { Eye, AlertTriangle } from 'lucide-react';
+import { Eye, AlertTriangle, RefreshCw } from 'lucide-react';
 import { Payment } from '../../../../core/http/generated/models';
 import { Badge } from '../../../../shared/components/ui/Badge';
 
@@ -10,6 +10,8 @@ interface PaymentTableProps {
   lastPage: number;
   onPageChange: (page: number) => void;
   onView: (payment: Payment) => void;
+  onSync?: (paymentId: string) => void;
+  syncingId?: string | null;
 }
 
 export const PaymentTable: React.FC<PaymentTableProps> = ({
@@ -19,6 +21,8 @@ export const PaymentTable: React.FC<PaymentTableProps> = ({
   lastPage,
   onPageChange,
   onView,
+  onSync,
+  syncingId,
 }) => {
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
@@ -114,13 +118,32 @@ export const PaymentTable: React.FC<PaymentTableProps> = ({
                     {formatDate(pay.paid_at || pay.failed_at || pay.created_at)}
                   </td>
                   <td className="px-6 py-4">
-                    <button
-                      title="Ver Dossiê Financeiro"
-                      onClick={() => onView(pay)}
-                      className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-[4px] cursor-pointer transition-all"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        title="Ver Dossiê Financeiro"
+                        onClick={() => onView(pay)}
+                        className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-[4px] cursor-pointer transition-all"
+                        id={`btn-view-payment-${pay.id}`}
+                      >
+                        <Eye className="h-4 w-4" />
+                      </button>
+
+                      {onSync && ['pending', 'failed', 'rejected', 'pendente', 'falhado'].includes(String(pay.status).toLowerCase()) && (
+                        <button
+                          title="Consultar gateway e atualizar status do pagamento"
+                          onClick={() => onSync(pay.id!)}
+                          disabled={syncingId !== null}
+                          className={`p-1.5 rounded-[4px] cursor-pointer transition-all ${
+                            syncingId === pay.id
+                              ? 'text-teal-650 bg-teal-50 animate-spin'
+                              : 'text-slate-400 hover:text-teal-600 hover:bg-teal-50 disabled:opacity-50'
+                          }`}
+                          id={`btn-sync-payment-row-${pay.id}`}
+                        >
+                          <RefreshCw className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))

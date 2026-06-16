@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DollarSign, ShieldAlert, RefreshCw } from 'lucide-react';
+import { DollarSign, ShieldAlert, RefreshCw, CheckCircle } from 'lucide-react';
 import { Payment } from '../../../../core/http/generated/models';
 import { billingAdminService } from '../services/billing-admin.service';
 import { ListarPaymentsParams } from '../types/billing-admin.types';
@@ -22,13 +22,27 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
     page: 1,
     tenant_id: '',
     subscription_id: '',
-    status: 'all',
+         status: 'all',
     gateway: 'all',
   });
 
   // Details modal State
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  // Synchronization and Toast State
+  const [syncingId, setSyncingId] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
+  // Auto close toast after 4s
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => {
+        setToastMessage(null);
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [toastMessage]);
 
   const fetchPayments = async () => {
     try {
@@ -63,8 +77,59 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
     });
   };
 
+  const handleSyncPayment = async (paymentId: string) => {
+    try {
+      setSyncingId(paymentId);
+      const updatedPayment = await billingAdminService.sincronizarPaymentStatus(paymentId);
+      
+      // Update list
+      setPayments(prev => prev.map(p => p.id === paymentId ? { ...p, ...updatedPayment } : p));
+      
+      // Update selected payment if modal is open
+      if (selectedPayment && selectedPayment.id === paymentId) {
+        setSelectedPayment({ ...selectedPayment, ...updatedPayment });
+      }
+      
+      setToastMessage({
+        text: 'Status do pagamento sincronizado com sucesso.',
+        type: 'success',
+      });
+    } catch (err: any) {
+      console.error('Failed to sync payment', err);
+      const apiMessage = err?.response?.data?.message || err?.message;
+      setToastMessage({
+        text: apiMessage || 'Não foi possível sincronizar o status do pagamento.',
+        type: 'error',
+      });
+    } finally {
+      setSyncingId(null);
+    }
+  };
+
   return (
     <div className="space-y-6 font-sans" id="payments-page-root">
+      {/* Toast Alert Indicator */}
+      {toastMessage && (
+        <div 
+          className={`p-4 border rounded-[4px] text-xs flex gap-3 items-start animate-fade-in fixed top-4 right-4 z-[9999] shadow-2xl max-w-md ${
+            toastMessage.type === 'success' 
+              ? 'bg-teal-50 border-teal-200 text-teal-800 animate-slide-in' 
+              : 'bg-rose-50 border-rose-200 text-rose-800 animate-slide-in'
+          }`} 
+          id="global-toast-indicator"
+        >
+          {toastMessage.type === 'success' ? (
+            <CheckCircle className="h-5 w-5 text-teal-600 shrink-0 mt-0.5" />
+          ) : (
+            <ShieldAlert className="h-5 w-5 text-rose-500 shrink-0 mt-0.5" />
+          )}
+          <div>
+            <p className="font-extrabold uppercase tracking-wide text-[10px] m-0 leading-none">Global Admin Cobranças</p>
+            <p className="text-[11px] text-slate-500 mt-1.5 font-medium leading-normal">{toastMessage.text}</p>
+          </div>
+        </div>
+      )}
+
       {/* Toolbar heading */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white border border-slate-200 p-6 rounded-[4px]" id="payments-module-toolbar">
         <div className="text-left">
@@ -118,6 +183,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
           setSelectedPayment(pay);
           setIsDetailOpen(true);
         }}
+        onSync={handleSyncPayment}
+        syncingId={syncingId}
       />
 
       {/* Dossiê dialog */}
@@ -128,6 +195,8 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
           setIsDetailOpen(false);
           setSelectedPayment(null);
         }}
+        onSync={handleSyncPayment}
+        syncingId={syncingId}
       />
     </div>
   );

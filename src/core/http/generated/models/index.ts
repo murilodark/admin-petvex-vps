@@ -53,6 +53,7 @@ export * from './paymentStatus.ts';
 export * from './plan.ts';
 export * from './planFeatures.ts';
 export * from './postAdminBillingPaymentGatewaysIdTest200.ts';
+export * from './postAdminBillingPaymentsIdSync200.ts';
 export * from './postAuthLogout200.ts';
 export * from './subscription.ts';
 export * from './subscriptionBillingCycle.ts';

@@ -59,6 +59,7 @@ import type {
   PaymentGateway,
   Plan,
   PostAdminBillingPaymentGatewaysIdTest200,
+  PostAdminBillingPaymentsIdSync200,
   PostAuthLogout200,
   Subscription,
   Tenant,
@@ -3119,7 +3120,62 @@ export function useGetAdminBillingPaymentsId<TData = Awaited<ReturnType<typeof g
 
 
 
-export const getAdminBillingInvoices = (
+export const postAdminBillingPaymentsIdSync = (
+    payment: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<PostAdminBillingPaymentsIdSync200>(
+      {url: `/admin/billing/payments/${payment}/sync-status`, method: 'PATCH', signal
+    },
+      options);
+    }
+
+
+
+export const getPostAdminBillingPaymentsIdSyncMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminBillingPaymentsIdSync>>, TError,{payment: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postAdminBillingPaymentsIdSync>>, TError,{payment: string}, TContext> => {
+
+const mutationKey = ['postAdminBillingPaymentsIdSync'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postAdminBillingPaymentsIdSync>>, {payment: string}> = (props) => {
+          const {payment} = props ?? {};
+
+          return  postAdminBillingPaymentsIdSync(payment,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostAdminBillingPaymentsIdSyncMutationResult = NonNullable<Awaited<ReturnType<typeof postAdminBillingPaymentsIdSync>>>
+
+    export type PostAdminBillingPaymentsIdSyncMutationError = unknown
+
+    export const usePostAdminBillingPaymentsIdSync = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postAdminBillingPaymentsIdSync>>, TError,{payment: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postAdminBillingPaymentsIdSync>>,
+        TError,
+        {payment: string},
+        TContext
+      > => {
+      return useMutation(getPostAdminBillingPaymentsIdSyncMutationOptions(options), queryClient);
+    }
+    export const getAdminBillingInvoices = (
     params?: GetAdminBillingInvoicesParams,
  options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
 ) => {

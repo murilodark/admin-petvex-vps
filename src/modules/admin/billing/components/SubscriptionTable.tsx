@@ -26,17 +26,32 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   onReactivate,
   onCancel,
 }) => {
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+  const formatCurrency = (amountVal?: any, currencyStr?: string | null) => {
+    const numericVal = amountVal !== undefined && amountVal !== null ? Number(amountVal) : NaN;
+    if (isNaN(numericVal)) {
+      return 'N/A';
+    }
+    const currency = currencyStr || 'BRL';
+    try {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency }).format(numericVal);
+    } catch {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numericVal);
+    }
   };
 
   const formatDate = (dateStr?: string) => {
-    if (!dateStr) return 'N/A';
-    return new Date(dateStr).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+    if (!dateStr) return '-';
+    try {
+      const date = new Date(dateStr);
+      if (isNaN(date.getTime())) return '-';
+      return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+      });
+    } catch {
+      return '-';
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -90,16 +105,20 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                 <tr key={sub.id} className="hover:bg-slate-50/50 transition-colors">
                   <td className="px-6 py-4 font-mono text-[10px] text-slate-400">#{sub.id}</td>
                   <td className="px-6 py-4 font-bold text-slate-900">
-                    <div>{sub.tenant?.name || 'Inexistente'}</div>
-                    <div className="text-[10px] text-slate-400 font-normal font-mono">{sub.tenant?.email}</div>
+                    <div>{sub.tenant?.name || '-'}</div>
+                    {sub.tenant?.email ? (
+                      <div className="text-[10px] text-slate-400 font-normal font-mono">{sub.tenant.email}</div>
+                    ) : (
+                      <div className="text-[10px] text-slate-400 font-normal italic">E-mail não informado</div>
+                    )}
                   </td>
-                  <td className="px-6 py-4 font-semibold">{sub.plan?.name || sub.plan_id}</td>
+                  <td className="px-6 py-4 font-semibold">{sub.plan?.name || sub.plan_id || '-'}</td>
                   <td className="px-6 py-4">{getStatusBadge(sub.status)}</td>
                   <td className="px-6 py-4 uppercase font-bold text-slate-500 font-mono text-[10px]">
-                    {sub.billing_cycle === 'monthly' ? 'Mensal' : 'Anual'}
+                    {sub.billing_cycle === 'monthly' ? 'Mensal' : sub.billing_cycle === 'yearly' ? 'Anual' : sub.billing_cycle || '-'}
                   </td>
-                  <td className="px-6 py-4 font-extrabold text-slate-800">
-                    {formatCurrency(sub.price)}
+                  <td className="px-6 py-4 font-extrabold text-slate-850">
+                    {formatCurrency((sub as any).amount !== undefined ? (sub as any).amount : sub.price, (sub as any).currency)}
                   </td>
                   <td className="px-6 py-4 uppercase font-bold text-slate-400 font-mono text-[10px]">
                     {sub.gateway?.replace('_', ' ') || 'N/A'}
@@ -166,7 +185,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
               ANTERIOR
             </button>
             <span className="px-3 text-slate-500 font-bold uppercase tracking-wider">
-              Páge <b>{page}</b> de <b>{lastPage}</b>
+              Página <b>{page}</b> de <b>{lastPage}</b>
             </span>
             <button
               disabled={page === lastPage}

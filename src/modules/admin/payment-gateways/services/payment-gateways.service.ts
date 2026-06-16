@@ -20,61 +20,7 @@ const GATEWAYS_DB_KEY = 'petvex_payment_gateways_db';
 const getStoredGateways = (): PaymentGateway[] => {
   const data = localStorage.getItem(GATEWAYS_DB_KEY);
   if (!data) {
-    const initialGateways: PaymentGateway[] = [
-      {
-        id: '1',
-        name: 'Mercado Pago Principal',
-        provider: 'mercado_pago',
-        status: 'active',
-        is_sandbox: false,
-        is_default: true,
-        has_public_key: true,
-        has_access_token: true,
-        config_json: { sandbox_mode: false, sync_status: 'online' },
-        created_at: '2026-01-15T08:00:00.000Z',
-        updated_at: '2026-01-15T08:00:00.000Z'
-      },
-      {
-        id: '2',
-        name: 'Stripe Global Sandbox',
-        provider: 'stripe',
-        status: 'testing',
-        is_sandbox: true,
-        is_default: false,
-        has_public_key: true,
-        has_access_token: false,
-        client_id: 'test_client_stripe',
-        has_client_id: true,
-        config_json: { test_mode: true },
-        created_at: '2026-02-10T14:30:00.000Z',
-        updated_at: '2026-02-12T10:15:00.000Z'
-      },
-      {
-        id: '3',
-        name: 'Iugu Credenciamento',
-        provider: 'iugu',
-        status: 'error',
-        is_sandbox: false,
-        is_default: false,
-        has_access_token: true,
-        status_message: 'Falha na autenticação do token do portador com Iugu API: 401 Unauthorized',
-        config_json: { retry_count: 5 },
-        created_at: '2026-03-01T11:00:00.000Z',
-        updated_at: '2026-03-03T16:45:00.000Z'
-      },
-      {
-        id: '4',
-        name: 'Asaas Homologação',
-        provider: 'asaas',
-        status: 'inactive',
-        is_sandbox: true,
-        is_default: false,
-        has_access_token: true,
-        config_json: {},
-        created_at: '2026-04-20T09:00:00.000Z',
-        updated_at: '2026-04-20T09:00:00.000Z'
-      }
-    ];
+    const initialGateways: PaymentGateway[] = [];
     localStorage.setItem(GATEWAYS_DB_KEY, JSON.stringify(initialGateways));
     return initialGateways;
   }

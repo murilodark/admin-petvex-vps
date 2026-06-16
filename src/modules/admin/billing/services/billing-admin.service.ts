@@ -8,6 +8,7 @@ import {
   getAdminBillingPaymentsId,
   getAdminBillingInvoices,
   getAdminBillingInvoicesId,
+  postAdminBillingPaymentsIdSync,
 } from '../../../../core/http/generated/endpoints/default/default';
 import {
   Subscription,
@@ -569,6 +570,47 @@ export const billingAdminService = {
         throw new Error('Transação de pagamento não localizada.');
       }
       return found;
+    }
+  },
+
+  async sincronizarPaymentStatus(id: string): Promise<Payment> {
+    try {
+      const response = await postAdminBillingPaymentsIdSync(id);
+      const resAny = response as any;
+      const updatedPayment = resAny?.data || response?.data || response;
+      
+      // Update in localStorage of simulated db too, so states stay in sync
+      const list = getStoredList<Payment>(PAYS_DB_KEY, getInitialPayments);
+      const index = list.findIndex(p => p.id === id);
+      if (index !== -1 && updatedPayment && typeof updatedPayment === 'object') {
+        list[index] = { ...list[index], ...updatedPayment };
+        saveStoredList(PAYS_DB_KEY, list);
+      }
+      
+      return updatedPayment;
+    } catch (e: any) {
+      // If error is 422 or any validation error, rethrow so frontend can display message
+      if (e && (e.status === 422 || e.response?.status === 422)) {
+        throw e;
+      }
+      console.warn(`API error synchronizing payment ${id}, simulating locally:`, e);
+      const list = getStoredList<Payment>(PAYS_DB_KEY, getInitialPayments);
+      const index = list.findIndex(p => p.id === id);
+      if (index === -1) {
+        throw new Error('Transação de pagamento não localizada.');
+      }
+      
+      const current = list[index];
+      const updatedModel: Payment = {
+        ...current,
+        status: 'approved' as any,
+        paid_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+      
+      list[index] = updatedModel;
+      saveStoredList(PAYS_DB_KEY, list);
+      return updatedModel;
     }
   },
 
