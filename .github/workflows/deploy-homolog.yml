@@ -3,7 +3,7 @@ name: "Deploy Front Homolog"
 on:
   push:
     branches:
-      - develop 
+      - develop
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -17,7 +17,11 @@ jobs:
       - name: "Checkout do código"
         uses: actions/checkout@v4
 
-      - name: "Criar arquivo .env local no GitHub Runner"
+      - name: "Exportar secrets do ambiente"
+        run: |
+          printf "%s\n" "${{ secrets.SECRETS_HOMOLOG }}" | sed 's/\r$//' >> $GITHUB_ENV
+
+      - name: "Criar arquivo .env"
         run: |
           printf "%s\n" "${{ secrets.SECRETS_HOMOLOG }}" | sed 's/\r$//' > .env
 
@@ -44,19 +48,13 @@ jobs:
       - name: "Instalar dependências"
         run: npm ci
 
-      - name: "Build aplicação carregando o .env"
-        run: |
-          # Lê o arquivo .env criado e exporta as variáveis para o processo do npm run build
-          export $(grep -v '^#' .env | xargs)
-          npm run build
+      - name: "Build aplicação"
+        run: npm run build
 
       - name: "Deploy Front Homolog"
         run: |
           set -e
 
-          # Extrai variáveis necessárias para o rsync e ssh a partir do $GITHUB_ENV ou do próprio .env se necessário
-          # Garanta que USERNAME, VPS_HOST, DEPLOY_PATH e VITE_FRONT_URL estejam configurados nas variáveis do repositório/ambiente
-          
           printf "%s\n" "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
           chmod 600 deploy_key
 
@@ -95,9 +93,6 @@ jobs:
 
       - name: "Health Check"
         run: |
-          # Carrega as variáveis para garantir que o script conheça a $VITE_FRONT_URL
-          export $(grep -v '^#' .env | xargs)
-          
           for i in {1..20}; do
             STATUS=$(curl -k -L -s -o /dev/null -w "%{http_code}" "$VITE_FRONT_URL")
 
