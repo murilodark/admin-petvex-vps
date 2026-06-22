@@ -3,7 +3,7 @@ name: "Deploy Front Homolog"
 on:
   push:
     branches:
-      - develop
+      - develop 
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
