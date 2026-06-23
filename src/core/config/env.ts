@@ -11,5 +11,5 @@ const getEnvVal = (key: string): any => {
 
 
 export const env = {
-  API_BASE_URL: getEnvVal('VITE_API_URL') ||  'http://localhost:8990/api/v1',
+  API_BASE_URL: getEnvVal('VITE_API_URL')+'/v1' ||  'http://localhost:8990/api/v1',
 };
