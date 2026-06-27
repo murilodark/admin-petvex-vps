@@ -11,7 +11,7 @@ import { AdminTenantsResponse } from '../models/adminTenantsResponse';
 
 export const postAuthLogin = (loginCredentials: LoginCredentials): Promise<LoginResponse> => {
   return customInstance<LoginResponse>({
-    url: '/auth/login',
+    url: '/auth/loginadmin',
     method: 'POST',
     data: loginCredentials,
   });
