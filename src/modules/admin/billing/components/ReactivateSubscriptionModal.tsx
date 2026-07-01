@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { X, Loader2, CheckCircle } from 'lucide-react';
-import { Subscription } from '../../../../core/http/generated/models';
+import { AdminSubscription } from '../types/billing-admin.types';
 
 interface ReactivateSubscriptionModalProps {
-  subscription: Subscription | null;
+  subscription: AdminSubscription | null;
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (id: string) => Promise<void>;
