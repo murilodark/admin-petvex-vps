@@ -1,10 +1,10 @@
 import React from 'react';
 import { X, ClipboardList, Shield, DollarSign, Calendar, Sliders, Layers, Check, RefreshCw, Key } from 'lucide-react';
-import { Subscription } from '../../../../core/http/generated/models';
 import { Badge } from '../../../../shared/components/ui/Badge';
+import { AdminSubscription } from '../types/billing-admin.types';
 
 interface SubscriptionDetailsModalProps {
-  subscription: Subscription | null;
+  subscription: AdminSubscription | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -17,7 +17,7 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
   if (!isOpen || !subscription) return null;
 
   // Formatter helpers
-  const formatCurrency = (amountVal?: any, currencyStr?: string | null) => {
+  const formatCurrency = (amountVal?: unknown, currencyStr?: string | null) => {
     const numericVal = amountVal !== undefined && amountVal !== null ? Number(amountVal) : NaN;
     if (isNaN(numericVal)) {
       return 'N/A';
@@ -47,7 +47,7 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
     }
   };
 
-  const renderBooleanBadge = (val?: any) => {
+  const renderBooleanBadge = (val?: unknown) => {
     if (val === true || val === 'true' || val === 1 || val === 'active' || val === 'Ativo') {
       return <Badge variant="success">Sim / Ativo</Badge>;
     }
@@ -63,8 +63,10 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
       case 'suspended':
         return <Badge variant="warning">Suspensa</Badge>;
       case 'canceled':
+      case 'cancelled':
         return <Badge variant="danger">Cancelada</Badge>;
       case 'past_due':
+      case 'payment_required':
         return <Badge variant="danger">Em Atraso</Badge>;
       case 'expired':
         return <Badge variant="neutral">Expirada</Badge>;
@@ -73,14 +75,25 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
     }
   };
 
-  const renderText = (value?: any, fallback: string = '-') => {
+  const renderText = (value?: unknown, fallback: string = '-') => {
     if (value === null || value === undefined || value === '') return fallback;
     return String(value);
   };
 
   const plan = subscription.plan || {};
   const tenant = subscription.tenant || {};
-  const metadata = (subscription as any).metadata || {};
+  const planRecord = plan as Record<string, unknown>;
+  const tenantRecord = tenant as Record<string, unknown>;
+  const planFeatures = (plan.features || {}) as Record<string, unknown>;
+  const metadata = subscription.metadata || {};
+  const linkedPayment = subscription.last_payment || subscription.payments?.[0];
+  const linkedInvoice = subscription.invoice || subscription.invoices?.[0];
+  const operationalHistory =
+    Array.isArray(metadata.operational_history)
+      ? metadata.operational_history
+      : Array.isArray(metadata.history)
+        ? metadata.history
+        : [];
 
   // List of standard limits
   const limits = [
@@ -161,12 +174,12 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">MOEDA</span>
-                <span className="font-bold text-slate-800 font-mono uppercase">{renderText((subscription as any).currency, 'BRL')}</span>
+                <span className="font-bold text-slate-800 font-mono uppercase">{renderText(subscription.currency, 'BRL')}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">VALOR RECORRENTE</span>
                 <span className="font-extrabold text-slate-900 text-sm">
-                  {formatCurrency((subscription as any).amount !== undefined ? (subscription as any).amount : subscription.price, (subscription as any).currency)}
+                  {formatCurrency(subscription.amount ?? subscription.price, subscription.currency)}
                 </span>
               </div>
               <div>
@@ -177,35 +190,35 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">PAYMENT GATEWAY ID</span>
-                <span className="font-mono text-slate-600 break-all">{renderText((subscription as any).payment_gateway_id)}</span>
+                <span className="font-mono text-slate-600 break-all">{renderText(subscription.payment_gateway_id)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">BILLING CUSTOMER ID</span>
-                <span className="font-mono text-slate-600 break-all">{renderText((subscription as any).billing_customer_id)}</span>
+                <span className="font-mono text-slate-600 break-all">{renderText(subscription.billing_customer_id)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">GATEWAY CUSTOMER ID</span>
-                <span className="font-mono text-slate-600 break-all">{renderText((subscription as any).gateway_customer_id)}</span>
+                <span className="font-mono text-slate-600 break-all">{renderText(subscription.gateway_customer_id)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">GATEWAY SUBSCRIPTION ID</span>
-                <span className="font-mono text-slate-600 break-all">{renderText((subscription as any).gateway_subscription_id)}</span>
+                <span className="font-mono text-slate-600 break-all">{renderText(subscription.gateway_subscription_id)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">GATEWAY CHECKOUT ID</span>
-                <span className="font-mono text-slate-600 break-all">{renderText((subscription as any).gateway_checkout_id)}</span>
+                <span className="font-mono text-slate-600 break-all">{renderText(subscription.gateway_checkout_id)}</span>
               </div>
               <div className="col-span-1 sm:col-span-2 md:col-span-2">
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">GATEWAY CHECKOUT URL</span>
-                {(subscription as any).gateway_checkout_url ? (
+                {subscription.gateway_checkout_url ? (
                   <a
-                    href={(subscription as any).gateway_checkout_url}
+                    href={subscription.gateway_checkout_url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-teal-650 hover:text-teal-850 hover:underline font-mono text-[10px] break-all font-bold block mt-0.5 truncate"
-                    title={(subscription as any).gateway_checkout_url}
+                    title={subscription.gateway_checkout_url}
                   >
-                    {(subscription as any).gateway_checkout_url}
+                    {subscription.gateway_checkout_url}
                   </a>
                 ) : (
                   <span className="text-slate-400 italic font-medium">Link de checkout indisponível</span>
@@ -232,7 +245,7 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">SLUG (SUBDOMÍNIO)</span>
                 <span className="font-mono font-bold text-slate-700 bg-slate-50 px-1.5 py-0.5 rounded border border-slate-100 text-[10px]">
-                  {renderText((tenant as any).slug)}
+                  {renderText(tenantRecord.slug)}
                 </span>
               </div>
               <div>
@@ -241,15 +254,15 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">TENANT ATIVO</span>
-                <div className="mt-0.5">{renderBooleanBadge((tenant as any).active ?? (tenant as any).is_active ?? true)}</div>
+                <div className="mt-0.5">{renderBooleanBadge(tenantRecord.active ?? tenantRecord.is_active ?? true)}</div>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">DOMÍNIO SELECIONADO</span>
-                <span className="font-mono text-slate-600 break-all">{renderText((tenant as any).domain, 'Padrão Petvex')}</span>
+                <span className="font-mono text-slate-600 break-all">{renderText(tenantRecord.domain, 'Padrão Petvex')}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">DOCUMENTO (CNPJ/CPF)</span>
-                <span className="font-mono font-semibold text-slate-800">{renderText(tenant.documento || (tenant as any).document || (tenant as any).cpf_cnpj)}</span>
+                <span className="font-mono font-semibold text-slate-800">{renderText(tenant.documento || tenantRecord.document || tenantRecord.cpf_cnpj)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">E-MAIL DO ADMINISTRADOR</span>
@@ -257,15 +270,15 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">TELEFONE CONTATO</span>
-                <span className="font-mono text-slate-700 font-medium">{renderText(tenant.telefone || (tenant as any).phone)}</span>
+                <span className="font-mono text-slate-700 font-medium">{renderText(tenant.telefone || tenantRecord.phone)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">PLANO SALVO NO TENANT</span>
-                <span className="font-bold text-teal-600 uppercase font-mono text-[10px]">{renderText(tenant.plano || (tenant as any).plan_id)}</span>
+                <span className="font-bold text-teal-600 uppercase font-mono text-[10px]">{renderText(tenant.plano || tenantRecord.plan_id)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">TRIAL ENCERRRA EM</span>
-                <span className="font-mono text-slate-600 font-bold">{formatDate((tenant as any).trial_ends_at)}</span>
+                <span className="font-mono text-slate-600 font-bold">{formatDate(renderText(tenantRecord.trial_ends_at, ''))}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">CRIADO EM</span>
@@ -320,11 +333,11 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">DESCONTO ANUAL (%)</span>
-                <span className="font-bold text-teal-600 font-mono">{(plan as any).yearly_discount_percent !== undefined ? `${(plan as any).yearly_discount_percent}%` : (plan as any).yearly_discount_percentage !== undefined ? `${(plan as any).yearly_discount_percentage}%` : '-'}</span>
+                <span className="font-bold text-teal-600 font-mono">{plan.yearly_discount_percent !== undefined ? `${plan.yearly_discount_percent}%` : planRecord.yearly_discount_percentage !== undefined ? `${planRecord.yearly_discount_percentage}%` : '-'}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">TRIAL HABILTADO</span>
-                <div className="mt-0.5">{renderBooleanBadge(plan.has_trial ?? (plan as any).trial_enabled)}</div>
+                <div className="mt-0.5">{renderBooleanBadge(plan.has_trial ?? planRecord.trial_enabled)}</div>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">DAYS TRIAL DISPONÍVEL</span>
@@ -332,11 +345,11 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">ORDEM EXIBIÇÃO</span>
-                <span className="font-semibold text-slate-700 font-mono">{renderText(plan.display_order ?? (plan as any).sort_order)}</span>
+                <span className="font-semibold text-slate-700 font-mono">{renderText(plan.display_order ?? planRecord.sort_order)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">PLAN ATIVO</span>
-                <div className="mt-0.5">{renderBooleanBadge(plan.is_active ?? (plan as any).active)}</div>
+                <div className="mt-0.5">{renderBooleanBadge(plan.is_active ?? planRecord.active)}</div>
               </div>
               <div className="col-span-1 sm:col-span-2 md:col-span-4">
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">DESCRIÇÃO CURTA</span>
@@ -377,8 +390,7 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
               {featuresList.map((feature, idx) => {
-                const subPlanFeatures = plan.features || {};
-                const isFeatureEnabled = !!(subPlanFeatures as any)[feature.key];
+                const isFeatureEnabled = !!planFeatures[feature.key];
                 return (
                   <div
                     key={idx}
@@ -418,15 +430,15 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs font-medium">
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">started_at</span>
-                <span className="font-mono text-slate-700">{formatDate((subscription as any).started_at)}</span>
+                <span className="font-mono text-slate-700">{formatDate(subscription.started_at)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">trial_started_at</span>
-                <span className="font-mono text-slate-700">{formatDate((subscription as any).trial_started_at)}</span>
+                <span className="font-mono text-slate-700">{formatDate(subscription.trial_started_at)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">trial_ends_at</span>
-                <span className="font-mono text-slate-800 font-bold">{formatDate(subscription.trial_ends_at || (subscription as any).trial_ends_at)}</span>
+                <span className="font-mono text-slate-800 font-bold">{formatDate(subscription.trial_ends_at)}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">current_period_starts_at</span>
@@ -446,7 +458,7 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
               </div>
               <div className="col-span-1 sm:col-span-2">
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">MOTIVO DE CANCELAMENTO (cancel_reason)</span>
-                <span className="text-slate-700 font-semibold italic">{renderText((subscription as any).cancel_reason, 'Nenhum motivo catalogado')}</span>
+                <span className="text-slate-700 font-semibold italic">{renderText(subscription.cancel_reason, 'Nenhum motivo catalogado')}</span>
               </div>
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider font-mono">CRIADA EM</span>
@@ -459,12 +471,56 @@ export const SubscriptionDetailsModal: React.FC<SubscriptionDetailsModalProps> =
             </div>
           </div>
 
-          {/* Section 7: Metadata */}
+          {/* Section 7: Cobranças vinculadas */}
+          <div className="border border-slate-150 rounded-[4px] p-4 bg-white shadow-xs">
+            <div className="text-[10px] font-black uppercase tracking-widest text-teal-750 mb-3.5 flex items-center gap-1.5 border-b border-slate-100 pb-2">
+              <RefreshCw className="h-4 w-4 text-teal-650" />
+              7. Pagamentos e faturas vinculadas
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+              <div className="bg-slate-50 border border-slate-100 rounded-[4px] p-3">
+                <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Último pagamento</span>
+                {linkedPayment ? (
+                  <div className="mt-2 space-y-1 font-mono text-[10px] text-slate-600">
+                    <div>ID: <span className="font-bold text-slate-900">#{linkedPayment.id}</span></div>
+                    <div>Status: <span className="font-bold text-slate-900">{linkedPayment.status}</span></div>
+                    <div>Valor: <span className="font-bold text-slate-900">{formatCurrency(linkedPayment.amount, linkedPayment.currency)}</span></div>
+                    <div>Pago em: <span className="font-bold text-slate-900">{formatDate(linkedPayment.paid_at)}</span></div>
+                  </div>
+                ) : (
+                  <span className="block mt-2 text-[11px] text-slate-400 italic">Nenhum pagamento vinculado no retorno da API.</span>
+                )}
+              </div>
+              <div className="bg-slate-50 border border-slate-100 rounded-[4px] p-3">
+                <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Fatura vinculada</span>
+                {linkedInvoice ? (
+                  <div className="mt-2 space-y-1 font-mono text-[10px] text-slate-600">
+                    <div>ID: <span className="font-bold text-slate-900">#{linkedInvoice.id}</span></div>
+                    <div>Número: <span className="font-bold text-slate-900">{renderText(linkedInvoice.number)}</span></div>
+                    <div>Status: <span className="font-bold text-slate-900">{linkedInvoice.status}</span></div>
+                    <div>Vencimento: <span className="font-bold text-slate-900">{formatDate(linkedInvoice.due_at)}</span></div>
+                  </div>
+                ) : (
+                  <span className="block mt-2 text-[11px] text-slate-400 italic">Nenhuma fatura vinculada no retorno da API.</span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Section 8: Metadata */}
           <div className="border border-slate-150 rounded-[4px] p-4 bg-white shadow-xs">
             <div className="text-[10px] font-black uppercase tracking-widest text-teal-750 mb-3.5 flex items-center gap-1.5 border-b border-slate-100 pb-2">
               <Key className="h-4 w-4 text-teal-650" />
-              7. Metadata & Chaves Adicionais
+              8. Metadata & histórico operacional
             </div>
+            {operationalHistory.length > 0 && (
+              <div className="mb-4 bg-teal-50 border border-teal-100 rounded-[4px] p-3">
+                <span className="block text-[9px] font-black text-teal-700 uppercase tracking-wider mb-2">Histórico operacional</span>
+                <pre className="text-[11px] text-slate-700 font-mono overflow-x-auto whitespace-pre-wrap max-h-40 leading-relaxed">
+                  {JSON.stringify(operationalHistory, null, 2)}
+                </pre>
+              </div>
+            )}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-semibold mb-3">
               <div>
                 <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">INVOICE_ID</span>

@@ -1,10 +1,10 @@
 import React from 'react';
 import { X, CheckCircle, Receipt, ExternalLink, Calendar, ShieldCheck } from 'lucide-react';
-import { Invoice } from '../../../../core/http/generated/models';
 import { Badge } from '../../../../shared/components/ui/Badge';
+import { AdminInvoice } from '../types/billing-admin.types';
 
 interface InvoiceDetailsModalProps {
-  invoice: Invoice | null;
+  invoice: AdminInvoice | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -36,6 +36,7 @@ export const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
       case 'paid':
         return <Badge variant="success">Paga</Badge>;
       case 'pending':
+      case 'open':
         return <Badge variant="warning">Pendente</Badge>;
       case 'overdue':
         return <Badge variant="danger">Vencida</Badge>;
@@ -47,6 +48,13 @@ export const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
         return <Badge variant="neutral">{status}</Badge>;
     }
   };
+
+  const operationalHistory =
+    Array.isArray(invoice.metadata?.operational_history)
+      ? invoice.metadata.operational_history
+      : Array.isArray(invoice.metadata?.history)
+        ? invoice.metadata.history
+        : [];
 
   return (
     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 font-sans animate-fade-in" id="invoice-detail-backdrop">
@@ -99,6 +107,10 @@ export const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
                 <span className="block text-[8px] font-extrabold text-slate-400 uppercase">E-MAIL ADMINISTRADOR</span>
                 <span className="text-slate-700 font-mono text-[10px] block truncate max-w-full">{invoice.tenant?.email}</span>
               </div>
+              <div>
+                <span className="block text-[8px] font-extrabold text-slate-400 uppercase">TENANT / CLIENTE</span>
+                <span className="text-slate-700 font-mono text-[10px] block truncate max-w-full">#{invoice.tenant_id || invoice.tenant?.id || 'N/A'}</span>
+              </div>
             </div>
           </div>
 
@@ -119,6 +131,10 @@ export const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
               <div>
                 <span className="block text-[8px] font-extrabold text-slate-400 uppercase">ID ASSINATURA REGULAR</span>
                 <span className="font-mono text-slate-800 text-[10px]">#{invoice.subscription_id}</span>
+              </div>
+              <div>
+                <span className="block text-[8px] font-extrabold text-slate-400 uppercase">PAGAMENTO VINCULADO</span>
+                <span className="font-mono text-slate-800 text-[10px]">#{invoice.payment?.id || invoice.metadata?.payment_id || 'N/A'}</span>
               </div>
               <div>
                 <span className="block text-[8px] font-extrabold text-slate-400 uppercase">GATEWAY PROCESSO</span>
@@ -160,8 +176,23 @@ export const InvoiceDetailsModal: React.FC<InvoiceDetailsModalProps> = ({
                   <span>{formatDate(invoice.paid_at)}</span>
                 </div>
               )}
+              {invoice.status === 'cancelled' && (
+                <div className="flex justify-between text-slate-600 font-bold bg-slate-50 p-1 rounded-[4px]">
+                  <span>CANCELAMENTO:</span>
+                  <span>{formatDate(invoice.updated_at)}</span>
+                </div>
+              )}
             </div>
           </div>
+
+          {operationalHistory.length > 0 && (
+            <div className="border border-teal-100 bg-teal-50/40 rounded-[4px] p-4">
+              <span className="block text-[8px] font-black text-teal-700 uppercase tracking-widest mb-2">HISTÓRICO OPERACIONAL</span>
+              <pre className="text-[10px] text-slate-700 font-mono overflow-x-auto whitespace-pre-wrap max-h-40 leading-relaxed">
+                {JSON.stringify(operationalHistory, null, 2)}
+              </pre>
+            </div>
+          )}
 
           {/* Invoice Download Action sheet */}
           {invoice.invoice_url && (
