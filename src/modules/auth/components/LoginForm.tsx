@@ -8,6 +8,21 @@ interface LoginFormProps {
   onSuccess: () => void;
 }
 
+function getAuthErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    return error.message;
+  }
+
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === 'string') {
+      return message;
+    }
+  }
+
+  return 'Falha na autenticação. Verifique suas credenciais.';
+}
+
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const [formData, setFormData] = useState<LoginFormData>({ email: '', password: '' });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -48,9 +63,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     try {
       await authService.authenticate(formData);
       onSuccess();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setApiError(err.message || 'Falha na autenticação. Verifique suas credenciais.');
+      setApiError(getAuthErrorMessage(err));
     } finally {
       setIsLoading(false);
     }

@@ -1,34 +1,49 @@
 import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
 import { customInstance } from '../../orval-mutator';
-import { User } from '../models/user';
-import { LoginCredentials } from '../models/loginCredentials';
-import { LoginResponse } from '../models/loginResponse';
+import {
+  loginAdminAuth,
+  logoutAdminAuth,
+  meAdminAuth,
+} from './admin-auth/admin-auth';
+import { AdminLoginRequest } from '../models/adminLoginRequest';
+import { LoginAdminAuth200 } from '../models/loginAdminAuth200';
+import { LoginAdminAuth200Data } from '../models/loginAdminAuth200Data';
+import { LogoutAdminAuth200 } from '../models/logoutAdminAuth200';
+import { MeAdminAuth200 } from '../models/meAdminAuth200';
+import { PlatformAdminUser } from '../models/platformAdminUser';
 import { Tenant } from '../models/tenant';
 import { CreateTenantPayload } from '../models/createTenantPayload';
 import { UpdateTenantPayload } from '../models/updateTenantPayload';
 import { GetAdminTenantsParams } from '../models/getAdminTenantsParams';
 import { AdminTenantsResponse } from '../models/adminTenantsResponse';
 
-export const postAuthLogin = (loginCredentials: LoginCredentials): Promise<LoginResponse> => {
-  return customInstance<LoginResponse>({
-    url: '/auth/loginadmin',
-    method: 'POST',
-    data: loginCredentials,
-  });
+function resolveLoginData(
+  response: LoginAdminAuth200 | LoginAdminAuth200Data,
+): LoginAdminAuth200Data {
+  return 'token' in response ? response : response.data;
+}
+
+function resolveLogoutData(response: LogoutAdminAuth200 | boolean): boolean {
+  return typeof response === 'boolean' ? response : response.data;
+}
+
+function resolveAdminUser(response: MeAdminAuth200 | PlatformAdminUser): PlatformAdminUser {
+  return 'data' in response ? response.data : response;
+}
+
+export const postAuthLogin = async (adminLoginRequest: AdminLoginRequest): Promise<LoginAdminAuth200Data> => {
+  const response = await loginAdminAuth(adminLoginRequest);
+  return resolveLoginData(response);
 };
 
-export const postAuthLogout = (): Promise<{ message: string }> => {
-  return customInstance<{ message: string }>({
-    url: '/auth/logout',
-    method: 'POST',
-  });
+export const postAuthLogout = async (): Promise<boolean> => {
+  const response = await logoutAdminAuth();
+  return resolveLogoutData(response);
 };
 
-export const getMe = (): Promise<User> => {
-  return customInstance<User>({
-    url: '/me',
-    method: 'GET',
-  });
+export const getMe = async (): Promise<PlatformAdminUser> => {
+  const response = await meAdminAuth();
+  return resolveAdminUser(response);
 };
 
 export const getAdminTenants = (params?: GetAdminTenantsParams): Promise<AdminTenantsResponse> => {
@@ -69,22 +84,22 @@ export const deleteAdminTenantsId = (id: string): Promise<void> => {
   });
 };
 
-export const usePostAuthLogin = (options?: Omit<UseMutationOptions<LoginResponse, Error, LoginCredentials>, 'mutationFn'>) => {
-  return useMutation<LoginResponse, Error, LoginCredentials>({
+export const usePostAuthLogin = (options?: Omit<UseMutationOptions<LoginAdminAuth200Data, Error, AdminLoginRequest>, 'mutationFn'>) => {
+  return useMutation<LoginAdminAuth200Data, Error, AdminLoginRequest>({
     mutationFn: postAuthLogin,
     ...options,
   });
 };
 
-export const usePostAuthLogout = (options?: Omit<UseMutationOptions<{ message: string }, Error, void>, 'mutationFn'>) => {
-  return useMutation<{ message: string }, Error, void>({
+export const usePostAuthLogout = (options?: Omit<UseMutationOptions<boolean, Error, void>, 'mutationFn'>) => {
+  return useMutation<boolean, Error, void>({
     mutationFn: postAuthLogout,
     ...options,
   });
 };
 
-export const useGetMe = (options?: Omit<UseQueryOptions<User, Error>, 'queryKey' | 'queryFn'>) => {
-  return useQuery<User, Error>({
+export const useGetMe = (options?: Omit<UseQueryOptions<PlatformAdminUser, Error>, 'queryKey' | 'queryFn'>) => {
+  return useQuery<PlatformAdminUser, Error>({
     queryKey: ['me'],
     queryFn: getMe,
     ...options,
@@ -139,4 +154,3 @@ export const useDeleteAdminTenantsId = (
     ...options,
   });
 };
-

@@ -1,7 +1,9 @@
-import { getMe } from '../../../core/http/generated/endpoints/endpoints';
+import { meAdminAuth } from '../../../core/http/generated/endpoints/admin-auth/admin-auth';
+import type { PlatformAdminUser } from '../../../core/http/generated/models/platformAdminUser';
 
 export const profileService = {
-  async getProfile() {
-    return getMe();
+  async getProfile(): Promise<PlatformAdminUser> {
+    const response = await meAdminAuth();
+    return 'data' in response ? response.data : response;
   },
 };
