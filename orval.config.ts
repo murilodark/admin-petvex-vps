@@ -3,7 +3,10 @@ import { defineConfig } from 'orval';
 export default defineConfig({
   petvex: {
     input: {
-      target: './openapi.yaml',
+      target: ['../api-petvex/api/docs/openapi.json', './openapi.yaml'],
+      override: {
+        transformer: './scripts/orval-strip-v1-transformer.js',
+      },
     },
     output: {
       mode: 'tags-split',

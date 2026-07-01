@@ -1,5 +1,6 @@
 import { api } from './api';
 import { tokenStorage } from '../storage/token.storage';
+import { adminUserStorage } from '../storage/admin-user.storage';
 import { parseApiError } from './errors';
 
 // Configure standard response structures and intercept 401 errors
@@ -10,6 +11,7 @@ api.client.interceptors.response.use(
   (error) => {
     if (error && error.response && error.response.status === 401) {
       tokenStorage.clearToken();
+      adminUserStorage.clearAdminUser();
       
       if (window.location.pathname !== '/login' && !window.location.pathname.endsWith('/login')) {
         window.location.href = '/login';

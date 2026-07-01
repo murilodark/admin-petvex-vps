@@ -1,26 +1,56 @@
 import { useSyncExternalStore } from 'react';
 import { tokenStorage } from '../storage/token.storage';
-import { User } from '../http/generated/models/user';
-import { postAuthLogin, postAuthLogout, getMe } from '../http/generated/endpoints/endpoints';
-import { LoginCredentials } from '../http/generated/models/loginCredentials';
+import { adminUserStorage } from '../storage/admin-user.storage';
+import {
+  loginAdminAuth,
+  logoutAdminAuth,
+  meAdminAuth,
+} from '../http/generated/endpoints/admin-auth/admin-auth';
+import type {
+  AdminLoginRequest,
+  LoginAdminAuth200,
+  LoginAdminAuth200Data,
+  MeAdminAuth200,
+  PlatformAdminUser,
+} from '../http/generated/models';
 
 export interface AuthState {
   token: string | null;
-  user: User | null;
+  adminUser: PlatformAdminUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
 
 type Listener = (state: AuthState) => void;
 
+const storedToken = tokenStorage.getToken();
+
 let state: AuthState = {
-  token: tokenStorage.getToken(),
-  user: null,
-  isAuthenticated: !!tokenStorage.getToken(),
-  isLoading: !!tokenStorage.getToken(), // If has token, load me
+  token: storedToken,
+  adminUser: storedToken ? adminUserStorage.getAdminUser() : null,
+  isAuthenticated: !!storedToken,
+  isLoading: !!storedToken,
 };
 
 const listeners = new Set<Listener>();
+
+function resolveLoginData(
+  response: LoginAdminAuth200 | LoginAdminAuth200Data,
+): LoginAdminAuth200Data {
+  if ('token' in response && 'admin' in response) {
+    return response;
+  }
+
+  return response.data;
+}
+
+function resolveAdminUser(response: MeAdminAuth200 | PlatformAdminUser): PlatformAdminUser {
+  if ('data' in response) {
+    return response.data;
+  }
+
+  return response;
+}
 
 export const authStore = {
   get state() {
@@ -39,31 +69,25 @@ export const authStore = {
     listeners.forEach((listener) => listener(state));
   },
 
-  async login(credentials: LoginCredentials) {
+  async login(credentials: AdminLoginRequest) {
     this._setState({ isLoading: true });
     try {
-      const response = await postAuthLogin(credentials);
-      const token = response.token;
-      
-      this.setToken(token);
-      
-      let currentUser = response.user;
-      if (!currentUser) {
-        // fetch me if user wasn't returned in the response
-        currentUser = await getMe();
-      }
-      
+      const response = resolveLoginData(await loginAdminAuth(credentials));
+      const { token, admin } = response;
+
+      tokenStorage.setToken(token);
+      adminUserStorage.setAdminUser(admin);
+
       this._setState({
         token,
-        user: currentUser,
+        adminUser: admin,
         isAuthenticated: true,
         isLoading: false,
       });
-      
+
       return response;
     } catch (error) {
-      this._setState({ isLoading: false, isAuthenticated: false, token: null });
-      tokenStorage.clearToken();
+      this.clearSession();
       throw error;
     }
   },
@@ -71,7 +95,7 @@ export const authStore = {
   async logout() {
     this._setState({ isLoading: true });
     try {
-      await postAuthLogout();
+      await logoutAdminAuth();
     } catch (error) {
       console.warn('Logout API error:', error);
     } finally {
@@ -84,20 +108,22 @@ export const authStore = {
   async loadMe() {
     const token = tokenStorage.getToken();
     if (!token) {
-      this._setState({ isLoading: false, isAuthenticated: false, user: null });
+      this.clearSession();
       return;
     }
     this._setState({ isLoading: true });
     try {
-      const user = await getMe();
+      const adminUser = resolveAdminUser(await meAdminAuth());
+      adminUserStorage.setAdminUser(adminUser);
+
       this._setState({
         token,
-        user,
+        adminUser,
         isAuthenticated: true,
         isLoading: false,
       });
     } catch (error) {
-      console.error('Failed to load user:', error);
+      console.error('Failed to load platform admin user:', error);
       this.clearSession();
     }
   },
@@ -109,9 +135,10 @@ export const authStore = {
 
   clearSession() {
     tokenStorage.clearToken();
+    adminUserStorage.clearAdminUser();
     this._setState({
       token: null,
-      user: null,
+      adminUser: null,
       isAuthenticated: false,
       isLoading: false,
     });
@@ -126,7 +153,9 @@ export function useAuth() {
 
   return {
     ...authState,
-    login: (credentials: LoginCredentials) => authStore.login(credentials),
+    user: authState.adminUser,
+    me: authState.adminUser,
+    login: (credentials: AdminLoginRequest) => authStore.login(credentials),
     logout: () => authStore.logout(),
     loadMe: () => authStore.loadMe(),
     setToken: (token: string) => authStore.setToken(token),
