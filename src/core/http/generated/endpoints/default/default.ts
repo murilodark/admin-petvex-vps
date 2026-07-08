@@ -72,7 +72,14 @@ import type {
   UpdateUserTenantAccessPayload,
   User,
   UserTenantAccess,
-  UserTenantAccessListResponse
+  UserTenantAccessListResponse,
+
+  GetWhatsAppNotificationsParams,
+  PostWhatsAppNotificationIdRetry200,
+  WhatsAppNotification,
+  WhatsAppNotificationsResponse,
+  WhatsAppSettings,
+  WhatsAppTemplate
 } from '../../models';
 
 import { customInstance } from '../../../orval-mutator';
@@ -3344,6 +3351,465 @@ export function useGetAdminBillingInvoicesId<TData = Awaited<ReturnType<typeof g
 }
 
 
+
+export const getWhatsAppTemplates = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<WhatsAppTemplate[]>(
+      {url: `/admin/whatsapp/templates`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetWhatsAppTemplatesQueryKey = () => {
+    return [
+    `/admin/whatsapp/templates`
+    ] as const;
+    }
+
+
+export const getGetWhatsAppTemplatesQueryOptions = <TData = Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWhatsAppTemplatesQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWhatsAppTemplates>>> = ({ signal }) => getWhatsAppTemplates(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetWhatsAppTemplatesQueryResult = NonNullable<Awaited<ReturnType<typeof getWhatsAppTemplates>>>
+export type GetWhatsAppTemplatesQueryError = unknown
+
+
+export function useGetWhatsAppTemplates<TData = Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWhatsAppTemplates>>,
+          TError,
+          Awaited<ReturnType<typeof getWhatsAppTemplates>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWhatsAppTemplates<TData = Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWhatsAppTemplates>>,
+          TError,
+          Awaited<ReturnType<typeof getWhatsAppTemplates>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWhatsAppTemplates<TData = Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetWhatsAppTemplates<TData = Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetWhatsAppTemplatesQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const getWhatsAppNotifications = (
+    params?: GetWhatsAppNotificationsParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<WhatsAppNotificationsResponse>(
+      {url: `/admin/whatsapp/notifications`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetWhatsAppNotificationsQueryKey = (params?: GetWhatsAppNotificationsParams,) => {
+    return [
+    `/admin/whatsapp/notifications`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetWhatsAppNotificationsQueryOptions = <TData = Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError = unknown>(params?: GetWhatsAppNotificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWhatsAppNotificationsQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWhatsAppNotifications>>> = ({ signal }) => getWhatsAppNotifications(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetWhatsAppNotificationsQueryResult = NonNullable<Awaited<ReturnType<typeof getWhatsAppNotifications>>>
+export type GetWhatsAppNotificationsQueryError = unknown
+
+
+export function useGetWhatsAppNotifications<TData = Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError = unknown>(
+ params: undefined |  GetWhatsAppNotificationsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWhatsAppNotifications>>,
+          TError,
+          Awaited<ReturnType<typeof getWhatsAppNotifications>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWhatsAppNotifications<TData = Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError = unknown>(
+ params?: GetWhatsAppNotificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWhatsAppNotifications>>,
+          TError,
+          Awaited<ReturnType<typeof getWhatsAppNotifications>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWhatsAppNotifications<TData = Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError = unknown>(
+ params?: GetWhatsAppNotificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetWhatsAppNotifications<TData = Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError = unknown>(
+ params?: GetWhatsAppNotificationsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotifications>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetWhatsAppNotificationsQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const getWhatsAppNotificationId = (
+    notification: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<WhatsAppNotification>(
+      {url: `/admin/whatsapp/notifications/${notification}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetWhatsAppNotificationIdQueryKey = (notification: string,) => {
+    return [
+    `/admin/whatsapp/notifications/${notification}`
+    ] as const;
+    }
+
+
+export const getGetWhatsAppNotificationIdQueryOptions = <TData = Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError = unknown>(notification: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWhatsAppNotificationIdQueryKey(notification);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWhatsAppNotificationId>>> = ({ signal }) => getWhatsAppNotificationId(notification, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: notification !== null && notification !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetWhatsAppNotificationIdQueryResult = NonNullable<Awaited<ReturnType<typeof getWhatsAppNotificationId>>>
+export type GetWhatsAppNotificationIdQueryError = unknown
+
+
+export function useGetWhatsAppNotificationId<TData = Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError = unknown>(
+ notification: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWhatsAppNotificationId>>,
+          TError,
+          Awaited<ReturnType<typeof getWhatsAppNotificationId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWhatsAppNotificationId<TData = Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError = unknown>(
+ notification: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWhatsAppNotificationId>>,
+          TError,
+          Awaited<ReturnType<typeof getWhatsAppNotificationId>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWhatsAppNotificationId<TData = Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError = unknown>(
+ notification: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetWhatsAppNotificationId<TData = Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError = unknown>(
+ notification: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppNotificationId>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetWhatsAppNotificationIdQueryOptions(notification,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const postWhatsAppNotificationIdRetry = (
+    notification: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<PostWhatsAppNotificationIdRetry200>(
+      {url: `/admin/whatsapp/notifications/${notification}/retry`, method: 'POST', signal
+    },
+      options);
+    }
+
+
+
+export const getPostWhatsAppNotificationIdRetryMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWhatsAppNotificationIdRetry>>, TError,{notification: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postWhatsAppNotificationIdRetry>>, TError,{notification: string}, TContext> => {
+
+const mutationKey = ['postWhatsAppNotificationIdRetry'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postWhatsAppNotificationIdRetry>>, {notification: string}> = (props) => {
+          const {notification} = props ?? {};
+
+          return  postWhatsAppNotificationIdRetry(notification,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostWhatsAppNotificationIdRetryMutationResult = NonNullable<Awaited<ReturnType<typeof postWhatsAppNotificationIdRetry>>>
+
+    export type PostWhatsAppNotificationIdRetryMutationError = unknown
+
+    export const usePostWhatsAppNotificationIdRetry = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postWhatsAppNotificationIdRetry>>, TError,{notification: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postWhatsAppNotificationIdRetry>>,
+        TError,
+        {notification: string},
+        TContext
+      > => {
+      return useMutation(getPostWhatsAppNotificationIdRetryMutationOptions(options), queryClient);
+    }
+    export const getWhatsAppTenantSettings = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<WhatsAppSettings[]>(
+      {url: `/admin/whatsapp/tenant-settings`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetWhatsAppTenantSettingsQueryKey = () => {
+    return [
+    `/admin/whatsapp/tenant-settings`
+    ] as const;
+    }
+
+
+export const getGetWhatsAppTenantSettingsQueryOptions = <TData = Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetWhatsAppTenantSettingsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getWhatsAppTenantSettings>>> = ({ signal }) => getWhatsAppTenantSettings(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetWhatsAppTenantSettingsQueryResult = NonNullable<Awaited<ReturnType<typeof getWhatsAppTenantSettings>>>
+export type GetWhatsAppTenantSettingsQueryError = unknown
+
+
+export function useGetWhatsAppTenantSettings<TData = Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWhatsAppTenantSettings>>,
+          TError,
+          Awaited<ReturnType<typeof getWhatsAppTenantSettings>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWhatsAppTenantSettings<TData = Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getWhatsAppTenantSettings>>,
+          TError,
+          Awaited<ReturnType<typeof getWhatsAppTenantSettings>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetWhatsAppTenantSettings<TData = Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetWhatsAppTenantSettings<TData = Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getWhatsAppTenantSettings>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetWhatsAppTenantSettingsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const putWhatsAppTenantSettings = (
+    tenant: string,
+    whatsAppSettings: WhatsAppSettings,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<WhatsAppSettings>(
+      {url: `/admin/whatsapp/tenant-settings/${tenant}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: whatsAppSettings, signal
+    },
+      options);
+    }
+
+
+
+export const getPutWhatsAppTenantSettingsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putWhatsAppTenantSettings>>, TError,{tenant: string;data: WhatsAppSettings}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putWhatsAppTenantSettings>>, TError,{tenant: string;data: WhatsAppSettings}, TContext> => {
+
+const mutationKey = ['putWhatsAppTenantSettings'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putWhatsAppTenantSettings>>, {tenant: string;data: WhatsAppSettings}> = (props) => {
+          const {tenant,data} = props ?? {};
+
+          return  putWhatsAppTenantSettings(tenant,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutWhatsAppTenantSettingsMutationResult = NonNullable<Awaited<ReturnType<typeof putWhatsAppTenantSettings>>>
+    export type PutWhatsAppTenantSettingsMutationBody = WhatsAppSettings
+    export type PutWhatsAppTenantSettingsMutationError = unknown
+
+    export const usePutWhatsAppTenantSettings = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putWhatsAppTenantSettings>>, TError,{tenant: string;data: WhatsAppSettings}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putWhatsAppTenantSettings>>,
+        TError,
+        {tenant: string;data: WhatsAppSettings},
+        TContext
+      > => {
+      return useMutation(getPutWhatsAppTenantSettingsMutationOptions(options), queryClient);
+    }
 
 
 
