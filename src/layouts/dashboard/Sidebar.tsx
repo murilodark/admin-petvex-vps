@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../core/auth/auth.store';
-import { LayoutDashboard, User, LogOut, Loader2, Users, CreditCard, ShieldCheck, Wallet, ClipboardList, DollarSign, Receipt } from 'lucide-react';
+import { LayoutDashboard, User, LogOut, Loader2, Users, CreditCard, ShieldCheck, Wallet, ClipboardList, DollarSign, Receipt, MessageSquare  } from 'lucide-react';
 import { cn } from '../../shared/lib/cn';
 
 interface SidebarProps {
