@@ -1,23 +1,18 @@
 import React from 'react';
 import { Eye, ShieldAlert, ZapOff, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { Subscription } from '../../../../core/http/generated/models';
 import { Badge } from '../../../../shared/components/ui/Badge';
-import { AdminSubscription } from '../types/billing-admin.types';
-import {
-  canCancelSubscription,
-  canReactivateSubscription,
-  canSuspendSubscription,
-} from '../utils/billing-admin-actions';
 
 interface SubscriptionTableProps {
-  data: AdminSubscription[];
+  data: Subscription[];
   total: number;
   page: number;
   lastPage: number;
   onPageChange: (page: number) => void;
-  onView: (subscription: AdminSubscription) => void;
-  onSuspend: (subscription: AdminSubscription) => void;
-  onReactivate: (subscription: AdminSubscription) => void;
-  onCancel: (subscription: AdminSubscription) => void;
+  onView: (subscription: Subscription) => void;
+  onSuspend: (subscription: Subscription) => void;
+  onReactivate: (subscription: Subscription) => void;
+  onCancel: (subscription: Subscription) => void;
 }
 
 export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
@@ -31,7 +26,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
   onReactivate,
   onCancel,
 }) => {
-  const formatCurrency = (amountVal?: unknown, currencyStr?: string | null) => {
+  const formatCurrency = (amountVal?: any, currencyStr?: string | null) => {
     const numericVal = amountVal !== undefined && amountVal !== null ? Number(amountVal) : NaN;
     if (isNaN(numericVal)) {
       return 'N/A';
@@ -68,10 +63,8 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
       case 'suspended':
         return <Badge variant="warning">Suspensa</Badge>;
       case 'canceled':
-      case 'cancelled':
         return <Badge variant="danger">Cancelada</Badge>;
       case 'past_due':
-      case 'payment_required':
         return <Badge variant="danger">Em Atraso</Badge>;
       case 'expired':
         return <Badge variant="neutral">Expirada</Badge>;
@@ -125,7 +118,7 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     {sub.billing_cycle === 'monthly' ? 'Mensal' : sub.billing_cycle === 'yearly' ? 'Anual' : sub.billing_cycle || '-'}
                   </td>
                   <td className="px-6 py-4 font-extrabold text-slate-850">
-                    {formatCurrency(sub.amount ?? sub.price, sub.currency)}
+                    {formatCurrency((sub as any).amount !== undefined ? (sub as any).amount : sub.price, (sub as any).currency)}
                   </td>
                   <td className="px-6 py-4 uppercase font-bold text-slate-400 font-mono text-[10px]">
                     {sub.gateway?.replace('_', ' ') || 'N/A'}
@@ -137,45 +130,38 @@ export const SubscriptionTable: React.FC<SubscriptionTableProps> = ({
                     <div className="flex items-center gap-2">
                       <button
                         title="Ver Detalhes"
-                        aria-label={`Ver detalhes da assinatura ${sub.id}`}
                         onClick={() => onView(sub)}
                         className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-[4px] cursor-pointer transition-all"
                       >
                         <Eye className="h-4 w-4" />
                       </button>
 
-                      {canSuspendSubscription(sub) && (
+                      {sub.status === 'active' || sub.status === 'trialing' || sub.status === 'past_due' ? (
+                        <>
                           <button
                             title="Suspender Assinatura"
-                            aria-label={`Suspender assinatura ${sub.id}`}
                             onClick={() => onSuspend(sub)}
                             className="p-1.5 text-amber-500 hover:text-amber-700 hover:bg-amber-50 rounded-[4px] cursor-pointer transition-all"
                           >
                             <ZapOff className="h-4 w-4" />
                           </button>
-                      )}
-
-                      {canCancelSubscription(sub) && (
                           <button
                             title="Cancelar Assinatura"
-                            aria-label={`Cancelar assinatura ${sub.id}`}
                             onClick={() => onCancel(sub)}
                             className="p-1.5 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-[4px] cursor-pointer transition-all"
                           >
                             <ShieldAlert className="h-4 w-4" />
                           </button>
-                      )}
-
-                      {canReactivateSubscription(sub) && (
+                        </>
+                      ) : sub.status === 'suspended' ? (
                         <button
                           title="Reativar Assinatura"
-                          aria-label={`Reativar assinatura ${sub.id}`}
                           onClick={() => onReactivate(sub)}
                           className="p-1.5 text-emerald-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-[4px] cursor-pointer transition-all"
                         >
                           <CheckCircle2 className="h-4 w-4" />
                         </button>
-                      )}
+                      ) : null}
                     </div>
                   </td>
                 </tr>

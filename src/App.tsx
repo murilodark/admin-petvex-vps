@@ -20,6 +20,7 @@ import { SubscriptionsPage } from './modules/admin/billing/pages/SubscriptionsPa
 import { PaymentsPage } from './modules/admin/billing/pages/PaymentsPage';
 import { InvoicesPage } from './modules/admin/billing/pages/InvoicesPage';
 import { WhatsappNotificationsPage } from './modules/whatsapp-notifications/pages/WhatsappNotificationsPage';
+import NotificationsPage from './modules/notifications';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -202,6 +203,18 @@ function AppContent() {
         title="Gerenciamento de Faturas Emitidas"
       >
         <InvoicesPage onNavigate={handleNavigate} />
+      </DashboardLayout>
+    );
+  }
+
+  if (isAuthenticated && currentPath.startsWith('/admin/notifications')) {
+    return (
+      <DashboardLayout
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        title="Gerenciamento de Notificações"
+      >
+        <NotificationsPage />
       </DashboardLayout>
     );
   }

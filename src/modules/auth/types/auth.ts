@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import type { AdminLoginRequest } from '../../../core/http/generated/models/adminLoginRequest';
+import { LoginCredentials } from '../../../core/http/generated/models/loginCredentials';
 
-export type AuthCredentials = AdminLoginRequest;
+export type AuthCredentials = LoginCredentials;
 
 export const loginSchema = z.object({
   email: z.string().email('Insira um e-mail válido'),

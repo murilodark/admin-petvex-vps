@@ -1,8 +1,8 @@
 import { authStore } from './auth.store';
-import type { AdminLoginRequest } from '../http/generated/models/adminLoginRequest';
+import { LoginCredentials } from '../http/generated/models/loginCredentials';
 
 export const authService = {
-  login(credentials: AdminLoginRequest) {
+  login(credentials: LoginCredentials) {
     return authStore.login(credentials);
   },
   logout() {

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { ClipboardList, CheckCircle, ShieldAlert, RefreshCw } from 'lucide-react';
-import { apiErrorHelper } from '../../../../common/helpers/api-error.helper';
+import { Subscription } from '../../../../core/http/generated/models';
 import { billingAdminService } from '../services/billing-admin.service';
-import { AdminSubscription, ListarSubscriptionsParams } from '../types/billing-admin.types';
+import { ListarSubscriptionsParams } from '../types/billing-admin.types';
 import { SubscriptionFilters } from '../components/SubscriptionFilters';
 import { SubscriptionTable } from '../components/SubscriptionTable';
 import { SubscriptionDetailsModal } from '../components/SubscriptionDetailsModal';
@@ -15,7 +15,7 @@ interface SubscriptionsPageProps {
 }
 
 export const SubscriptionsPage: React.FC<SubscriptionsPageProps> = ({ onNavigate }) => {
-  const [subscriptions, setSubscriptions] = useState<AdminSubscription[]>([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +31,7 @@ export const SubscriptionsPage: React.FC<SubscriptionsPageProps> = ({ onNavigate
   });
 
   // Dialog States
-  const [selectedSub, setSelectedSub] = useState<AdminSubscription | null>(null);
+  const [selectedSub, setSelectedSub] = useState<Subscription | null>(null);
   
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isSuspendOpen, setIsSuspendOpen] = useState(false);
@@ -53,9 +53,9 @@ export const SubscriptionsPage: React.FC<SubscriptionsPageProps> = ({ onNavigate
       const res = await billingAdminService.listarSubscriptions(filters);
       setSubscriptions(res.data);
       setTotal(res.total);
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error('Failed to load subscriptions', err);
-      setError(apiErrorHelper.getFriendlyErrorMessage(err));
+      setError(err?.message || 'Falha ao sincronizar lista de assinaturas com o banco de dados.');
     } finally {
       setLoading(false);
     }
@@ -80,28 +80,15 @@ export const SubscriptionsPage: React.FC<SubscriptionsPageProps> = ({ onNavigate
     });
   };
 
-  const handleOpenDetails = async (subscription: AdminSubscription) => {
-    setSelectedSub(subscription);
-    setIsDetailOpen(true);
-
-    try {
-      const details = await billingAdminService.buscarSubscriptionPorId(subscription.id);
-      setSelectedSub(details);
-    } catch (err: unknown) {
-      console.error('Failed to load subscription details', err);
-      triggerToast(apiErrorHelper.getFriendlyErrorMessage(err), 'error');
-    }
-  };
-
   // Action confirmations
   const handleConfirmSuspend = async (id: string, reason: string) => {
     try {
       const response = await billingAdminService.suspenderSubscription(id, reason);
       triggerToast(response.message || 'Assinatura suspensa administrativamente com sucesso!');
-      await fetchSubscriptions();
-    } catch (err: unknown) {
+      fetchSubscriptions();
+    } catch (err: any) {
       console.error(err);
-      triggerToast(apiErrorHelper.getFriendlyErrorMessage(err), 'error');
+      triggerToast(err?.message || 'Não foi possível suspender esta assinatura.', 'error');
       throw err;
     }
   };
@@ -110,10 +97,10 @@ export const SubscriptionsPage: React.FC<SubscriptionsPageProps> = ({ onNavigate
     try {
       const response = await billingAdminService.cancelarSubscription(id, reason);
       triggerToast(response.message || 'Assinatura cancelada definitivamente com sucesso!');
-      await fetchSubscriptions();
-    } catch (err: unknown) {
+      fetchSubscriptions();
+    } catch (err: any) {
       console.error(err);
-      triggerToast(apiErrorHelper.getFriendlyErrorMessage(err), 'error');
+      triggerToast(err?.message || 'Não foi possível cancelar esta assinatura.', 'error');
       throw err;
     }
   };
@@ -122,10 +109,10 @@ export const SubscriptionsPage: React.FC<SubscriptionsPageProps> = ({ onNavigate
     try {
       const response = await billingAdminService.reativarSubscription(id);
       triggerToast(response.message || 'Assinatura reativada integralmente com sucesso!');
-      await fetchSubscriptions();
-    } catch (err: unknown) {
+      fetchSubscriptions();
+    } catch (err: any) {
       console.error(err);
-      triggerToast(apiErrorHelper.getFriendlyErrorMessage(err), 'error');
+      triggerToast(err?.message || 'Não foi possível reativar esta assinatura.', 'error');
       throw err;
     }
   };
@@ -203,7 +190,10 @@ export const SubscriptionsPage: React.FC<SubscriptionsPageProps> = ({ onNavigate
         page={filters.page || 1}
         lastPage={Math.ceil(total / 10) || 1}
         onPageChange={handlePageChange}
-        onView={handleOpenDetails}
+        onView={(sub) => {
+          setSelectedSub(sub);
+          setIsDetailOpen(true);
+        }}
         onSuspend={(sub) => {
           setSelectedSub(sub);
           setIsSuspendOpen(true);

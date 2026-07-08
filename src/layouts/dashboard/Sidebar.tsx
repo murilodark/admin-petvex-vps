@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../core/auth/auth.store';
-import { LayoutDashboard, User, LogOut, Loader2, Users, CreditCard, ShieldCheck, Wallet, ClipboardList, DollarSign, Receipt, MessageSquare  } from 'lucide-react';
+import { LayoutDashboard, User, LogOut, Loader2, Users, CreditCard, ShieldCheck, Wallet, ClipboardList, DollarSign, Receipt, MessageSquare, Bell } from 'lucide-react';
 import { cn } from '../../shared/lib/cn';
 
 interface SidebarProps {
@@ -57,6 +57,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPath, onNavigate, isOpe
       name: 'Notificações WhatsApp',
       path: '/admin/whatsapp/whatsapp-notifications',
       icon: MessageSquare,
+    },
+    {
+      name: 'Notificações',
+      path: '/admin/notifications',
+      icon: Bell,
     },
     {
       name: 'Gateways de Pagamento',
@@ -124,6 +129,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPath, onNavigate, isOpe
               (item.path === '/admin/billing/payments' && currentPath.startsWith('/admin/billing/payments')) ||
               (item.path === '/admin/billing/invoices' && currentPath.startsWith('/admin/billing/invoices')) ||
               (item.path === '/admin/whatsapp/whatsapp-notifications' && currentPath.startsWith('/admin/whatsapp/whatsapp-notifications')) ||
+              (item.path === '/admin/notifications' && currentPath.startsWith('/admin/notifications')) ||
               (currentPath === '/me' && item.path === '/profile');
 
             const Icon = item.icon!;

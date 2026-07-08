@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { X, Loader2, ShieldAlert } from 'lucide-react';
+import { Subscription } from '../../../../core/http/generated/models';
 import { CancelSubscriptionSchema } from '../schemas/billing-admin.schema';
-import { AdminSubscription } from '../types/billing-admin.types';
 
 interface CancelSubscriptionModalProps {
-  subscription: AdminSubscription | null;
+  subscription: Subscription | null;
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (id: string, reason: string) => Promise<void>;

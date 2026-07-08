@@ -4,33 +4,6 @@ import { Badge } from '../../../shared/components/ui/Badge';
 import { useAuth } from '../../../core/auth/auth.store';
 import { User as UserIcon } from 'lucide-react';
 
-function formatRole(role: string): string {
-  return role
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
-function formatStatus(status: string): string {
-  return status === 'active' ? 'Ativo' : 'Inativo';
-}
-
-function formatLastLogin(lastLoginAt: string | null): string {
-  if (!lastLoginAt) {
-    return 'Sem registro';
-  }
-
-  const parsedDate = new Date(lastLoginAt);
-
-  if (Number.isNaN(parsedDate.getTime())) {
-    return 'Sem registro';
-  }
-
-  return new Intl.DateTimeFormat('pt-BR', {
-    dateStyle: 'short',
-    timeStyle: 'short',
-  }).format(parsedDate);
-}
-
 export const ProfileCard: React.FC = () => {
   const { user, isLoading } = useAuth();
 
@@ -50,7 +23,11 @@ export const ProfileCard: React.FC = () => {
     );
   }
 
-  const statusVariant = user.status === 'active' ? 'success' : 'danger';
+  const tenantName = typeof user.tenant === 'object' && user.tenant !== null
+    ? user.tenant.name
+    : user.tenant;
+
+  const profileType = user.type || user.profile || 'Administrador Global';
 
   return (
     <Card id="profile-card" className="max-w-2xl mx-auto border-l-4 border-l-teal-600 shadow-sm rounded-[4px]">
@@ -87,28 +64,19 @@ export const ProfileCard: React.FC = () => {
 
         <div className="flex justify-between items-center border-b border-slate-100 pb-3" id="profile-detail-type">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            Cargo
+            Perfil / Função
           </span>
           <span className="text-xs font-bold text-teal-600 uppercase tracking-wider">
-            {formatRole(user.role)}
+            {profileType}
           </span>
         </div>
 
-        <div className="flex justify-between items-center border-b border-slate-100 pb-3" id="profile-detail-status">
+        <div className="flex justify-between items-center pb-2" id="profile-detail-tenant">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            Status
+            Tenant Associado
           </span>
-          <Badge variant={statusVariant}>
-            {formatStatus(user.status)}
-          </Badge>
-        </div>
-
-        <div className="flex justify-between items-center pb-2" id="profile-detail-last-login">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            Último Login
-          </span>
-          <span className="text-xs font-mono text-slate-700">
-            {formatLastLogin(user.last_login_at)}
+          <span className="text-xs font-bold text-slate-800">
+            {tenantName || 'GLOBAL_PETVEX'}
           </span>
         </div>
       </div>

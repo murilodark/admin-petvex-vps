@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { DollarSign, ShieldAlert, RefreshCw, CheckCircle } from 'lucide-react';
-import { apiErrorHelper } from '../../../../common/helpers/api-error.helper';
+import { Payment } from '../../../../core/http/generated/models';
 import { billingAdminService } from '../services/billing-admin.service';
-import { AdminPayment, ListarPaymentsParams } from '../types/billing-admin.types';
+import { ListarPaymentsParams } from '../types/billing-admin.types';
 import { PaymentFilters } from '../components/PaymentFilters';
 import { PaymentTable } from '../components/PaymentTable';
 import { PaymentDetailsModal } from '../components/PaymentDetailsModal';
@@ -12,7 +12,7 @@ interface PaymentsPageProps {
 }
 
 export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
-  const [payments, setPayments] = useState<AdminPayment[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -22,12 +22,12 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
     page: 1,
     tenant_id: '',
     subscription_id: '',
-    status: 'all',
+         status: 'all',
     gateway: 'all',
   });
 
   // Details modal State
-  const [selectedPayment, setSelectedPayment] = useState<AdminPayment | null>(null);
+  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   // Synchronization and Toast State
@@ -51,9 +51,9 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
       const res = await billingAdminService.listarPayments(filters);
       setPayments(res.data);
       setTotal(res.total);
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error('Failed to load transaction list', err);
-      setError(apiErrorHelper.getFriendlyErrorMessage(err));
+      setError(err?.message || 'Falha ao sincronizar histórico de transações com o bando de dados.');
     } finally {
       setLoading(false);
     }
@@ -77,22 +77,6 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
     });
   };
 
-  const handleOpenDetails = async (payment: AdminPayment) => {
-    setSelectedPayment(payment);
-    setIsDetailOpen(true);
-
-    try {
-      const details = await billingAdminService.buscarPaymentPorId(payment.id);
-      setSelectedPayment(details);
-    } catch (err: unknown) {
-      console.error('Failed to load payment details', err);
-      setToastMessage({
-        text: apiErrorHelper.getFriendlyErrorMessage(err),
-        type: 'error',
-      });
-    }
-  };
-
   const handleSyncPayment = async (paymentId: string) => {
     try {
       setSyncingId(paymentId);
@@ -110,11 +94,11 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
         text: 'Status do pagamento sincronizado com sucesso.',
         type: 'success',
       });
-      await fetchPayments();
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error('Failed to sync payment', err);
+      const apiMessage = err?.response?.data?.message || err?.message;
       setToastMessage({
-        text: apiErrorHelper.getFriendlyErrorMessage(err),
+        text: apiMessage || 'Não foi possível sincronizar o status do pagamento.',
         type: 'error',
       });
     } finally {
@@ -195,7 +179,10 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({ onNavigate }) => {
         page={filters.page || 1}
         lastPage={Math.ceil(total / 10) || 1}
         onPageChange={handlePageChange}
-        onView={handleOpenDetails}
+        onView={(pay) => {
+          setSelectedPayment(pay);
+          setIsDetailOpen(true);
+        }}
         onSync={handleSyncPayment}
         syncingId={syncingId}
       />

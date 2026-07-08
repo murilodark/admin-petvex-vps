@@ -1,11 +1,10 @@
 import React from 'react';
 import { X, CheckCircle, ShieldX, DollarSign, Wallet, ArrowRight, ShieldCheck, RefreshCw } from 'lucide-react';
+import { Payment } from '../../../../core/http/generated/models';
 import { Badge } from '../../../../shared/components/ui/Badge';
-import { AdminPayment } from '../types/billing-admin.types';
-import { canSyncPayment } from '../utils/billing-admin-actions';
 
 interface PaymentDetailsModalProps {
-  payment: AdminPayment | null;
+  payment: Payment | null;
   isOpen: boolean;
   onClose: () => void;
   onSync?: (paymentId: string) => void;
@@ -40,12 +39,9 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'approved':
-      case 'paid':
         return <Badge variant="success">Aprovado</Badge>;
       case 'pending':
         return <Badge variant="warning">Pendente</Badge>;
-      case 'processing':
-        return <Badge variant="info">Processando</Badge>;
       case 'failed':
       case 'rejected':
         return <Badge variant="danger">Falhado</Badge>;
@@ -57,8 +53,6 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
         return <Badge variant="neutral">{status}</Badge>;
     }
   };
-
-  const gatewayReturn = payment.metadata?.gateway_return ?? payment.metadata?.last_gateway_return ?? payment.metadata?.gateway_response;
 
   return (
     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 font-sans animate-fade-in" id="payment-detail-backdrop">
@@ -112,10 +106,6 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
                 <span className="block text-[8px] font-extrabold text-slate-400 uppercase">ASSINATURA ASSOCIADA</span>
                 <span className="font-mono text-slate-800 text-[10px]">#{payment.subscription_id}</span>
               </div>
-              <div>
-                <span className="block text-[8px] font-extrabold text-slate-400 uppercase">FATURA ASSOCIADA</span>
-                <span className="font-mono text-slate-800 text-[10px]">#{payment.invoice_id || payment.invoice?.number || 'N/A'}</span>
-              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 pt-1">
@@ -129,12 +119,6 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
                 <span className="block text-[8px] font-extrabold text-slate-400 uppercase">GATEWAY PROCESSO</span>
                 <span className="text-slate-800 uppercase text-[10px] font-mono leading-none font-bold">
                   {payment.gateway?.replace('_', ' ') || 'N/A'}
-                </span>
-              </div>
-              <div>
-                <span className="block text-[8px] font-extrabold text-slate-400 uppercase">TENANT</span>
-                <span className="text-slate-800 text-[10px] font-bold block truncate max-w-full">
-                  {payment.tenant?.name || payment.tenant_id || 'N/A'}
                 </span>
               </div>
             </div>
@@ -160,14 +144,6 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
                 </span>
               </div>
             </div>
-            {gatewayReturn !== undefined && (
-              <div className="mt-3">
-                <span className="block text-[8px] font-extrabold text-slate-400 uppercase mb-1">ÚLTIMO RETORNO DO GATEWAY</span>
-                <pre className="font-mono text-[9px] text-slate-700 bg-slate-50 px-2 py-1.5 rounded-[4px] border border-slate-100 overflow-x-auto whitespace-pre-wrap max-h-32">
-                  {typeof gatewayReturn === 'string' ? gatewayReturn : JSON.stringify(gatewayReturn, null, 2)}
-                </pre>
-              </div>
-            )}
           </div>
 
           {/* Section 3: Chronicles */}
@@ -198,12 +174,6 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
                   <span>{formatDate(payment.refunded_at)}</span>
                 </div>
               )}
-              {payment.status === 'cancelled' && (
-                <div className="flex justify-between text-slate-600 font-bold bg-slate-50 p-1 rounded-[4px]">
-                  <span>CANCELAMENTO/FALHA:</span>
-                  <span>{formatDate(payment.failed_at || payment.updated_at)}</span>
-                </div>
-              )}
             </div>
           </div>
 
@@ -224,11 +194,11 @@ export const PaymentDetailsModal: React.FC<PaymentDetailsModalProps> = ({
         {/* Footer toolbar */}
         <div className="bg-slate-50 border-t border-slate-100 px-6 py-4 flex justify-between items-center" id="payment-detail-footer">
           <div>
-            {onSync && canSyncPayment(payment) && (
+            {onSync && ['pending', 'failed', 'rejected', 'PENDENTE', 'FALHADO'].includes(payment.status) && (
               <button
                 id="payment-detail-sync-btn"
                 onClick={() => onSync(payment.id!)}
-                disabled={syncingId === payment.id}
+                disabled={syncingId !== null}
                 className={`flex items-center gap-2 px-4 py-1.5 rounded-[4px] text-xs font-extrabold cursor-pointer transition-all uppercase ${
                   syncingId === payment.id
                     ? 'bg-teal-50 text-teal-700 border border-teal-200 cursor-not-allowed'

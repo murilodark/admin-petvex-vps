@@ -79,7 +79,7 @@ export const PaymentFilters: React.FC<PaymentFiltersProps> = ({
             <option value="pending">PENDENTES</option>
             <option value="approved">APROVADOS (PAID)</option>
             <option value="rejected">REJEITADOS</option>
-            <option value="failed">FALHADOS (FAILED)</option>
+            <option value="refusing">FALHADOS (FAILED)</option>
             <option value="cancelled">CANCELADOS</option>
             <option value="refunded">ESTORNADOS (REFUNDED)</option>
           </select>

@@ -144,43 +144,43 @@ export const WhatsappNotificationsPage: React.FC = () => {
       </div>
 
       {/* Tabs Menu */}
-      <div className="flex border-b border-slate-800 bg-slate-950 p-1 rounded-[4px] gap-2" id="whatsapp-tabs-bar">
+      <div className="flex overflow-x-auto whitespace-nowrap border-b border-slate-800 bg-slate-950 p-1 rounded-[4px] gap-2 no-scrollbar" id="whatsapp-tabs-bar" style={{ WebkitOverflowScrolling: 'touch' }}>
         <button
           id="tab-btn-history"
           onClick={() => setActiveTab('history')}
-          className={`flex items-center gap-2 px-5 py-3 text-xs uppercase tracking-wider font-bold rounded-[4px] transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-5 py-3 text-xs uppercase tracking-wider font-bold rounded-[4px] transition-all cursor-pointer shrink-0 ${
             activeTab === 'history'
               ? 'bg-teal-600 text-white shadow-sm'
               : 'text-slate-400 hover:text-white hover:bg-slate-900'
           }`}
         >
-          <History className="h-4 w-4" />
+          <History className="h-4 w-4 shrink-0" />
           Histórico de Envios
         </button>
 
         <button
           id="tab-btn-templates"
           onClick={() => setActiveTab('templates')}
-          className={`flex items-center gap-2 px-5 py-3 text-xs uppercase tracking-wider font-bold rounded-[4px] transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-5 py-3 text-xs uppercase tracking-wider font-bold rounded-[4px] transition-all cursor-pointer shrink-0 ${
             activeTab === 'templates'
               ? 'bg-teal-600 text-white shadow-sm'
               : 'text-slate-400 hover:text-white hover:bg-slate-900'
           }`}
         >
-          <FileText className="h-4 w-4" />
+          <FileText className="h-4 w-4 shrink-0" />
           Templates cadastrados
         </button>
 
         <button
           id="tab-btn-settings"
           onClick={() => setActiveTab('settings')}
-          className={`flex items-center gap-2 px-5 py-3 text-xs uppercase tracking-wider font-bold rounded-[4px] transition-all cursor-pointer ${
+          className={`flex items-center gap-2 px-5 py-3 text-xs uppercase tracking-wider font-bold rounded-[4px] transition-all cursor-pointer shrink-0 ${
             activeTab === 'settings'
               ? 'bg-teal-600 text-white shadow-sm'
               : 'text-slate-400 hover:text-white hover:bg-slate-900'
           }`}
         >
-          <Settings className="h-4 w-4" />
+          <Settings className="h-4 w-4 shrink-0" />
           Configurações
         </button>
       </div>

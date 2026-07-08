@@ -32,12 +32,16 @@ import type {
   AdminTenantUsersResponse,
   AdminTenantsResponse,
   AdminUsersResponse,
+  CreateNotificationTemplatePayload,
   CreatePaymentGatewayPayload,
   CreatePlanPayload,
+  CreateTenantBlockPayload,
   CreateTenantPayload,
   CreateTenantUserPayload,
   CreateUserPayload,
   CreateUserTenantAccessPayload,
+  DeleteNotificationTemplate200,
+  DeleteNotificationTemplateTenantBlock200,
   GetAdminBillingInvoicesParams,
   GetAdminBillingPaymentGatewaysParams,
   GetAdminBillingPaymentsParams,
@@ -46,9 +50,18 @@ import type {
   GetAdminTenantsParams,
   GetAdminTenantsTenantUsersParams,
   GetAdminUsersParams,
+  GetNotificationDispatchesParams,
+  GetNotificationTemplatesParams,
+  GetWhatsAppNotificationsParams,
   Invoice,
   LoginCredentials,
   LoginResponse,
+  NotificationDispatch,
+  NotificationDispatchStats,
+  NotificationDispatchesResponse,
+  NotificationTemplate,
+  NotificationTemplateStats,
+  NotificationTemplatesResponse,
   PatchAdminBillingPaymentGatewaysIdSetDefault200,
   PatchAdminBillingSubscriptionsIdCancel200,
   PatchAdminBillingSubscriptionsIdCancelBody,
@@ -61,9 +74,12 @@ import type {
   PostAdminBillingPaymentGatewaysIdTest200,
   PostAdminBillingPaymentsIdSync200,
   PostAuthLogout200,
+  PostWhatsAppNotificationIdRetry200,
   Subscription,
   Tenant,
+  TenantBlock,
   TenantUser,
+  UpdateNotificationTemplatePayload,
   UpdatePaymentGatewayPayload,
   UpdatePlanPayload,
   UpdateTenantPayload,
@@ -73,9 +89,6 @@ import type {
   User,
   UserTenantAccess,
   UserTenantAccessListResponse,
-
-  GetWhatsAppNotificationsParams,
-  PostWhatsAppNotificationIdRetry200,
   WhatsAppNotification,
   WhatsAppNotificationsResponse,
   WhatsAppSettings,
@@ -3134,7 +3147,7 @@ export const postAdminBillingPaymentsIdSync = (
 
 
       return customInstance<PostAdminBillingPaymentsIdSync200>(
-      {url: `/admin/billing/payments/${payment}/sync-status`, method: 'PATCH', signal
+      {url: `/admin/billing/payments/${payment}/sync`, method: 'POST', signal
     },
       options);
     }
@@ -3349,6 +3362,9 @@ export function useGetAdminBillingInvoicesId<TData = Awaited<ReturnType<typeof g
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+
+
 
 
 
@@ -3810,6 +3826,1000 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getPutWhatsAppTenantSettingsMutationOptions(options), queryClient);
     }
+    export const getNotificationTemplateStats = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationTemplateStats>(
+      {url: `/admin/notification-templates/stats`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetNotificationTemplateStatsQueryKey = () => {
+    return [
+    `/admin/notification-templates/stats`
+    ] as const;
+    }
+
+
+export const getGetNotificationTemplateStatsQueryOptions = <TData = Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNotificationTemplateStatsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationTemplateStats>>> = ({ signal }) => getNotificationTemplateStats(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetNotificationTemplateStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getNotificationTemplateStats>>>
+export type GetNotificationTemplateStatsQueryError = unknown
+
+
+export function useGetNotificationTemplateStats<TData = Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationTemplateStats>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationTemplateStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationTemplateStats<TData = Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationTemplateStats>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationTemplateStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationTemplateStats<TData = Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetNotificationTemplateStats<TData = Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetNotificationTemplateStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const getNotificationTemplates = (
+    params?: GetNotificationTemplatesParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationTemplatesResponse>(
+      {url: `/admin/notification-templates`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetNotificationTemplatesQueryKey = (params?: GetNotificationTemplatesParams,) => {
+    return [
+    `/admin/notification-templates`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetNotificationTemplatesQueryOptions = <TData = Awaited<ReturnType<typeof getNotificationTemplates>>, TError = unknown>(params?: GetNotificationTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNotificationTemplatesQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationTemplates>>> = ({ signal }) => getNotificationTemplates(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplates>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetNotificationTemplatesQueryResult = NonNullable<Awaited<ReturnType<typeof getNotificationTemplates>>>
+export type GetNotificationTemplatesQueryError = unknown
+
+
+export function useGetNotificationTemplates<TData = Awaited<ReturnType<typeof getNotificationTemplates>>, TError = unknown>(
+ params: undefined |  GetNotificationTemplatesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplates>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationTemplates>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationTemplates>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationTemplates<TData = Awaited<ReturnType<typeof getNotificationTemplates>>, TError = unknown>(
+ params?: GetNotificationTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplates>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationTemplates>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationTemplates>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationTemplates<TData = Awaited<ReturnType<typeof getNotificationTemplates>>, TError = unknown>(
+ params?: GetNotificationTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetNotificationTemplates<TData = Awaited<ReturnType<typeof getNotificationTemplates>>, TError = unknown>(
+ params?: GetNotificationTemplatesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplates>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetNotificationTemplatesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const postNotificationTemplate = (
+    createNotificationTemplatePayload: CreateNotificationTemplatePayload,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationTemplate>(
+      {url: `/admin/notification-templates`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createNotificationTemplatePayload, signal
+    },
+      options);
+    }
+
+
+
+export const getPostNotificationTemplateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNotificationTemplate>>, TError,{data: CreateNotificationTemplatePayload}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNotificationTemplate>>, TError,{data: CreateNotificationTemplatePayload}, TContext> => {
+
+const mutationKey = ['postNotificationTemplate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNotificationTemplate>>, {data: CreateNotificationTemplatePayload}> = (props) => {
+          const {data} = props ?? {};
+
+          return  postNotificationTemplate(data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNotificationTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof postNotificationTemplate>>>
+    export type PostNotificationTemplateMutationBody = CreateNotificationTemplatePayload
+    export type PostNotificationTemplateMutationError = unknown
+
+    export const usePostNotificationTemplate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNotificationTemplate>>, TError,{data: CreateNotificationTemplatePayload}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNotificationTemplate>>,
+        TError,
+        {data: CreateNotificationTemplatePayload},
+        TContext
+      > => {
+      return useMutation(getPostNotificationTemplateMutationOptions(options), queryClient);
+    }
+    export const getNotificationTemplate = (
+    notificationTemplate: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationTemplate>(
+      {url: `/admin/notification-templates/${notificationTemplate}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetNotificationTemplateQueryKey = (notificationTemplate: string,) => {
+    return [
+    `/admin/notification-templates/${notificationTemplate}`
+    ] as const;
+    }
+
+
+export const getGetNotificationTemplateQueryOptions = <TData = Awaited<ReturnType<typeof getNotificationTemplate>>, TError = unknown>(notificationTemplate: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNotificationTemplateQueryKey(notificationTemplate);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationTemplate>>> = ({ signal }) => getNotificationTemplate(notificationTemplate, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: notificationTemplate !== null && notificationTemplate !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplate>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetNotificationTemplateQueryResult = NonNullable<Awaited<ReturnType<typeof getNotificationTemplate>>>
+export type GetNotificationTemplateQueryError = unknown
+
+
+export function useGetNotificationTemplate<TData = Awaited<ReturnType<typeof getNotificationTemplate>>, TError = unknown>(
+ notificationTemplate: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplate>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationTemplate>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationTemplate>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationTemplate<TData = Awaited<ReturnType<typeof getNotificationTemplate>>, TError = unknown>(
+ notificationTemplate: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplate>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationTemplate>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationTemplate>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationTemplate<TData = Awaited<ReturnType<typeof getNotificationTemplate>>, TError = unknown>(
+ notificationTemplate: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetNotificationTemplate<TData = Awaited<ReturnType<typeof getNotificationTemplate>>, TError = unknown>(
+ notificationTemplate: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplate>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetNotificationTemplateQueryOptions(notificationTemplate,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const putNotificationTemplate = (
+    notificationTemplate: string,
+    updateNotificationTemplatePayload: UpdateNotificationTemplatePayload,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationTemplate>(
+      {url: `/admin/notification-templates/${notificationTemplate}`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: updateNotificationTemplatePayload, signal
+    },
+      options);
+    }
+
+
+
+export const getPutNotificationTemplateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putNotificationTemplate>>, TError,{notificationTemplate: string;data: UpdateNotificationTemplatePayload}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof putNotificationTemplate>>, TError,{notificationTemplate: string;data: UpdateNotificationTemplatePayload}, TContext> => {
+
+const mutationKey = ['putNotificationTemplate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof putNotificationTemplate>>, {notificationTemplate: string;data: UpdateNotificationTemplatePayload}> = (props) => {
+          const {notificationTemplate,data} = props ?? {};
+
+          return  putNotificationTemplate(notificationTemplate,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PutNotificationTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof putNotificationTemplate>>>
+    export type PutNotificationTemplateMutationBody = UpdateNotificationTemplatePayload
+    export type PutNotificationTemplateMutationError = unknown
+
+    export const usePutNotificationTemplate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof putNotificationTemplate>>, TError,{notificationTemplate: string;data: UpdateNotificationTemplatePayload}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof putNotificationTemplate>>,
+        TError,
+        {notificationTemplate: string;data: UpdateNotificationTemplatePayload},
+        TContext
+      > => {
+      return useMutation(getPutNotificationTemplateMutationOptions(options), queryClient);
+    }
+    export const deleteNotificationTemplate = (
+    notificationTemplate: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<DeleteNotificationTemplate200>(
+      {url: `/admin/notification-templates/${notificationTemplate}`, method: 'DELETE', signal
+    },
+      options);
+    }
+
+
+
+export const getDeleteNotificationTemplateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteNotificationTemplate>>, TError,{notificationTemplate: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteNotificationTemplate>>, TError,{notificationTemplate: string}, TContext> => {
+
+const mutationKey = ['deleteNotificationTemplate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteNotificationTemplate>>, {notificationTemplate: string}> = (props) => {
+          const {notificationTemplate} = props ?? {};
+
+          return  deleteNotificationTemplate(notificationTemplate,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteNotificationTemplateMutationResult = NonNullable<Awaited<ReturnType<typeof deleteNotificationTemplate>>>
+
+    export type DeleteNotificationTemplateMutationError = unknown
+
+    export const useDeleteNotificationTemplate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteNotificationTemplate>>, TError,{notificationTemplate: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteNotificationTemplate>>,
+        TError,
+        {notificationTemplate: string},
+        TContext
+      > => {
+      return useMutation(getDeleteNotificationTemplateMutationOptions(options), queryClient);
+    }
+    export const patchNotificationTemplateActivate = (
+    notificationTemplate: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationTemplate>(
+      {url: `/admin/notification-templates/${notificationTemplate}/activate`, method: 'PATCH', signal
+    },
+      options);
+    }
+
+
+
+export const getPatchNotificationTemplateActivateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchNotificationTemplateActivate>>, TError,{notificationTemplate: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof patchNotificationTemplateActivate>>, TError,{notificationTemplate: string}, TContext> => {
+
+const mutationKey = ['patchNotificationTemplateActivate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchNotificationTemplateActivate>>, {notificationTemplate: string}> = (props) => {
+          const {notificationTemplate} = props ?? {};
+
+          return  patchNotificationTemplateActivate(notificationTemplate,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatchNotificationTemplateActivateMutationResult = NonNullable<Awaited<ReturnType<typeof patchNotificationTemplateActivate>>>
+
+    export type PatchNotificationTemplateActivateMutationError = unknown
+
+    export const usePatchNotificationTemplateActivate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchNotificationTemplateActivate>>, TError,{notificationTemplate: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof patchNotificationTemplateActivate>>,
+        TError,
+        {notificationTemplate: string},
+        TContext
+      > => {
+      return useMutation(getPatchNotificationTemplateActivateMutationOptions(options), queryClient);
+    }
+    export const patchNotificationTemplateDeactivate = (
+    notificationTemplate: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationTemplate>(
+      {url: `/admin/notification-templates/${notificationTemplate}/deactivate`, method: 'PATCH', signal
+    },
+      options);
+    }
+
+
+
+export const getPatchNotificationTemplateDeactivateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchNotificationTemplateDeactivate>>, TError,{notificationTemplate: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof patchNotificationTemplateDeactivate>>, TError,{notificationTemplate: string}, TContext> => {
+
+const mutationKey = ['patchNotificationTemplateDeactivate'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof patchNotificationTemplateDeactivate>>, {notificationTemplate: string}> = (props) => {
+          const {notificationTemplate} = props ?? {};
+
+          return  patchNotificationTemplateDeactivate(notificationTemplate,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PatchNotificationTemplateDeactivateMutationResult = NonNullable<Awaited<ReturnType<typeof patchNotificationTemplateDeactivate>>>
+
+    export type PatchNotificationTemplateDeactivateMutationError = unknown
+
+    export const usePatchNotificationTemplateDeactivate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof patchNotificationTemplateDeactivate>>, TError,{notificationTemplate: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof patchNotificationTemplateDeactivate>>,
+        TError,
+        {notificationTemplate: string},
+        TContext
+      > => {
+      return useMutation(getPatchNotificationTemplateDeactivateMutationOptions(options), queryClient);
+    }
+    export const getNotificationTemplateTenantBlocks = (
+    notificationTemplate: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<TenantBlock[]>(
+      {url: `/admin/notification-templates/${notificationTemplate}/tenant-blocks`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetNotificationTemplateTenantBlocksQueryKey = (notificationTemplate: string,) => {
+    return [
+    `/admin/notification-templates/${notificationTemplate}/tenant-blocks`
+    ] as const;
+    }
+
+
+export const getGetNotificationTemplateTenantBlocksQueryOptions = <TData = Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError = unknown>(notificationTemplate: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNotificationTemplateTenantBlocksQueryKey(notificationTemplate);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>> = ({ signal }) => getNotificationTemplateTenantBlocks(notificationTemplate, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: notificationTemplate !== null && notificationTemplate !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetNotificationTemplateTenantBlocksQueryResult = NonNullable<Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>>
+export type GetNotificationTemplateTenantBlocksQueryError = unknown
+
+
+export function useGetNotificationTemplateTenantBlocks<TData = Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError = unknown>(
+ notificationTemplate: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationTemplateTenantBlocks<TData = Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError = unknown>(
+ notificationTemplate: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationTemplateTenantBlocks<TData = Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError = unknown>(
+ notificationTemplate: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetNotificationTemplateTenantBlocks<TData = Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError = unknown>(
+ notificationTemplate: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationTemplateTenantBlocks>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetNotificationTemplateTenantBlocksQueryOptions(notificationTemplate,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const postNotificationTemplateTenantBlock = (
+    notificationTemplate: string,
+    createTenantBlockPayload: CreateTenantBlockPayload,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<TenantBlock>(
+      {url: `/admin/notification-templates/${notificationTemplate}/tenant-blocks`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createTenantBlockPayload, signal
+    },
+      options);
+    }
+
+
+
+export const getPostNotificationTemplateTenantBlockMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNotificationTemplateTenantBlock>>, TError,{notificationTemplate: string;data: CreateTenantBlockPayload}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof postNotificationTemplateTenantBlock>>, TError,{notificationTemplate: string;data: CreateTenantBlockPayload}, TContext> => {
+
+const mutationKey = ['postNotificationTemplateTenantBlock'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof postNotificationTemplateTenantBlock>>, {notificationTemplate: string;data: CreateTenantBlockPayload}> = (props) => {
+          const {notificationTemplate,data} = props ?? {};
+
+          return  postNotificationTemplateTenantBlock(notificationTemplate,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PostNotificationTemplateTenantBlockMutationResult = NonNullable<Awaited<ReturnType<typeof postNotificationTemplateTenantBlock>>>
+    export type PostNotificationTemplateTenantBlockMutationBody = CreateTenantBlockPayload
+    export type PostNotificationTemplateTenantBlockMutationError = unknown
+
+    export const usePostNotificationTemplateTenantBlock = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof postNotificationTemplateTenantBlock>>, TError,{notificationTemplate: string;data: CreateTenantBlockPayload}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof postNotificationTemplateTenantBlock>>,
+        TError,
+        {notificationTemplate: string;data: CreateTenantBlockPayload},
+        TContext
+      > => {
+      return useMutation(getPostNotificationTemplateTenantBlockMutationOptions(options), queryClient);
+    }
+    export const deleteNotificationTemplateTenantBlock = (
+    notificationTemplate: string,
+    tenantBlock: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<DeleteNotificationTemplateTenantBlock200>(
+      {url: `/admin/notification-templates/${notificationTemplate}/tenant-blocks/${tenantBlock}`, method: 'DELETE', signal
+    },
+      options);
+    }
+
+
+
+export const getDeleteNotificationTemplateTenantBlockMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteNotificationTemplateTenantBlock>>, TError,{notificationTemplate: string;tenantBlock: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+): UseMutationOptions<Awaited<ReturnType<typeof deleteNotificationTemplateTenantBlock>>, TError,{notificationTemplate: string;tenantBlock: string}, TContext> => {
+
+const mutationKey = ['deleteNotificationTemplateTenantBlock'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteNotificationTemplateTenantBlock>>, {notificationTemplate: string;tenantBlock: string}> = (props) => {
+          const {notificationTemplate,tenantBlock} = props ?? {};
+
+          return  deleteNotificationTemplateTenantBlock(notificationTemplate,tenantBlock,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteNotificationTemplateTenantBlockMutationResult = NonNullable<Awaited<ReturnType<typeof deleteNotificationTemplateTenantBlock>>>
+
+    export type DeleteNotificationTemplateTenantBlockMutationError = unknown
+
+    export const useDeleteNotificationTemplateTenantBlock = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteNotificationTemplateTenantBlock>>, TError,{notificationTemplate: string;tenantBlock: string}, TContext>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteNotificationTemplateTenantBlock>>,
+        TError,
+        {notificationTemplate: string;tenantBlock: string},
+        TContext
+      > => {
+      return useMutation(getDeleteNotificationTemplateTenantBlockMutationOptions(options), queryClient);
+    }
+    export const getNotificationDispatchStats = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationDispatchStats>(
+      {url: `/admin/notification-dispatches/stats`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetNotificationDispatchStatsQueryKey = () => {
+    return [
+    `/admin/notification-dispatches/stats`
+    ] as const;
+    }
+
+
+export const getGetNotificationDispatchStatsQueryOptions = <TData = Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNotificationDispatchStatsQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationDispatchStats>>> = ({ signal }) => getNotificationDispatchStats(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetNotificationDispatchStatsQueryResult = NonNullable<Awaited<ReturnType<typeof getNotificationDispatchStats>>>
+export type GetNotificationDispatchStatsQueryError = unknown
+
+
+export function useGetNotificationDispatchStats<TData = Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationDispatchStats>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationDispatchStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationDispatchStats<TData = Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationDispatchStats>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationDispatchStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationDispatchStats<TData = Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetNotificationDispatchStats<TData = Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatchStats>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetNotificationDispatchStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const getNotificationDispatches = (
+    params?: GetNotificationDispatchesParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationDispatchesResponse>(
+      {url: `/admin/notification-dispatches`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetNotificationDispatchesQueryKey = (params?: GetNotificationDispatchesParams,) => {
+    return [
+    `/admin/notification-dispatches`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetNotificationDispatchesQueryOptions = <TData = Awaited<ReturnType<typeof getNotificationDispatches>>, TError = unknown>(params?: GetNotificationDispatchesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatches>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNotificationDispatchesQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationDispatches>>> = ({ signal }) => getNotificationDispatches(params, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatches>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetNotificationDispatchesQueryResult = NonNullable<Awaited<ReturnType<typeof getNotificationDispatches>>>
+export type GetNotificationDispatchesQueryError = unknown
+
+
+export function useGetNotificationDispatches<TData = Awaited<ReturnType<typeof getNotificationDispatches>>, TError = unknown>(
+ params: undefined |  GetNotificationDispatchesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatches>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationDispatches>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationDispatches>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationDispatches<TData = Awaited<ReturnType<typeof getNotificationDispatches>>, TError = unknown>(
+ params?: GetNotificationDispatchesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatches>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationDispatches>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationDispatches>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationDispatches<TData = Awaited<ReturnType<typeof getNotificationDispatches>>, TError = unknown>(
+ params?: GetNotificationDispatchesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatches>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetNotificationDispatches<TData = Awaited<ReturnType<typeof getNotificationDispatches>>, TError = unknown>(
+ params?: GetNotificationDispatchesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatches>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetNotificationDispatchesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const getNotificationDispatch = (
+    notificationDispatch: string,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<NotificationDispatch>(
+      {url: `/admin/notification-dispatches/${notificationDispatch}`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getGetNotificationDispatchQueryKey = (notificationDispatch: string,) => {
+    return [
+    `/admin/notification-dispatches/${notificationDispatch}`
+    ] as const;
+    }
+
+
+export const getGetNotificationDispatchQueryOptions = <TData = Awaited<ReturnType<typeof getNotificationDispatch>>, TError = unknown>(notificationDispatch: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatch>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetNotificationDispatchQueryKey(notificationDispatch);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getNotificationDispatch>>> = ({ signal }) => getNotificationDispatch(notificationDispatch, requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: notificationDispatch !== null && notificationDispatch !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatch>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetNotificationDispatchQueryResult = NonNullable<Awaited<ReturnType<typeof getNotificationDispatch>>>
+export type GetNotificationDispatchQueryError = unknown
+
+
+export function useGetNotificationDispatch<TData = Awaited<ReturnType<typeof getNotificationDispatch>>, TError = unknown>(
+ notificationDispatch: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatch>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationDispatch>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationDispatch>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationDispatch<TData = Awaited<ReturnType<typeof getNotificationDispatch>>, TError = unknown>(
+ notificationDispatch: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatch>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getNotificationDispatch>>,
+          TError,
+          Awaited<ReturnType<typeof getNotificationDispatch>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetNotificationDispatch<TData = Awaited<ReturnType<typeof getNotificationDispatch>>, TError = unknown>(
+ notificationDispatch: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatch>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetNotificationDispatch<TData = Awaited<ReturnType<typeof getNotificationDispatch>>, TError = unknown>(
+ notificationDispatch: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getNotificationDispatch>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetNotificationDispatchQueryOptions(notificationDispatch,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
 
 
 

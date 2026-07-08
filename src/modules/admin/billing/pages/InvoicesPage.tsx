@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Receipt, ShieldAlert, RefreshCw } from 'lucide-react';
-import { apiErrorHelper } from '../../../../common/helpers/api-error.helper';
+import { Invoice } from '../../../../core/http/generated/models';
 import { billingAdminService } from '../services/billing-admin.service';
-import { AdminInvoice, ListarInvoicesParams } from '../types/billing-admin.types';
+import { ListarInvoicesParams } from '../types/billing-admin.types';
 import { InvoiceFilters } from '../components/InvoiceFilters';
 import { InvoiceTable } from '../components/InvoiceTable';
 import { InvoiceDetailsModal } from '../components/InvoiceDetailsModal';
@@ -12,7 +12,7 @@ interface InvoicesPageProps {
 }
 
 export const InvoicesPage: React.FC<InvoicesPageProps> = ({ onNavigate }) => {
-  const [invoices, setInvoices] = useState<AdminInvoice[]>([]);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,7 +26,7 @@ export const InvoicesPage: React.FC<InvoicesPageProps> = ({ onNavigate }) => {
   });
 
   // Details modal State
-  const [selectedInvoice, setSelectedInvoice] = useState<AdminInvoice | null>(null);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   const fetchInvoices = async () => {
@@ -36,9 +36,9 @@ export const InvoicesPage: React.FC<InvoicesPageProps> = ({ onNavigate }) => {
       const res = await billingAdminService.listarInvoices(filters);
       setInvoices(res.data);
       setTotal(res.total);
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error('Failed to load faturas list', err);
-      setError(apiErrorHelper.getFriendlyErrorMessage(err));
+      setError(err?.message || 'Falha ao sincronizar histórico de faturas com o banco de dados.');
     } finally {
       setLoading(false);
     }
@@ -59,19 +59,6 @@ export const InvoicesPage: React.FC<InvoicesPageProps> = ({ onNavigate }) => {
       subscription_id: '',
       status: 'all',
     });
-  };
-
-  const handleOpenDetails = async (invoice: AdminInvoice) => {
-    setSelectedInvoice(invoice);
-    setIsDetailOpen(true);
-
-    try {
-      const details = await billingAdminService.buscarInvoicePorId(invoice.id);
-      setSelectedInvoice(details);
-    } catch (err: unknown) {
-      console.error('Failed to load invoice details', err);
-      setError(apiErrorHelper.getFriendlyErrorMessage(err));
-    }
   };
 
   return (
@@ -125,7 +112,10 @@ export const InvoicesPage: React.FC<InvoicesPageProps> = ({ onNavigate }) => {
         page={filters.page || 1}
         lastPage={Math.ceil(total / 10) || 1}
         onPageChange={handlePageChange}
-        onView={handleOpenDetails}
+        onView={(inv) => {
+          setSelectedInvoice(inv);
+          setIsDetailOpen(true);
+        }}
       />
 
       {/* Dossiê dialog */}

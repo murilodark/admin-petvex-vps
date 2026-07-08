@@ -1,15 +1,15 @@
 import React from 'react';
 import { Eye, AlertTriangle } from 'lucide-react';
+import { Invoice } from '../../../../core/http/generated/models';
 import { Badge } from '../../../../shared/components/ui/Badge';
-import { AdminInvoice } from '../types/billing-admin.types';
 
 interface InvoiceTableProps {
-  data: AdminInvoice[];
+  data: Invoice[];
   total: number;
   page: number;
   lastPage: number;
   onPageChange: (page: number) => void;
-  onView: (invoice: AdminInvoice) => void;
+  onView: (invoice: Invoice) => void;
 }
 
 export const InvoiceTable: React.FC<InvoiceTableProps> = ({
@@ -38,7 +38,6 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
       case 'paid':
         return <Badge variant="success">Paga</Badge>;
       case 'pending':
-      case 'open':
         return <Badge variant="warning">Pendente</Badge>;
       case 'overdue':
         return <Badge variant="danger">Vencida</Badge>;
@@ -110,7 +109,6 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
                   <td className="px-6 py-4">
                     <button
                       title="Ver Fatura"
-                      aria-label={`Ver fatura ${inv.number || inv.id}`}
                       onClick={() => onView(inv)}
                       className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-[4px] cursor-pointer transition-all"
                     >
@@ -138,7 +136,7 @@ export const InvoiceTable: React.FC<InvoiceTableProps> = ({
               ANTERIOR
             </button>
             <span className="px-3 text-slate-500 font-bold uppercase tracking-wider">
-              Página <b>{page}</b> de <b>{lastPage}</b>
+              Páge <b>{page}</b> de <b>{lastPage}</b>
             </span>
             <button
               disabled={page === lastPage}

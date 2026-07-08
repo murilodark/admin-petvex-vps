@@ -5,81 +5,35 @@ import { Subscription } from '../../../../core/http/generated/models/subscriptio
 import { Payment } from '../../../../core/http/generated/models/payment';
 import { Invoice } from '../../../../core/http/generated/models/invoice';
 
-export type BillingMetadata = Record<string, unknown>;
-
-export type AdminSubscription = Omit<Subscription, 'status'> & {
-  status: string;
-  amount?: number;
-  currency?: string;
-  metadata?: BillingMetadata;
-  trial_started_at?: string;
-  started_at?: string;
-  cancel_reason?: string;
-  gateway_checkout_url?: string;
-  payment_gateway_id?: string | number;
-  billing_customer_id?: string | number;
-  gateway_customer_id?: string;
-  gateway_subscription_id?: string;
-  gateway_checkout_id?: string;
-  last_payment?: AdminPayment;
-  invoice?: AdminInvoice;
-  invoices?: AdminInvoice[];
-  payments?: AdminPayment[];
-};
-
-export type AdminPayment = Omit<Payment, 'status' | 'method' | 'subscription' | 'invoice'> & {
-  status: string;
-  method: string;
-  payment_method?: string;
-  payment_gateway_id?: string | number;
-  metadata?: BillingMetadata;
-  subscription?: AdminSubscription;
-  invoice?: AdminInvoice;
-};
-
-export type AdminInvoice = Omit<Invoice, 'status' | 'subscription'> & {
-  status: string;
-  due_date?: string;
-  payment_gateway_id?: string | number;
-  metadata?: BillingMetadata;
-  subscription?: AdminSubscription;
-  payment?: AdminPayment;
-};
-
-export type ListarSubscriptionsParams = Omit<GetAdminBillingSubscriptionsParams, 'perPage'> & {
+export type ListarSubscriptionsParams = GetAdminBillingSubscriptionsParams & {
   is_sandbox?: string;
   plan_id?: string;
 };
 
 export interface ListarSubscriptionsResult {
-  data: AdminSubscription[];
+  data: Subscription[];
   total: number;
   page: number;
   perPage: number;
   lastPage: number;
 }
 
-export type ListarPaymentsParams = Omit<GetAdminBillingPaymentsParams, 'perPage'>;
+export type ListarPaymentsParams = GetAdminBillingPaymentsParams;
 
 export interface ListarPaymentsResult {
-  data: AdminPayment[];
+  data: Payment[];
   total: number;
   page: number;
   perPage: number;
   lastPage: number;
 }
 
-export type ListarInvoicesParams = Omit<GetAdminBillingInvoicesParams, 'perPage'>;
+export type ListarInvoicesParams = GetAdminBillingInvoicesParams;
 
 export interface ListarInvoicesResult {
-  data: AdminInvoice[];
+  data: Invoice[];
   total: number;
   page: number;
   perPage: number;
   lastPage: number;
-}
-
-export interface BillingActionResponse {
-  status: boolean;
-  message: string;
 }

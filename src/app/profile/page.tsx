@@ -10,7 +10,7 @@ export const ProfilePage: React.FC = () => {
             PERFIL<br/>USUÁRIO
           </div>
           <p id="massive-subtitle" className="text-xs text-slate-500 mt-4 max-w-xl font-medium leading-relaxed">
-            Confira abaixo as informações do administrador da plataforma obtidas diretamente da API administrativa com Sanctum Bearer Token.
+            Confira abaixo as informações do seu perfil de usuário logado (/me) obtidas diretamente da API em tempo real com Sanctum Bearer Token.
           </p>
         </div>
         <div className="text-left md:text-right" id="profile-route-indicator">
@@ -18,7 +18,7 @@ export const ProfilePage: React.FC = () => {
             Active Endpoint Tracker
           </div>
           <div className="flex items-center md:justify-end font-mono text-xs text-teal-700 bg-teal-50/70 border border-teal-100 px-3.5 py-1.5 rounded-[4px] font-bold">
-            GET /api/v1/admin/auth/me : ACTIVE
+            GET /api/me : ACTIVE
           </div>
         </div>
       </div>

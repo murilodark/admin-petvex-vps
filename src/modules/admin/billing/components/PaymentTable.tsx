@@ -1,16 +1,15 @@
 import React from 'react';
 import { Eye, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Payment } from '../../../../core/http/generated/models';
 import { Badge } from '../../../../shared/components/ui/Badge';
-import { AdminPayment } from '../types/billing-admin.types';
-import { canSyncPayment } from '../utils/billing-admin-actions';
 
 interface PaymentTableProps {
-  data: AdminPayment[];
+  data: Payment[];
   total: number;
   page: number;
   lastPage: number;
   onPageChange: (page: number) => void;
-  onView: (payment: AdminPayment) => void;
+  onView: (payment: Payment) => void;
   onSync?: (paymentId: string) => void;
   syncingId?: string | null;
 }
@@ -43,12 +42,9 @@ export const PaymentTable: React.FC<PaymentTableProps> = ({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'approved':
-      case 'paid':
         return <Badge variant="success">Aprovado</Badge>;
       case 'pending':
         return <Badge variant="warning">Pendente</Badge>;
-      case 'processing':
-        return <Badge variant="info">Processando</Badge>;
       case 'failed':
       case 'rejected':
         return <Badge variant="danger">Falhado</Badge>;
@@ -125,7 +121,6 @@ export const PaymentTable: React.FC<PaymentTableProps> = ({
                     <div className="flex items-center gap-1.5">
                       <button
                         title="Ver Dossiê Financeiro"
-                        aria-label={`Ver dossiê do pagamento ${pay.id}`}
                         onClick={() => onView(pay)}
                         className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-[4px] cursor-pointer transition-all"
                         id={`btn-view-payment-${pay.id}`}
@@ -133,16 +128,15 @@ export const PaymentTable: React.FC<PaymentTableProps> = ({
                         <Eye className="h-4 w-4" />
                       </button>
 
-                      {onSync && canSyncPayment(pay) && (
+                      {onSync && ['pending', 'failed', 'rejected', 'pendente', 'falhado'].includes(String(pay.status).toLowerCase()) && (
                         <button
                           title="Consultar gateway e atualizar status do pagamento"
-                          aria-label={`Sincronizar pagamento ${pay.id}`}
                           onClick={() => onSync(pay.id!)}
-                          disabled={syncingId === pay.id}
+                          disabled={syncingId !== null}
                           className={`p-1.5 rounded-[4px] cursor-pointer transition-all ${
                             syncingId === pay.id
                               ? 'text-teal-650 bg-teal-50 animate-spin'
-                              : 'text-slate-400 hover:text-teal-600 hover:bg-teal-50'
+                              : 'text-slate-400 hover:text-teal-600 hover:bg-teal-50 disabled:opacity-50'
                           }`}
                           id={`btn-sync-payment-row-${pay.id}`}
                         >
@@ -172,7 +166,7 @@ export const PaymentTable: React.FC<PaymentTableProps> = ({
               ANTERIOR
             </button>
             <span className="px-3 text-slate-500 font-bold uppercase tracking-wider">
-              Página <b>{page}</b> de <b>{lastPage}</b>
+              Páge <b>{page}</b> de <b>{lastPage}</b>
             </span>
             <button
               disabled={page === lastPage}

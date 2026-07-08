@@ -61,9 +61,9 @@ export const SubscriptionFilters: React.FC<SubscriptionFiltersProps> = ({
             className="w-full px-3 py-1.5 border border-slate-200 rounded-[4px] text-xs focus:outline-none focus:ring-1 focus:ring-teal-500 font-semibold text-slate-700 bg-white"
           >
             <option value="all">TODOS OS PLANOS</option>
-            <option value="1">PLANO SLIM</option>
-            <option value="2">PLANO STANDARD</option>
-            <option value="3">PLANO PRO MULTIPET</option>
+            <option value="plan-1">PLANO SLIM</option>
+            <option value="plan-2">PLANO STANDARD</option>
+            <option value="plan-3">PLANO PRO MULTIPET</option>
           </select>
         </div>
 
@@ -83,10 +83,8 @@ export const SubscriptionFilters: React.FC<SubscriptionFiltersProps> = ({
             <option value="trialing">PERÍODO TESTE (TRIAL)</option>
             <option value="active">ATIVAS</option>
             <option value="past_due">ATRASADAS (PAST DUE)</option>
-            <option value="payment_required">PAGAMENTO NECESSÁRIO</option>
             <option value="suspended">SUSPENSAS</option>
             <option value="canceled">CANCELADAS</option>
-            <option value="cancelled">CANCELADAS (API)</option>
             <option value="expired">EXPIRADAS</option>
           </select>
         </div>
