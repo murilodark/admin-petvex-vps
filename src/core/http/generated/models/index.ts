@@ -89,6 +89,8 @@ export * from './userTenantAccessListResponse.ts';
 export * from './userTenantAccessRole.ts';
 export * from './validationExceptionResponse.ts';
 export * from './validationExceptionResponseErrors.ts';
+export * from './getWhatsAppNotificationsParams.ts';
+export * from './postWhatsAppNotificationIdRetry200.ts';
 export * from './whatsAppNotification.ts';
 export * from './whatsAppNotificationAppointment.ts';
 export * from './whatsAppNotificationClient.ts';
