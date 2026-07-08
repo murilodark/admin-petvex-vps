@@ -19,6 +19,7 @@ import { PaymentGatewayDetailsPage } from './modules/admin/payment-gateways/page
 import { SubscriptionsPage } from './modules/admin/billing/pages/SubscriptionsPage';
 import { PaymentsPage } from './modules/admin/billing/pages/PaymentsPage';
 import { InvoicesPage } from './modules/admin/billing/pages/InvoicesPage';
+import { WhatsappNotificationsPage } from './modules/whatsapp-notifications/pages/WhatsappNotificationsPage';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -201,6 +202,18 @@ function AppContent() {
         title="Gerenciamento de Faturas Emitidas"
       >
         <InvoicesPage onNavigate={handleNavigate} />
+      </DashboardLayout>
+    );
+  }
+
+  if (isAuthenticated && currentPath.startsWith('/admin/whatsapp/whatsapp-notifications')) {
+    return (
+      <DashboardLayout
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        title="Gerenciamento de Notificações WhatsApp"
+      >
+        <WhatsappNotificationsPage />
       </DashboardLayout>
     );
   }

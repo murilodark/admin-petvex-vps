@@ -89,3 +89,16 @@ export * from './userTenantAccessListResponse.ts';
 export * from './userTenantAccessRole.ts';
 export * from './validationExceptionResponse.ts';
 export * from './validationExceptionResponseErrors.ts';
+export * from './getWhatsAppNotificationsParams.ts';
+export * from './postWhatsAppNotificationIdRetry200.ts';
+export * from './whatsAppNotification.ts';
+export * from './whatsAppNotificationAppointment.ts';
+export * from './whatsAppNotificationClient.ts';
+export * from './whatsAppNotificationPayload.ts';
+export * from './whatsAppNotificationPet.ts';
+export * from './whatsAppNotificationsResponse.ts';
+export * from './whatsAppNotificationStatus.ts';
+export * from './whatsAppSettings.ts';
+export * from './whatsAppTemplate.ts';
+export * from './whatsAppTemplateComponentsItem.ts';
+
