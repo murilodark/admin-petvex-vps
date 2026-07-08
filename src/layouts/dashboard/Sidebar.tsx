@@ -54,6 +54,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPath, onNavigate, isOpe
       icon: Receipt,
     },
     {
+      name: 'Notificações WhatsApp',
+      path: '/admin/whatsapp/whatsapp-notifications',
+      icon: MessageSquare,
+    },
+    {
       name: 'Gateways de Pagamento',
       path: '/admin/billing/payment-gateways',
       icon: Wallet,
@@ -118,6 +123,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPath, onNavigate, isOpe
               (item.path === '/admin/billing/subscriptions' && currentPath.startsWith('/admin/billing/subscriptions')) ||
               (item.path === '/admin/billing/payments' && currentPath.startsWith('/admin/billing/payments')) ||
               (item.path === '/admin/billing/invoices' && currentPath.startsWith('/admin/billing/invoices')) ||
+              (item.path === '/admin/whatsapp/whatsapp-notifications' && currentPath.startsWith('/admin/whatsapp/whatsapp-notifications')) ||
               (currentPath === '/me' && item.path === '/profile');
 
             const Icon = item.icon!;
