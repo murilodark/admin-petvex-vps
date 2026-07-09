@@ -6,7 +6,11 @@ on:
       - main
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # Mapeamento seguro das suas variáveis
+  VPS_HOST: ${{ secrets.VPS_HOST }}
+  USERNAME: ${{ secrets.VPS_USER }}
+  DEPLOY_PATH: "/var/www/meu-front"
+  VITE_FRONT_URL: "https://meusite.com"
 
 jobs:
   build-and-deploy:
@@ -28,23 +32,17 @@ jobs:
       - name: "Configurar Node.js"
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "npm"
 
-      - name: Configurar known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
+      # 🔑 NOVO: Configura o SSH-Agent e registra a chave e o host automaticamente
+      - name: "Configurar Chave SSH e Known Hosts"
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-          for i in 1 2 3 4 5; do
-            echo "Tentativa $i para capturar host key..."
-            ssh-keyscan -T 30 -H "$VPS_HOST" >> ~/.ssh/known_hosts && break
-            sleep 10
-          done
-
-          test -s ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
-
+      - name: "Registrar Host Remoto"
+        run: ssh-keyscan -H "$VPS_HOST" >> ~/.ssh/known_hosts
 
       - name: "Instalar dependências"
         run: npm ci
@@ -56,33 +54,17 @@ jobs:
         run: |
           set -e
 
-          printf "%s\n" "${{ secrets.SSH_PRIVATE_KEY }}" > deploy_key
-          chmod 600 deploy_key
+          # Criação de diretórios remotos (Não precisa mais passar -i deploy_key)
+          ssh "$USERNAME@$VPS_HOST" "mkdir -p $DEPLOY_PATH/dist && mkdir -p $DEPLOY_PATH/docker/nginx/conf.d"
 
-          ssh -i deploy_key "$USERNAME@$VPS_HOST" "
-            mkdir -p $DEPLOY_PATH/dist &&
-            mkdir -p $DEPLOY_PATH/docker/nginx/conf.d
-          "
+          # Sincronização de arquivos via rsync (Removido o parâmetro -e "ssh -i ...")
+          rsync -az --delete dist/ "$USERNAME@$VPS_HOST:$DEPLOY_PATH/dist/"
+          rsync -az .env "$USERNAME@$VPS_HOST:$DEPLOY_PATH/.env"
+          rsync -az docker-compose.production.yml "$USERNAME@$VPS_HOST:$DEPLOY_PATH/docker-compose.production.yml"
+          rsync -az docker/nginx/conf.d/production.conf "$USERNAME@$VPS_HOST:$DEPLOY_PATH/docker/nginx/conf.d/production.conf"
 
-          rsync -az --delete \
-            -e "ssh -i deploy_key" \
-            dist/ "$USERNAME@$VPS_HOST:$DEPLOY_PATH/dist/"
-
-          rsync -az \
-            -e "ssh -i deploy_key" \
-            .env "$USERNAME@$VPS_HOST:$DEPLOY_PATH/.env"
-
-          rsync -az \
-            -e "ssh -i deploy_key" \
-            docker-compose.production.yml \
-            "$USERNAME@$VPS_HOST:$DEPLOY_PATH/docker-compose.production.yml"
-
-          rsync -az \
-            -e "ssh -i deploy_key" \
-            docker/nginx/conf.d/production.conf \
-            "$USERNAME@$VPS_HOST:$DEPLOY_PATH/docker/nginx/conf.d/production.conf"
-
-          ssh -i deploy_key "$USERNAME@$VPS_HOST" "
+          # Reinicialização dos containers no servidor externo
+          ssh "$USERNAME@$VPS_HOST" "
             set -e &&
             cd $DEPLOY_PATH &&
             docker compose --env-file .env -f docker-compose.production.yml down &&
@@ -90,22 +72,18 @@ jobs:
             docker image prune -af
           "
 
-          rm -f deploy_key
+      # O passo de apagar a chave foi removido! A Action oficial limpa tudo da memória ao encerrar.
 
       - name: "Health Check"
         run: |
           for i in {1..20}; do
             STATUS=$(curl -k -L -s -o /dev/null -w "%{http_code}" "$VITE_FRONT_URL")
-
             echo "Tentativa $i - Status: $STATUS"
-
             if [ "$STATUS" = "200" ]; then
               echo "Aplicação online!"
               exit 0
             fi
-
             sleep 10
           done
-
           echo "Health check falhou."
           exit 1
