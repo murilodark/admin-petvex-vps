@@ -9,8 +9,8 @@ env:
   # Mapeamento seguro das suas variáveis
   VPS_HOST: ${{ secrets.VPS_HOST }}
   USERNAME: ${{ secrets.VPS_USER }}
-  DEPLOY_PATH: "/var/www/meu-front"
-  VITE_FRONT_URL: "https://meusite.com"
+  DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+  VITE_FRONT_URL: ${{ secrets.VITE_FRONT_URL }}
 
 jobs:
   build-and-deploy:
