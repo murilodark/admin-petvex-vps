@@ -14,7 +14,7 @@ RSYNC_FILTERS=(
   # --include='/tsconfig.json'
   # --include='/vite.config.ts'
   # --exclude='*'
-
+ 
   --exclude='.git'
   --exclude='.env'
   --exclude='.env.*'
