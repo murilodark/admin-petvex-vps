@@ -1,0 +1,359 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PetVex Admin - Admin Notification Template Tenant Blocks",
+    "version": "0.0.1",
+    "description": "Filtered OpenAPI specification for Admin Notification Template Tenant Blocks."
+  },
+  "servers": [
+    {
+      "url": "http://localhost/api"
+    }
+  ],
+  "paths": {
+    "/v1/admin/notification-templates/{notificationTemplate}/tenant-blocks": {
+      "get": {
+        "operationId": "listAdminNotificationTemplateTenantBlocks",
+        "tags": [
+          "Admin Notification Template Tenant Blocks"
+        ],
+        "parameters": [
+          {
+            "name": "notificationTemplate",
+            "in": "path",
+            "required": true,
+            "description": "The notification template ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search tenant blocks by reason, tenant name or tenant slug.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "description": "Filter by tenant id.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Items per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template tenant blocks fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "minItems": 0,
+                              "maxItems": 0,
+                              "additionalItems": false
+                            }
+                          ]
+                        },
+                        "meta": {
+                          "type": "string"
+                        },
+                        "links": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta",
+                        "links"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAdminNotificationTemplateTenantBlock",
+        "tags": [
+          "Admin Notification Template Tenant Blocks"
+        ],
+        "parameters": [
+          {
+            "name": "notificationTemplate",
+            "in": "path",
+            "required": true,
+            "description": "The notification template ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BlockTenantNotificationTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template blocked for tenant successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/notification-templates/{notificationTemplate}/tenant-blocks/{tenantBlock}": {
+      "delete": {
+        "operationId": "deleteAdminNotificationTemplateTenantBlock",
+        "tags": [
+          "Admin Notification Template Tenant Blocks"
+        ],
+        "parameters": [
+          {
+            "name": "notificationTemplate",
+            "in": "path",
+            "required": true,
+            "description": "The notification template ID",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "tenantBlock",
+            "in": "path",
+            "required": true,
+            "description": "The tenant block ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template tenant block removed successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "null"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "AuthenticationException": {
+        "description": "Unauthenticated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "ModelNotFoundException": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "ValidationException": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Errors overview."
+                },
+                "errors": {
+                  "type": "object",
+                  "description": "A detailed description of each field that failed validation.",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "message",
+                "errors"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "BlockTenantNotificationTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "tenant_id": {
+            "type": "integer"
+          },
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255
+          }
+        },
+        "required": [
+          "tenant_id"
+        ],
+        "title": "BlockTenantNotificationTemplateRequest"
+      }
+    }
+  }
+}

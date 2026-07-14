@@ -1,0 +1,50 @@
+Use obrigatoriamente o template:
+
+.agents/templats/refactor-module-api-driven.md
+
+Variáveis:
+
+MODULE_NAME={{MODULE_NAME}}
+ENTITY_NAME={{ENTITY_NAME}}
+ENTITY_NAME_PLURAL={{ENTITY_NAME_PLURAL}}
+GENERATED_GROUP={{GENERATED_GROUP}}
+PAGE_FILE={{PAGE_FILE}}
+
+Objetivo:
+
+Refatorar de forma controlada o módulo `src/modules/{{MODULE_NAME}}` para o padrão API-driven atual do App PetVex.
+
+Antes de implementar:
+
+- auditar a estrutura e o fluxo atual;
+- identificar causa e problemas concretos;
+- localizar endpoints/hooks/models Orval disponíveis;
+- identificar queries duplicadas, types repetidos, services manuais e filtragens locais;
+- apresentar um plano mínimo de alteração.
+
+Durante a implementação:
+
+- preservar layout, textos, responsividade, rotas e funcionalidades;
+- usar endpoints/hooks/models gerados;
+- não editar `src/core/http/generated`;
+- não criar URL manual para endpoint já gerado;
+- usar service somente quando houver necessidade real;
+- criar mapper/type local somente quando houver diferença real entre API e UI;
+- reduzir a page apenas por meio de extrações úteis;
+- não criar todos os diretórios por obrigação;
+- reutilizar componentes shared existentes;
+- preservar modal e formulário em erro 422;
+- evitar chamadas duplicadas, refetch redundante e invalidação global;
+- não carregar grandes coleções para filtrar localmente;
+- não adicionar `perPage` sem requisito;
+- remover código somente após confirmar que está sem uso;
+- não alterar módulos fora do escopo.
+
+Validação obrigatória:
+
+npm run lint
+npm run build
+
+Use `npm run api:generate` somente quando necessário e revise alterações geradas fora do escopo.
+
+Na entrega, informe diagnóstico, estratégia adotada, arquivos criados/alterados/removidos, validações executadas e pendências.

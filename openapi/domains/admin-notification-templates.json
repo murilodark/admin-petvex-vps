@@ -1,0 +1,830 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PetVex Admin - Admin Notification Templates",
+    "version": "0.0.1",
+    "description": "Filtered OpenAPI specification for Admin Notification Templates."
+  },
+  "servers": [
+    {
+      "url": "http://localhost/api"
+    }
+  ],
+  "paths": {
+    "/v1/admin/notification-templates/stats": {
+      "get": {
+        "operationId": "statsAdminNotificationTemplateStat",
+        "tags": [
+          "Admin Notification Templates"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template stats fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "total_templates": {
+                          "type": "string"
+                        },
+                        "active_templates": {
+                          "type": "string"
+                        },
+                        "inactive_templates": {
+                          "type": "string"
+                        },
+                        "manual_templates": {
+                          "type": "string"
+                        },
+                        "automatic_templates": {
+                          "type": "string"
+                        },
+                        "whatsapp_manual_templates": {
+                          "type": "string"
+                        },
+                        "email_templates": {
+                          "type": "string"
+                        },
+                        "blocked_tenants_count": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      },
+                      "required": [
+                        "total_templates",
+                        "active_templates",
+                        "inactive_templates",
+                        "manual_templates",
+                        "automatic_templates",
+                        "whatsapp_manual_templates",
+                        "email_templates",
+                        "blocked_tenants_count"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/notification-templates": {
+      "get": {
+        "operationId": "listAdminNotificationTemplates",
+        "tags": [
+          "Admin Notification Templates"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search templates by key, name, description, subject or body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "description": "Filter by module.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event",
+            "in": "query",
+            "description": "Filter by event.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "description": "Filter by channel.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "send_type",
+            "in": "query",
+            "description": "Filter by send type.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "is_active",
+            "in": "query",
+            "description": "Filter by active status.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "is_default",
+            "in": "query",
+            "description": "Filter by default status.",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "created_from",
+            "in": "query",
+            "description": "Filter templates created from this date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_to",
+            "in": "query",
+            "description": "Filter templates created until this date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Items per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification templates fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "minItems": 0,
+                              "maxItems": 0,
+                              "additionalItems": false
+                            }
+                          ]
+                        },
+                        "meta": {
+                          "type": "string"
+                        },
+                        "links": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta",
+                        "links"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          }
+        }
+      },
+      "post": {
+        "operationId": "createAdminNotificationTemplate",
+        "tags": [
+          "Admin Notification Templates"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreNotificationTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template created successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/notification-templates/{notificationTemplate}": {
+      "get": {
+        "operationId": "getAdminNotificationTemplate",
+        "tags": [
+          "Admin Notification Templates"
+        ],
+        "parameters": [
+          {
+            "name": "notificationTemplate",
+            "in": "path",
+            "required": true,
+            "description": "The notification template ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateAdminNotificationTemplate",
+        "tags": [
+          "Admin Notification Templates"
+        ],
+        "parameters": [
+          {
+            "name": "notificationTemplate",
+            "in": "path",
+            "required": true,
+            "description": "The notification template ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNotificationTemplateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template updated successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteAdminNotificationTemplate",
+        "tags": [
+          "Admin Notification Templates"
+        ],
+        "parameters": [
+          {
+            "name": "notificationTemplate",
+            "in": "path",
+            "required": true,
+            "description": "The notification template ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template deleted successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "null"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      }
+    },
+    "/v1/admin/notification-templates/{notificationTemplate}/activate": {
+      "patch": {
+        "operationId": "activateAdminNotificationTemplateActivate",
+        "tags": [
+          "Admin Notification Templates"
+        ],
+        "parameters": [
+          {
+            "name": "notificationTemplate",
+            "in": "path",
+            "required": true,
+            "description": "The notification template ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template activated successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      }
+    },
+    "/v1/admin/notification-templates/{notificationTemplate}/deactivate": {
+      "patch": {
+        "operationId": "deactivateAdminNotificationTemplateDeactivate",
+        "tags": [
+          "Admin Notification Templates"
+        ],
+        "parameters": [
+          {
+            "name": "notificationTemplate",
+            "in": "path",
+            "required": true,
+            "description": "The notification template ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification template deactivated successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "AuthenticationException": {
+        "description": "Unauthenticated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "ValidationException": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Errors overview."
+                },
+                "errors": {
+                  "type": "object",
+                  "description": "A detailed description of each field that failed validation.",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "message",
+                "errors"
+              ]
+            }
+          }
+        }
+      },
+      "ModelNotFoundException": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "StoreNotificationTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "module": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "event": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "channel": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "send_type": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "automatic",
+              "both"
+            ]
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255
+          },
+          "body": {
+            "type": "string"
+          },
+          "variables": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "is_default": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "key",
+          "name",
+          "module",
+          "event",
+          "channel",
+          "send_type",
+          "body"
+        ],
+        "title": "StoreNotificationTemplateRequest"
+      },
+      "UpdateNotificationTemplateRequest": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 150
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "module": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "event": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "channel": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "send_type": {
+            "type": "string",
+            "enum": [
+              "manual",
+              "automatic",
+              "both"
+            ]
+          },
+          "subject": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 255
+          },
+          "body": {
+            "type": "string"
+          },
+          "variables": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "is_default": {
+            "type": "boolean"
+          }
+        },
+        "title": "UpdateNotificationTemplateRequest"
+      }
+    }
+  }
+}

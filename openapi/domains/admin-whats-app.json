@@ -1,0 +1,477 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PetVex Admin - Admin Whats App",
+    "version": "0.0.1",
+    "description": "Filtered OpenAPI specification for Admin Whats App."
+  },
+  "servers": [
+    {
+      "url": "http://localhost/api"
+    }
+  ],
+  "paths": {
+    "/v1/admin/whatsapp/templates": {
+      "get": {
+        "operationId": "listAdminWhatsappTemplates",
+        "tags": [
+          "Admin WhatsApp"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "WhatsApp templates fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/whatsapp/notifications": {
+      "get": {
+        "operationId": "listAdminWhatsappNotifications",
+        "tags": [
+          "Admin WhatsApp"
+        ],
+        "parameters": [
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "queued",
+                "sent",
+                "delivered",
+                "read",
+                "failed",
+                "cancelled"
+              ]
+            }
+          },
+          {
+            "name": "appointment_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "client_id",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "WhatsApp notifications fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "minItems": 0,
+                              "maxItems": 0,
+                              "additionalItems": false
+                            }
+                          ]
+                        },
+                        "meta": {
+                          "type": "string"
+                        },
+                        "links": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta",
+                        "links"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/whatsapp/notifications/{notification}": {
+      "get": {
+        "operationId": "getAdminWhatsappNotification",
+        "tags": [
+          "Admin WhatsApp"
+        ],
+        "parameters": [
+          {
+            "name": "notification",
+            "in": "path",
+            "required": true,
+            "description": "The notification ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "WhatsApp notification fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      }
+    },
+    "/v1/admin/whatsapp/notifications/{notification}/retry": {
+      "post": {
+        "operationId": "retryAdminWhatsappNotificationRetry",
+        "tags": [
+          "Admin WhatsApp"
+        ],
+        "parameters": [
+          {
+            "name": "notification",
+            "in": "path",
+            "required": true,
+            "description": "The notification ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "WhatsApp notification retry queued successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/whatsapp/tenant-settings/{tenant}": {
+      "put": {
+        "operationId": "updateAdminWhatsappTenantSetting",
+        "tags": [
+          "Admin WhatsApp"
+        ],
+        "parameters": [
+          {
+            "name": "tenant",
+            "in": "path",
+            "required": true,
+            "description": "The tenant ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTenantWhatsappSettingsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "WhatsApp settings updated successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "AuthenticationException": {
+        "description": "Unauthenticated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "ValidationException": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Errors overview."
+                },
+                "errors": {
+                  "type": "object",
+                  "description": "A detailed description of each field that failed validation.",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "message",
+                "errors"
+              ]
+            }
+          }
+        }
+      },
+      "ModelNotFoundException": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "UpdateTenantWhatsappSettingsRequest": {
+        "type": "object",
+        "properties": {
+          "appointment_reminder_confirmation": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "appointment_reminder_confirmation"
+        ],
+        "title": "UpdateTenantWhatsappSettingsRequest"
+      }
+    }
+  }
+}

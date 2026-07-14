@@ -7,7 +7,12 @@
     "dev": "vite --port=3000 --host=0.0.0.0",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "openapi": "orval --config ./orval.config.ts",
+    "api:prepare": "tsx fetch-openapi-slugs.ts --execute",
+    "api:orval": "orval --config ./orval.config.ts",
+    "api:finalize": "tsx finalize-openapi-sync.ts --execute",
+    "api:generate": "npm run api:prepare && npm run api:orval && npm run api:finalize",
+    "api:check": "npm run lint && npm run build",
+    "openapi": "npm run api:orval",
     "lint": "tsc --noEmit"
   },
   "dependencies": {

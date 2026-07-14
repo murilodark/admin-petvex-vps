@@ -10,15 +10,17 @@ import DashboardLayout from './layouts/dashboard';
 import { TenantsPage } from './modules/tenants/pages/TenantsPage';
 import { TenantPage } from './modules/tenants/pages/TenantPage';
 import { PlansPage } from './modules/plans/pages/PlansPage';
-import { GlobalUsersPage } from './modules/admin/global-users/pages/GlobalUsersPage';
-import { GlobalUserFormPage } from './modules/admin/global-users/pages/GlobalUserFormPage';
-import { GlobalUserDetailsPage } from './modules/admin/global-users/pages/GlobalUserDetailsPage';
-import { PaymentGatewaysPage } from './modules/admin/payment-gateways/pages/PaymentGatewaysPage';
-import { PaymentGatewayFormPage } from './modules/admin/payment-gateways/pages/PaymentGatewayFormPage';
-import { PaymentGatewayDetailsPage } from './modules/admin/payment-gateways/pages/PaymentGatewayDetailsPage';
-import { SubscriptionsPage } from './modules/admin/billing/pages/SubscriptionsPage';
-import { PaymentsPage } from './modules/admin/billing/pages/PaymentsPage';
-import { InvoicesPage } from './modules/admin/billing/pages/InvoicesPage';
+import { PartnersPage } from './modules/partners/pages/PartnersPage';
+import { SubscriptionsPage } from './modules/billing/pages/SubscriptionsPage';
+import { InvoicesPage } from './modules/billing/pages/InvoicesPage';
+import { PaymentsPage } from './modules/billing/pages/PaymentsPage';
+import { PaymentGatewaysPage } from './modules/payment-gateways/pages/PaymentGatewaysPage';
+import { PaymentGatewayFormPage } from './modules/payment-gateways/pages/PaymentGatewayFormPage';
+import { PaymentGatewayDetailsPage } from './modules/payment-gateways/pages/PaymentGatewayDetailsPage';
+import { GlobalUsersPage } from './modules/global-users/pages/GlobalUsersPage';
+import { GlobalUserFormPage } from './modules/global-users/pages/GlobalUserFormPage';
+import { GlobalUserDetailsPage } from './modules/global-users/pages/GlobalUserDetailsPage';
+
 import { WhatsappNotificationsPage } from './modules/whatsapp-notifications/pages/WhatsappNotificationsPage';
 import NotificationsPage from './modules/notifications';
 
@@ -117,92 +119,14 @@ function AppContent() {
     );
   }
 
-  if (isAuthenticated && currentPath.startsWith('/usuarios')) {
-    const parts = currentPath.split('/');
-    const isNovo = currentPath.endsWith('/novo');
-    const isEdit = currentPath.includes('/editar/');
-    
-    let pageTitle = 'Usuários Globais';
-    if (isNovo) pageTitle = 'Novo Usuário Global';
-    else if (isEdit) pageTitle = 'Editar Usuário Global';
-    else if (parts[2]) pageTitle = 'Vínculos de Acesso do Usuário';
-
+  if (isAuthenticated && currentPath.startsWith('/admin/partners')) {
     return (
       <DashboardLayout
         currentPath={currentPath}
         onNavigate={handleNavigate}
-        title={pageTitle}
+        title="Gerenciamento de Parceiros e Cupons"
       >
-        {isNovo || isEdit ? (
-          <GlobalUserFormPage onNavigate={handleNavigate} />
-        ) : parts[2] ? (
-          <GlobalUserDetailsPage onNavigate={handleNavigate} />
-        ) : (
-          <GlobalUsersPage onNavigate={handleNavigate} />
-        )}
-      </DashboardLayout>
-    );
-  }
-
-  if (isAuthenticated && currentPath.startsWith('/admin/billing/payment-gateways')) {
-    const parts = currentPath.split('/');
-    const isNovo = currentPath.endsWith('/create');
-    const isEdit = currentPath.endsWith('/edit');
-    
-    let pageTitle = 'Gateways de Pagamento';
-    if (isNovo) pageTitle = 'Cadastrar Gateway de Pagamento';
-    else if (isEdit) pageTitle = 'Editar Gateway de Pagamento';
-    else if (parts[4]) pageTitle = 'Detalhes do Gateway';
-
-    return (
-      <DashboardLayout
-        currentPath={currentPath}
-        onNavigate={handleNavigate}
-        title={pageTitle}
-      >
-        {isNovo || isEdit ? (
-          <PaymentGatewayFormPage onNavigate={handleNavigate} />
-        ) : parts[4] ? (
-          <PaymentGatewayDetailsPage onNavigate={handleNavigate} />
-        ) : (
-          <PaymentGatewaysPage onNavigate={handleNavigate} />
-        )}
-      </DashboardLayout>
-    );
-  }
-
-  if (isAuthenticated && currentPath.startsWith('/admin/billing/subscriptions')) {
-    return (
-      <DashboardLayout
-        currentPath={currentPath}
-        onNavigate={handleNavigate}
-        title="Gerenciamento de Assinaturas"
-      >
-        <SubscriptionsPage onNavigate={handleNavigate} />
-      </DashboardLayout>
-    );
-  }
-
-  if (isAuthenticated && currentPath.startsWith('/admin/billing/payments')) {
-    return (
-      <DashboardLayout
-        currentPath={currentPath}
-        onNavigate={handleNavigate}
-        title="Gerenciamento de Transações Financeiras"
-      >
-        <PaymentsPage onNavigate={handleNavigate} />
-      </DashboardLayout>
-    );
-  }
-
-  if (isAuthenticated && currentPath.startsWith('/admin/billing/invoices')) {
-    return (
-      <DashboardLayout
-        currentPath={currentPath}
-        onNavigate={handleNavigate}
-        title="Gerenciamento de Faturas Emitidas"
-      >
-        <InvoicesPage onNavigate={handleNavigate} />
+        <PartnersPage />
       </DashboardLayout>
     );
   }
@@ -227,6 +151,104 @@ function AppContent() {
         title="Gerenciamento de Notificações WhatsApp"
       >
         <WhatsappNotificationsPage />
+      </DashboardLayout>
+    );
+  }
+
+  if (isAuthenticated && currentPath.startsWith('/admin/billing/subscriptions')) {
+    return (
+      <DashboardLayout
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        title="Gerenciamento de Assinaturas"
+      >
+        <SubscriptionsPage onNavigate={handleNavigate} />
+      </DashboardLayout>
+    );
+  }
+
+  if (isAuthenticated && currentPath.startsWith('/admin/billing/invoices')) {
+    return (
+      <DashboardLayout
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        title="Controle de Faturas SaaS"
+      >
+        <InvoicesPage onNavigate={handleNavigate} />
+      </DashboardLayout>
+    );
+  }
+
+  if (isAuthenticated && currentPath.startsWith('/admin/billing/payments')) {
+    return (
+      <DashboardLayout
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        title="Histórico de Pagamentos"
+      >
+        <PaymentsPage onNavigate={handleNavigate} />
+      </DashboardLayout>
+    );
+  }
+
+  if (isAuthenticated && currentPath.startsWith('/admin/billing/payment-gateways')) {
+    const parts = currentPath.split('/');
+    const isCreate = parts[4] === 'create';
+    const isEdit = parts[5] === 'edit';
+    
+    return (
+      <DashboardLayout
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        title={
+          isCreate 
+            ? 'Cadastrar Gateway de Pagamento' 
+            : isEdit 
+              ? 'Editar Gateway de Pagamento' 
+              : parts[4] 
+                ? 'Detalhes do Gateway' 
+                : 'Gateways de Pagamento'
+        }
+      >
+        {isCreate || isEdit ? (
+          <PaymentGatewayFormPage onNavigate={handleNavigate} />
+        ) : parts[4] ? (
+          <PaymentGatewayDetailsPage onNavigate={handleNavigate} />
+        ) : (
+          <PaymentGatewaysPage onNavigate={handleNavigate} />
+        )}
+      </DashboardLayout>
+    );
+  }
+
+  if (isAuthenticated && currentPath.startsWith('/usuarios')) {
+    const parts = currentPath.split('/');
+    const isNew = parts[2] === 'novo';
+    const isEdit = parts[2] === 'editar';
+    const editId = isEdit ? parts[3] : undefined;
+    const detailId = (!isNew && !isEdit) ? parts[2] : undefined;
+
+    return (
+      <DashboardLayout
+        currentPath={currentPath}
+        onNavigate={handleNavigate}
+        title={
+          isNew 
+            ? 'Cadastrar Usuário Global' 
+            : isEdit 
+              ? `Editar Usuário Global #${editId}` 
+              : detailId 
+                ? `Detalhes do Usuário #${detailId}` 
+                : 'Usuários Globais'
+        }
+      >
+        {isNew || isEdit ? (
+          <GlobalUserFormPage onNavigate={handleNavigate} />
+        ) : detailId ? (
+          <GlobalUserDetailsPage onNavigate={handleNavigate} />
+        ) : (
+          <GlobalUsersPage onNavigate={handleNavigate} />
+        )}
       </DashboardLayout>
     );
   }

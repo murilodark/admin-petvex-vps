@@ -1,0 +1,395 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PetVex Admin - Admin Notification Dispatches",
+    "version": "0.0.1",
+    "description": "Filtered OpenAPI specification for Admin Notification Dispatches."
+  },
+  "servers": [
+    {
+      "url": "http://localhost/api"
+    }
+  ],
+  "paths": {
+    "/v1/admin/notification-dispatches/stats": {
+      "get": {
+        "operationId": "statsAdminNotificationDispatchStat",
+        "tags": [
+          "Admin Notification Dispatches"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification dispatch stats fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "total_dispatches": {
+                          "type": "string"
+                        },
+                        "generated_count": {
+                          "type": "string"
+                        },
+                        "pending_count": {
+                          "type": "string"
+                        },
+                        "queued_count": {
+                          "type": "string"
+                        },
+                        "sent_count": {
+                          "type": "string"
+                        },
+                        "failed_count": {
+                          "type": "string"
+                        },
+                        "cancelled_count": {
+                          "type": "string"
+                        },
+                        "by_channel": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "integer"
+                          }
+                        },
+                        "by_module": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "integer"
+                          }
+                        },
+                        "by_event": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "required": [
+                        "total_dispatches",
+                        "generated_count",
+                        "pending_count",
+                        "queued_count",
+                        "sent_count",
+                        "failed_count",
+                        "cancelled_count",
+                        "by_channel",
+                        "by_module",
+                        "by_event"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/notification-dispatches": {
+      "get": {
+        "operationId": "listAdminNotificationDispatches",
+        "tags": [
+          "Admin Notification Dispatches"
+        ],
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "description": "Search dispatches by recipient, subject, body, template or tenant.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "description": "Filter by tenant id.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "notification_template_id",
+            "in": "query",
+            "description": "Filter by notification template id.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "description": "Filter by module.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "event",
+            "in": "query",
+            "description": "Filter by event.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channel",
+            "in": "query",
+            "description": "Filter by channel.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "send_type",
+            "in": "query",
+            "description": "Filter by send type.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by status.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_from",
+            "in": "query",
+            "description": "Filter dispatches created from this date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "created_to",
+            "in": "query",
+            "description": "Filter dispatches created until this date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sent_from",
+            "in": "query",
+            "description": "Filter dispatches sent from this date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sent_to",
+            "in": "query",
+            "description": "Filter dispatches sent until this date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Items per page.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification dispatches fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "minItems": 0,
+                              "maxItems": 0,
+                              "additionalItems": false
+                            }
+                          ]
+                        },
+                        "meta": {
+                          "type": "string"
+                        },
+                        "links": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta",
+                        "links"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/notification-dispatches/{notificationDispatch}": {
+      "get": {
+        "operationId": "getAdminNotificationDispatch",
+        "tags": [
+          "Admin Notification Dispatches"
+        ],
+        "parameters": [
+          {
+            "name": "notificationDispatch",
+            "in": "path",
+            "required": true,
+            "description": "The notification dispatch ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Notification dispatch fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": []
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "AuthenticationException": {
+        "description": "Unauthenticated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "ModelNotFoundException": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

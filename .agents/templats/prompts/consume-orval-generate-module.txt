@@ -1,0 +1,37 @@
+Use obrigatoriamente o template:
+
+.agents/templats/consume-orval-generated-module.md
+
+Variáveis:
+
+MODULE_NAME={{MODULE_NAME}}
+ENTITY_NAME={{ENTITY_NAME}}
+ENTITY_NAME_PLURAL={{ENTITY_NAME_PLURAL}}
+GENERATED_GROUP={{GENERATED_GROUP}}
+ROUTE_PATH={{ROUTE_PATH}}
+
+Objetivo:
+
+Auditar e adaptar o módulo `src/modules/{{MODULE_NAME}}` para consumir corretamente os endpoints, hooks React Query, query keys e models gerados pelo Orval em `src/core/http/generated`.
+
+Requisitos principais:
+
+- analisar primeiro o módulo e os exports reais do grupo `{{GENERATED_GROUP}}`;
+- não editar arquivos gerados;
+- não inventar nomes de funções ou contratos;
+- substituir chamadas HTTP manuais somente quando houver equivalente gerado;
+- priorizar models gerados;
+- manter types locais apenas para formulário, filtros, view model ou estado de UI;
+- usar hooks Orval diretamente quando suficientes;
+- manter service somente quando houver orquestração ou transformação real;
+- remover arquivos obsoletos somente após confirmar que não possuem uso;
+- evitar requisições duplicadas;
+- não carregar coleções completas para filtrar localmente;
+- não enviar `perPage` por padrão;
+- preservar layout, textos, rotas, permissões e funcionalidades;
+- preservar formulário e modal em erros 422;
+- não alterar infraestrutura HTTP nem `orval.config.ts`;
+- executar `npm run lint` e `npm run build`;
+- executar `npm run api:generate` somente se o contrato estiver desatualizado ou a tarefa exigir.
+
+Ao final, informe a estratégia adotada, endpoints/models utilizados, arquivos alterados/removidos e resultados das validações.

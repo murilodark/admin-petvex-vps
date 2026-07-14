@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "domains": {
+    "admin-auth": {
+      "hash": "a32e667970e13954c6aae9652351a611e5a6859d413b4f1b6847652c51117968",
+      "specification": "openapi/domains/admin-auth.json",
+      "generatedAt": "2026-07-13T22:34:18.079Z"
+    },
+    "admin-billing-invoices": {
+      "hash": "e5733662d2ff3b713665fabb1e8f2ceecb405e6f3dd0687656d3fda0f1504f5e",
+      "specification": "openapi/domains/admin-billing-invoices.json",
+      "generatedAt": "2026-07-13T22:34:18.081Z"
+    },
+    "admin-billing-payments": {
+      "hash": "0831c31b0488dac3317ad1d07310545ca8e20e14a7fc6b27bc12c944a0c3267d",
+      "specification": "openapi/domains/admin-billing-payments.json",
+      "generatedAt": "2026-07-13T22:34:18.082Z"
+    },
+    "admin-billing-subscriptions": {
+      "hash": "3a0a5accb22385eceb77bb98c9d88288a76558666d63bdf60bc3a0d94abf97f0",
+      "specification": "openapi/domains/admin-billing-subscriptions.json",
+      "generatedAt": "2026-07-13T22:34:18.083Z"
+    },
+    "admin-notification-dispatches": {
+      "hash": "78bd4d41776b9cbe0d7a88913133e3f4363d508938c8abd8861b3dcece2291cf",
+      "specification": "openapi/domains/admin-notification-dispatches.json",
+      "generatedAt": "2026-07-13T22:34:18.084Z"
+    },
+    "admin-notification-template-tenant-blocks": {
+      "hash": "ab46aa0b9ca9ad0ed820b976d7c1e81b7eb897f71f0407009bf8d923ed00d466",
+      "specification": "openapi/domains/admin-notification-template-tenant-blocks.json",
+      "generatedAt": "2026-07-13T22:34:18.086Z"
+    },
+    "admin-notification-templates": {
+      "hash": "6d0662626ee897a5e6659c98298aecc00095c5536895a81205f7160caf0a86e8",
+      "specification": "openapi/domains/admin-notification-templates.json",
+      "generatedAt": "2026-07-13T22:34:18.087Z"
+    },
+    "admin-partners": {
+      "hash": "998cf847f39c1cbc44cf2c385f00fe961b22091fdb9f97cad8503a951b460e33",
+      "specification": "openapi/domains/admin-partners.json",
+      "generatedAt": "2026-07-13T22:34:18.088Z"
+    },
+    "admin-payment-gateways": {
+      "hash": "96d8991cfecf17312e46536c11e0ccf7ae914c555442914336e2a12ea2a8e18e",
+      "specification": "openapi/domains/admin-payment-gateways.json",
+      "generatedAt": "2026-07-13T22:34:18.089Z"
+    },
+    "admin-plans": {
+      "hash": "fc1d2d8ce8df6c5caa85cccf1351facb492cfb76866e4b50831da84d41d1c651",
+      "specification": "openapi/domains/admin-plans.json",
+      "generatedAt": "2026-07-13T22:34:18.091Z"
+    },
+    "admin-tenant-users": {
+      "hash": "671835d8d904814885b8b30b344ba099cbd97c31c46dc7e3100718155445d6dd",
+      "specification": "openapi/domains/admin-tenant-users.json",
+      "generatedAt": "2026-07-13T22:34:18.093Z"
+    },
+    "admin-tenants": {
+      "hash": "dfb19f9b46b168c58a545453e8f14b5445103033340a43719dee1b54d2080c4d",
+      "specification": "openapi/domains/admin-tenants.json",
+      "generatedAt": "2026-07-13T22:34:18.094Z"
+    },
+    "admin-user-tenants": {
+      "hash": "ae3c6db6f275cdd6f8768dea7269e67782e3082b3e9422a6024bc937c99ff7f5",
+      "specification": "openapi/domains/admin-user-tenants.json",
+      "generatedAt": "2026-07-13T22:34:18.094Z"
+    },
+    "admin-users": {
+      "hash": "9e97de774b69bbde6364a48c437ab74e7af98f2d734631cc629ee6b2593052cf",
+      "specification": "openapi/domains/admin-users.json",
+      "generatedAt": "2026-07-13T22:34:18.095Z"
+    },
+    "admin-whats-app": {
+      "hash": "51de7cb2f7b85136e4ed7e0d552a9ec914ce9356e7a30f7bd6501811940b062b",
+      "specification": "openapi/domains/admin-whats-app.json",
+      "generatedAt": "2026-07-13T22:34:18.095Z"
+    }
+  }
+}

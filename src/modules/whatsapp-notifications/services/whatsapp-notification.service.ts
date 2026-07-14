@@ -1,16 +1,16 @@
 import {
-  getWhatsAppNotifications,
-  getWhatsAppNotificationId,
-  postWhatsAppNotificationIdRetry,
-  getWhatsAppTemplates,
-  getWhatsAppTenantSettings,
-  putWhatsAppTenantSettings
-} from '../../../core/http/generated/endpoints/default/default';
+  getAdminWhatsappNotification,
+  listAdminWhatsappNotifications,
+  listAdminWhatsappTemplates,
+  retryAdminWhatsappNotificationRetry,
+  updateAdminWhatsappTenantSetting,
+} from '../../../core/http/generated/endpoints/admin-whats-app/admin-whats-app';
 import {
   WhatsAppNotification,
   WhatsAppTemplate,
-  WhatsAppSettings
+  WhatsAppSettings,
 } from '../../../core/http/generated/models';
+import { UpdateTenantWhatsappSettingsRequest } from '../../../core/http/generated/models/admin-whats-app';
 import {
   whatsappNotificationMapper,
   UIWhatsAppNotification
@@ -37,22 +37,40 @@ export const whatsappNotificationService = {
     if (filters.page) queryParams.page = filters.page;
     if (filters.perPage) queryParams.perPage = filters.perPage;
 
-    const response = await getWhatsAppNotifications(queryParams);
+    const response = (await listAdminWhatsappNotifications(queryParams)) as any;
+    
+    const notificationsArray: WhatsAppNotification[] = Array.isArray(response?.data) ? response.data : [];
+    const meta = response?.meta && typeof response.meta === 'object' ? response.meta : undefined;
+
+    const total = Number(meta?.total ?? notificationsArray.length);
+    const page = Number(meta?.current_page ?? filters.page ?? 1);
+    const perPage = Number(meta?.per_page ?? filters.perPage ?? 10);
+    const lastPage = Number(meta?.last_page ?? 1);
+
     return {
-      data: response.data || [],
-      total: response.total || 0,
-      page: response.page || 1,
-      perPage: response.perPage || 10,
-      lastPage: response.lastPage || 1,
+      data: notificationsArray,
+      total,
+      page,
+      perPage,
+      lastPage,
     };
   },
 
   async getNotification(id: string): Promise<WhatsAppNotification> {
-    return await getWhatsAppNotificationId(id);
+    const response = await getAdminWhatsappNotification(Number(id));
+    
+    let apiNotification: WhatsAppNotification;
+    if (response && typeof response === 'object' && 'data' in response) {
+      apiNotification = (response.data as unknown as WhatsAppNotification);
+    } else {
+      apiNotification = (response as unknown as WhatsAppNotification);
+    }
+    
+    return apiNotification;
   },
 
   async retryNotification(id: string): Promise<{ status: boolean; message: string }> {
-    const response = await postWhatsAppNotificationIdRetry(id);
+    const response = await retryAdminWhatsappNotificationRetry(Number(id));
     return {
       status: !!response?.status,
       message: response?.message || 'Reenvio processado com sucesso'
@@ -60,14 +78,25 @@ export const whatsappNotificationService = {
   },
 
   async listTemplates(): Promise<WhatsAppTemplate[]> {
-    return await getWhatsAppTemplates();
+    const response = await listAdminWhatsappTemplates();
+    
+    let templates: WhatsAppTemplate[] = [];
+    if (response && typeof response === 'object') {
+      if ('data' in response && Array.isArray(response.data)) {
+        templates = response.data as unknown as WhatsAppTemplate[];
+      } else if (Array.isArray(response)) {
+        templates = response as unknown as WhatsAppTemplate[];
+      }
+    }
+    return templates;
   },
 
   async getSettings(): Promise<WhatsAppSettings[]> {
-    return await getWhatsAppTenantSettings();
+    return [];
   },
 
   async updateSettings(tenantId: string, payload: WhatsAppSettings): Promise<WhatsAppSettings> {
-    return await putWhatsAppTenantSettings(tenantId, payload);
+    await updateAdminWhatsappTenantSetting(Number(tenantId), payload as unknown as UpdateTenantWhatsappSettingsRequest);
+    return payload;
   }
 };

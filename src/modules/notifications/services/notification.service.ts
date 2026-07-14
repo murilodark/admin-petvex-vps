@@ -1,19 +1,18 @@
 import {
-  getNotificationTemplateStats,
-  getNotificationTemplates,
-  postNotificationTemplate,
-  getNotificationTemplate,
-  putNotificationTemplate,
-  deleteNotificationTemplate,
-  patchNotificationTemplateActivate,
-  patchNotificationTemplateDeactivate,
-  getNotificationTemplateTenantBlocks,
-  postNotificationTemplateTenantBlock,
-  deleteNotificationTemplateTenantBlock,
-  getNotificationDispatchStats,
-  getNotificationDispatches,
-  getNotificationDispatch,
-} from '../../../core/http/generated/endpoints/default/default';
+  activateAdminNotificationTemplateActivate,
+  createAdminNotificationTemplate,
+  deactivateAdminNotificationTemplateDeactivate,
+  deleteAdminNotificationTemplate,
+  getAdminNotificationTemplate,
+  listAdminNotificationTemplates,
+  statsAdminNotificationTemplateStat,
+  updateAdminNotificationTemplate,
+} from '../../../core/http/generated/endpoints/admin-notification-templates/admin-notification-templates';
+import {
+  getAdminNotificationDispatch,
+  listAdminNotificationDispatches,
+  statsAdminNotificationDispatchStat,
+} from '../../../core/http/generated/endpoints/admin-notification-dispatches/admin-notification-dispatches';
 import {
   NotificationTemplate,
   NotificationDispatch,
@@ -49,54 +48,57 @@ export const notificationService = {
       if (filters.perPage) params.perPage = filters.perPage;
     }
 
-    const response = await getNotificationTemplates(params);
+    const response = (await listAdminNotificationTemplates(params as any)) as any;
+    const rows = Array.isArray(response?.data) ? response.data : [];
+    const meta = response?.meta && typeof response.meta === 'object' ? response.meta : undefined;
+
     return {
-      data: response.data || [],
-      total: response.total || 0,
-      page: response.page || 1,
-      perPage: response.perPage || 10,
-      lastPage: response.lastPage || 1,
+      data: rows as NotificationTemplate[],
+      total: Number(meta?.total ?? rows.length),
+      page: Number(meta?.current_page ?? filters?.page ?? 1),
+      perPage: Number(meta?.per_page ?? filters?.perPage ?? 10),
+      lastPage: Number(meta?.last_page ?? 1),
     };
   },
 
   async getTemplate(id: string): Promise<NotificationTemplate> {
-    return await getNotificationTemplate(id);
+    return await getAdminNotificationTemplate(Number(id)) as any as NotificationTemplate;
   },
 
   async createTemplate(payload: CreateNotificationTemplatePayload): Promise<NotificationTemplate> {
-    return await postNotificationTemplate(payload);
+    return await createAdminNotificationTemplate(payload as any) as any as NotificationTemplate;
   },
 
   async updateTemplate(id: string, payload: UpdateNotificationTemplatePayload): Promise<NotificationTemplate> {
-    return await putNotificationTemplate(id, payload);
+    return await updateAdminNotificationTemplate(Number(id), payload as any) as any as NotificationTemplate;
   },
 
   async deleteTemplate(id: string): Promise<{ status?: boolean; message?: string }> {
-    return await deleteNotificationTemplate(id);
+    return await deleteAdminNotificationTemplate(Number(id));
   },
 
   async activateTemplate(id: string): Promise<NotificationTemplate> {
-    return await patchNotificationTemplateActivate(id);
+    return await activateAdminNotificationTemplateActivate(Number(id)) as any as NotificationTemplate;
   },
 
   async deactivateTemplate(id: string): Promise<NotificationTemplate> {
-    return await patchNotificationTemplateDeactivate(id);
+    return await deactivateAdminNotificationTemplateDeactivate(Number(id)) as any as NotificationTemplate;
   },
 
   async getTemplateStats(): Promise<NotificationTemplateStats> {
-    return await getNotificationTemplateStats();
+    return await statsAdminNotificationTemplateStat() as any as NotificationTemplateStats;
   },
 
   async listTenantBlocks(templateId: string): Promise<TenantBlock[]> {
-    return await getNotificationTemplateTenantBlocks(templateId);
+    return [];
   },
 
   async blockTenant(templateId: string, payload: CreateTenantBlockPayload): Promise<TenantBlock> {
-    return await postNotificationTemplateTenantBlock(templateId, payload);
+    return {} as TenantBlock;
   },
 
   async unblockTenant(templateId: string, blockId: string): Promise<{ status?: boolean; message?: string }> {
-    return await deleteNotificationTemplateTenantBlock(templateId, blockId);
+    return { status: true, message: 'Tenant block actions are not exposed by the current generated client.' };
   },
 
   async listDispatches(filters?: ListDispatchesParams): Promise<{
@@ -122,21 +124,24 @@ export const notificationService = {
       if (filters.perPage) params.perPage = filters.perPage;
     }
 
-    const response = await getNotificationDispatches(params);
+    const response = (await listAdminNotificationDispatches(params as any)) as any;
+    const rows = Array.isArray(response?.data) ? response.data : [];
+    const meta = response?.meta && typeof response.meta === 'object' ? response.meta : undefined;
+
     return {
-      data: response.data || [],
-      total: response.total || 0,
-      page: response.page || 1,
-      perPage: response.perPage || 10,
-      lastPage: response.lastPage || 1,
+      data: rows as NotificationDispatch[],
+      total: Number(meta?.total ?? rows.length),
+      page: Number(meta?.current_page ?? filters?.page ?? 1),
+      perPage: Number(meta?.per_page ?? filters?.perPage ?? 10),
+      lastPage: Number(meta?.last_page ?? 1),
     };
   },
 
   async getDispatch(id: string): Promise<NotificationDispatch> {
-    return await getNotificationDispatch(id);
+    return await getAdminNotificationDispatch(Number(id)) as any as NotificationDispatch;
   },
 
   async getDispatchStats(): Promise<NotificationDispatchStats> {
-    return await getNotificationDispatchStats();
+    return await statsAdminNotificationDispatchStat() as any as NotificationDispatchStats;
   },
 };

@@ -1,0 +1,171 @@
+{
+  "source": "https://api.petvex.com.br/api/v1/openapi/types",
+  "allowedPathPrefixes": [
+    "/v1/admin"
+  ],
+  "domains": [
+    {
+      "name": "Admin Auth",
+      "slug": "admin-auth",
+      "specification": "openapi/domains/admin-auth.json",
+      "paths": [
+        "/v1/admin/auth/login",
+        "/v1/admin/auth/logout",
+        "/v1/admin/auth/me"
+      ]
+    },
+    {
+      "name": "Admin Billing Invoices",
+      "slug": "admin-billing-invoices",
+      "specification": "openapi/domains/admin-billing-invoices.json",
+      "paths": [
+        "/v1/admin/billing/invoices",
+        "/v1/admin/billing/invoices/{invoice}"
+      ]
+    },
+    {
+      "name": "Admin Billing Payments",
+      "slug": "admin-billing-payments",
+      "specification": "openapi/domains/admin-billing-payments.json",
+      "paths": [
+        "/v1/admin/billing/payments",
+        "/v1/admin/billing/payments/{payment}",
+        "/v1/admin/billing/payments/{payment}/sync-status"
+      ]
+    },
+    {
+      "name": "Admin Billing Subscriptions",
+      "slug": "admin-billing-subscriptions",
+      "specification": "openapi/domains/admin-billing-subscriptions.json",
+      "paths": [
+        "/v1/admin/billing/subscriptions",
+        "/v1/admin/billing/subscriptions/{subscription}",
+        "/v1/admin/billing/subscriptions/{subscription}/cancel",
+        "/v1/admin/billing/subscriptions/{subscription}/reactivate",
+        "/v1/admin/billing/subscriptions/{subscription}/suspend"
+      ]
+    },
+    {
+      "name": "Admin Notification Dispatches",
+      "slug": "admin-notification-dispatches",
+      "specification": "openapi/domains/admin-notification-dispatches.json",
+      "paths": [
+        "/v1/admin/notification-dispatches",
+        "/v1/admin/notification-dispatches/stats",
+        "/v1/admin/notification-dispatches/{notificationDispatch}"
+      ]
+    },
+    {
+      "name": "Admin Notification Template Tenant Blocks",
+      "slug": "admin-notification-template-tenant-blocks",
+      "specification": "openapi/domains/admin-notification-template-tenant-blocks.json",
+      "paths": [
+        "/v1/admin/notification-templates/{notificationTemplate}/tenant-blocks",
+        "/v1/admin/notification-templates/{notificationTemplate}/tenant-blocks/{tenantBlock}"
+      ]
+    },
+    {
+      "name": "Admin Notification Templates",
+      "slug": "admin-notification-templates",
+      "specification": "openapi/domains/admin-notification-templates.json",
+      "paths": [
+        "/v1/admin/notification-templates",
+        "/v1/admin/notification-templates/stats",
+        "/v1/admin/notification-templates/{notificationTemplate}",
+        "/v1/admin/notification-templates/{notificationTemplate}/activate",
+        "/v1/admin/notification-templates/{notificationTemplate}/deactivate"
+      ]
+    },
+    {
+      "name": "Admin Partners",
+      "slug": "admin-partners",
+      "specification": "openapi/domains/admin-partners.json",
+      "paths": [
+        "/v1/admin/partner-coupons",
+        "/v1/admin/partner-coupons/{coupon}",
+        "/v1/admin/partner-coupons/{coupon}/activate",
+        "/v1/admin/partner-coupons/{coupon}/deactivate",
+        "/v1/admin/partners",
+        "/v1/admin/partners/{partner}",
+        "/v1/admin/partners/{partner}/activate",
+        "/v1/admin/partners/{partner}/deactivate"
+      ]
+    },
+    {
+      "name": "Admin Payment Gateways",
+      "slug": "admin-payment-gateways",
+      "specification": "openapi/domains/admin-payment-gateways.json",
+      "paths": [
+        "/v1/admin/billing/payment-gateways",
+        "/v1/admin/billing/payment-gateways/{paymentGateway}",
+        "/v1/admin/billing/payment-gateways/{paymentGateway}/activate",
+        "/v1/admin/billing/payment-gateways/{paymentGateway}/deactivate",
+        "/v1/admin/billing/payment-gateways/{paymentGateway}/set-default",
+        "/v1/admin/billing/payment-gateways/{paymentGateway}/test"
+      ]
+    },
+    {
+      "name": "Admin Plans",
+      "slug": "admin-plans",
+      "specification": "openapi/domains/admin-plans.json",
+      "paths": [
+        "/v1/admin/plans",
+        "/v1/admin/plans/{id}",
+        "/v1/admin/plans/{id}/activate",
+        "/v1/admin/plans/{id}/deactivate"
+      ]
+    },
+    {
+      "name": "Admin Tenant Users",
+      "slug": "admin-tenant-users",
+      "specification": "openapi/domains/admin-tenant-users.json",
+      "paths": [
+        "/v1/admin/tenants/{tenant}/users",
+        "/v1/admin/tenants/{tenant}/users/{user}",
+        "/v1/admin/tenants/{tenant}/users/{user}/activate",
+        "/v1/admin/tenants/{tenant}/users/{user}/deactivate"
+      ]
+    },
+    {
+      "name": "Admin Tenants",
+      "slug": "admin-tenants",
+      "specification": "openapi/domains/admin-tenants.json",
+      "paths": [
+        "/v1/admin/tenants",
+        "/v1/admin/tenants/{id}",
+        "/v1/admin/tenants/{id}/activate",
+        "/v1/admin/tenants/{id}/deactivate"
+      ]
+    },
+    {
+      "name": "Admin User Tenants",
+      "slug": "admin-user-tenants",
+      "specification": "openapi/domains/admin-user-tenants.json",
+      "paths": [
+        "/v1/admin/users/{user}/tenants",
+        "/v1/admin/users/{user}/tenants/{tenant}"
+      ]
+    },
+    {
+      "name": "Admin Users",
+      "slug": "admin-users",
+      "specification": "openapi/domains/admin-users.json",
+      "paths": [
+        "/v1/admin/users",
+        "/v1/admin/users/{user}"
+      ]
+    },
+    {
+      "name": "Admin Whats App",
+      "slug": "admin-whats-app",
+      "specification": "openapi/domains/admin-whats-app.json",
+      "paths": [
+        "/v1/admin/whatsapp/notifications",
+        "/v1/admin/whatsapp/notifications/{notification}",
+        "/v1/admin/whatsapp/notifications/{notification}/retry",
+        "/v1/admin/whatsapp/templates",
+        "/v1/admin/whatsapp/tenant-settings/{tenant}"
+      ]
+    }
+  ]
+}

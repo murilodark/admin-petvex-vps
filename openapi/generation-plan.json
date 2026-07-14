@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-07-13T22:53:40.426Z",
+  "domains": {
+    "new": [],
+    "changed": [],
+    "unchanged": [
+      "admin-auth",
+      "admin-billing-invoices",
+      "admin-billing-payments",
+      "admin-billing-subscriptions",
+      "admin-notification-dispatches",
+      "admin-notification-template-tenant-blocks",
+      "admin-notification-templates",
+      "admin-partners",
+      "admin-payment-gateways",
+      "admin-plans",
+      "admin-tenant-users",
+      "admin-tenants",
+      "admin-user-tenants",
+      "admin-users",
+      "admin-whats-app"
+    ],
+    "missingOutput": [],
+    "removed": []
+  },
+  "toGenerate": []
+}

@@ -1,0 +1,2888 @@
+openapi: 3.0.3
+info:
+  title: Petvex Admin API
+  version: 1.0.0
+paths:
+  /auth/login:
+    post:
+      operationId: postAuthLogin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginCredentials'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+
+  /auth/logout:
+    post:
+      operationId: postAuthLogout
+      responses:
+        '200':
+          description: Successful logout
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /me:
+    get:
+      operationId: getMe
+      responses:
+        '200':
+          description: Dynamic user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /admin/users:
+    get:
+      operationId: getAdminUsers
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: is_global_admin
+          in: query
+          schema:
+            type: boolean
+        - name: tenant_id
+          in: query
+          schema:
+            type: string
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminUsersResponse'
+    post:
+      operationId: postAdminUsers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /admin/users/{user}:
+    get:
+      operationId: getAdminUsersUser
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      operationId: putAdminUsersUser
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    delete:
+      operationId: deleteAdminUsersUser
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/users/{user}/tenants:
+    get:
+      operationId: getAdminUsersUserTenants
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTenantAccessListResponse'
+    post:
+      operationId: postAdminUsersUserTenants
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserTenantAccessPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTenantAccess'
+
+  /admin/users/{user}/tenants/{tenant}:
+    put:
+      operationId: putAdminUsersUserTenantsTenant
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserTenantAccessPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserTenantAccess'
+    delete:
+      operationId: deleteAdminUsersUserTenantsTenant
+      parameters:
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/tenants:
+    get:
+      operationId: getAdminTenants
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: plano
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminTenantsResponse'
+    post:
+      operationId: postAdminTenants
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTenantPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+
+  /admin/tenants/{id}:
+    get:
+      operationId: getAdminTenantsId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+    put:
+      operationId: putAdminTenantsId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTenantPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+    delete:
+      operationId: deleteAdminTenantsId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/tenants/{tenant}/users:
+    get:
+      operationId: getAdminTenantsTenantUsers
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: active
+          in: query
+          schema:
+            type: boolean
+        - name: role
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminTenantUsersResponse'
+    post:
+      operationId: postAdminTenantsTenantUsers
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTenantUserPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantUser'
+
+  /admin/tenants/{tenant}/users/{user}:
+    get:
+      operationId: getAdminTenantsTenantUsersUser
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantUser'
+    put:
+      operationId: putAdminTenantsTenantUsersUser
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTenantUserPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantUser'
+    delete:
+      operationId: deleteAdminTenantsTenantUsersUser
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/tenants/{tenant}/users/{user}/activate:
+    patch:
+      operationId: patchAdminTenantsTenantUsersUserActivate
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/tenants/{tenant}/users/{user}/deactivate:
+    patch:
+      operationId: patchAdminTenantsTenantUsersUserDeactivate
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: user
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/plans:
+    get:
+      operationId: getAdminPlans
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPlansResponse'
+    post:
+      operationId: postAdminPlans
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlanPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+
+  /admin/plans/{id}:
+    get:
+      operationId: getAdminPlansId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+    put:
+      operationId: putAdminPlansId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePlanPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plan'
+    delete:
+      operationId: deleteAdminPlansId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/plans/{id}/activate:
+    patch:
+      operationId: patchAdminPlansIdActivate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/plans/{id}/deactivate:
+    patch:
+      operationId: patchAdminPlansIdDeactivate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/billing/payment-gateways:
+    get:
+      operationId: getAdminBillingPaymentGateways
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: is_sandbox
+          in: query
+          schema:
+            type: boolean
+        - name: provider
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPaymentGatewaysResponse'
+    post:
+      operationId: postAdminBillingPaymentGateways
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentGatewayPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentGateway'
+
+  /admin/billing/payment-gateways/{paymentGateway}:
+    get:
+      operationId: getAdminBillingPaymentGatewaysId
+      parameters:
+        - name: paymentGateway
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentGateway'
+    put:
+      operationId: putAdminBillingPaymentGatewaysId
+      parameters:
+        - name: paymentGateway
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentGatewayPayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentGateway'
+    delete:
+      operationId: deleteAdminBillingPaymentGatewaysId
+      parameters:
+        - name: paymentGateway
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+
+  /admin/billing/payment-gateways/{paymentGateway}/test:
+    post:
+      operationId: postAdminBillingPaymentGatewaysIdTest
+      parameters:
+        - name: paymentGateway
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful connection test
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - message
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /admin/billing/payment-gateways/{paymentGateway}/set-default:
+    patch:
+      operationId: patchAdminBillingPaymentGatewaysIdSetDefault
+      parameters:
+        - name: paymentGateway
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Set as default successful
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - message
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /admin/billing/subscriptions:
+    get:
+      operationId: getAdminBillingSubscriptions
+      parameters:
+        - name: tenant_id
+          in: query
+          schema:
+            type: string
+        - name: plan_id
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: billing_cycle
+          in: query
+          schema:
+            type: string
+        - name: gateway
+          in: query
+          schema:
+            type: string
+        - name: date_from
+          in: query
+          schema:
+            type: string
+        - name: date_to
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminSubscriptionsResponse'
+
+  /admin/billing/subscriptions/{subscription}:
+    get:
+      operationId: getAdminBillingSubscriptionsId
+      parameters:
+        - name: subscription
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subscription'
+
+  /admin/billing/subscriptions/{subscription}/suspend:
+    patch:
+      operationId: patchAdminBillingSubscriptionsIdSuspend
+      parameters:
+        - name: subscription
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - message
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /admin/billing/subscriptions/{subscription}/reactivate:
+    patch:
+      operationId: patchAdminBillingSubscriptionsIdReactivate
+      parameters:
+        - name: subscription
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - message
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /admin/billing/subscriptions/{subscription}/cancel:
+    patch:
+      operationId: patchAdminBillingSubscriptionsIdCancel
+      parameters:
+        - name: subscription
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - status
+                  - message
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /admin/billing/payments:
+    get:
+      operationId: getAdminBillingPayments
+      parameters:
+        - name: tenant_id
+          in: query
+          schema:
+            type: string
+        - name: subscription_id
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: gateway
+          in: query
+          schema:
+            type: string
+        - name: date_from
+          in: query
+          schema:
+            type: string
+        - name: date_to
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminPaymentsResponse'
+
+  /admin/billing/payments/{payment}:
+    get:
+      operationId: getAdminBillingPaymentsId
+      parameters:
+        - name: payment
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+
+  /admin/billing/payments/{payment}/sync:
+    post:
+      operationId: postAdminBillingPaymentsIdSync
+      parameters:
+        - name: payment
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+                  data:
+                    $ref: '#/components/schemas/Payment'
+
+  /admin/billing/invoices:
+    get:
+      operationId: getAdminBillingInvoices
+      parameters:
+        - name: tenant_id
+          in: query
+          schema:
+            type: string
+        - name: subscription_id
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: date_from
+          in: query
+          schema:
+            type: string
+        - name: date_to
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminInvoicesResponse'
+
+  /admin/billing/invoices/{invoice}:
+    get:
+      operationId: getAdminBillingInvoicesId
+      parameters:
+        - name: invoice
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+
+  /admin/whatsapp/templates:
+    get:
+      operationId: getWhatsAppTemplates
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WhatsAppTemplate'
+
+  /admin/whatsapp/notifications:
+    get:
+      operationId: getWhatsAppNotifications
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: appointment_id
+          in: query
+          schema:
+            type: string
+        - name: client_id
+          in: query
+          schema:
+            type: string
+        - name: date_from
+          in: query
+          schema:
+            type: string
+        - name: date_to
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhatsAppNotificationsResponse'
+
+  /admin/whatsapp/notifications/{notification}:
+    get:
+      operationId: getWhatsAppNotificationId
+      parameters:
+        - name: notification
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhatsAppNotification'
+
+  /admin/whatsapp/notifications/{notification}/retry:
+    post:
+      operationId: postWhatsAppNotificationIdRetry
+      parameters:
+        - name: notification
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /admin/whatsapp/tenant-settings:
+    get:
+      operationId: getWhatsAppTenantSettings
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WhatsAppSettings'
+
+  /admin/whatsapp/tenant-settings/{tenant}:
+    put:
+      operationId: putWhatsAppTenantSettings
+      parameters:
+        - name: tenant
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhatsAppSettings'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhatsAppSettings'
+
+  /admin/notification-templates/stats:
+    get:
+      operationId: getNotificationTemplateStats
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTemplateStats'
+
+  /admin/notification-templates:
+    get:
+      operationId: getNotificationTemplates
+      parameters:
+        - name: module
+          in: query
+          schema:
+            type: string
+        - name: event
+          in: query
+          schema:
+            type: string
+        - name: channel
+          in: query
+          schema:
+            type: string
+        - name: send_type
+          in: query
+          schema:
+            type: string
+        - name: is_active
+          in: query
+          schema:
+            type: boolean
+        - name: is_default
+          in: query
+          schema:
+            type: boolean
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTemplatesResponse'
+    post:
+      operationId: postNotificationTemplate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNotificationTemplatePayload'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTemplate'
+
+  /admin/notification-templates/{notificationTemplate}:
+    get:
+      operationId: getNotificationTemplate
+      parameters:
+        - name: notificationTemplate
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTemplate'
+    put:
+      operationId: putNotificationTemplate
+      parameters:
+        - name: notificationTemplate
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNotificationTemplatePayload'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTemplate'
+    delete:
+      operationId: deleteNotificationTemplate
+      parameters:
+        - name: notificationTemplate
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /admin/notification-templates/{notificationTemplate}/activate:
+    patch:
+      operationId: patchNotificationTemplateActivate
+      parameters:
+        - name: notificationTemplate
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTemplate'
+
+  /admin/notification-templates/{notificationTemplate}/deactivate:
+    patch:
+      operationId: patchNotificationTemplateDeactivate
+      parameters:
+        - name: notificationTemplate
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTemplate'
+
+  /admin/notification-templates/{notificationTemplate}/tenant-blocks:
+    get:
+      operationId: getNotificationTemplateTenantBlocks
+      parameters:
+        - name: notificationTemplate
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TenantBlock'
+    post:
+      operationId: postNotificationTemplateTenantBlock
+      parameters:
+        - name: notificationTemplate
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTenantBlockPayload'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantBlock'
+
+  /admin/notification-templates/{notificationTemplate}/tenant-blocks/{tenantBlock}:
+    delete:
+      operationId: deleteNotificationTemplateTenantBlock
+      parameters:
+        - name: notificationTemplate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: tenantBlock
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: boolean
+                  message:
+                    type: string
+
+  /admin/notification-dispatches/stats:
+    get:
+      operationId: getNotificationDispatchStats
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationDispatchStats'
+
+  /admin/notification-dispatches:
+    get:
+      operationId: getNotificationDispatches
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: tenant_id
+          in: query
+          schema:
+            type: string
+        - name: notification_template_id
+          in: query
+          schema:
+            type: string
+        - name: module
+          in: query
+          schema:
+            type: string
+        - name: event
+          in: query
+          schema:
+            type: string
+        - name: channel
+          in: query
+          schema:
+            type: string
+        - name: send_type
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: date_from
+          in: query
+          schema:
+            type: string
+        - name: date_to
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+        - name: perPage
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationDispatchesResponse'
+
+  /admin/notification-dispatches/{notificationDispatch}:
+    get:
+      operationId: getNotificationDispatch
+      parameters:
+        - name: notificationDispatch
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationDispatch'
+
+components:
+  schemas:
+    LoginCredentials:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    LoginResponse:
+      type: object
+      required:
+        - token
+        - user
+      properties:
+        token:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        type:
+          type: string
+        profile:
+          type: string
+        is_global_admin:
+          type: boolean
+        tenant:
+          anyOf:
+            - type: string
+            - type: object
+              additionalProperties: true
+
+    Tenant:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - status
+        - created_at
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        documento:
+          type: string
+        telefone:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive]
+        plano:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    CreateTenantPayload:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        documento:
+          type: string
+        telefone:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive]
+        plano:
+          type: string
+
+    UpdateTenantPayload:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        documento:
+          type: string
+        telefone:
+          type: string
+        status:
+          type: string
+          enum: [active, inactive]
+        plano:
+          type: string
+
+    AdminTenantsResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tenant'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    TenantUser:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+        active:
+          type: boolean
+        phone:
+          type: string
+        document:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    CreateTenantUserPayload:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        password_confirmation:
+          type: string
+        role:
+          type: string
+        active:
+          type: boolean
+        phone:
+          type: string
+        document:
+          type: string
+
+    UpdateTenantUserPayload:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        password_confirmation:
+          type: string
+        role:
+          type: string
+        active:
+          type: boolean
+        phone:
+          type: string
+        document:
+          type: string
+
+    AdminTenantUsersResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TenantUser'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    PlanFeatures:
+      type: object
+      properties:
+        pdv:
+          type: boolean
+        reports:
+          type: boolean
+        boarding:
+          type: boolean
+        grooming:
+          type: boolean
+        whatsapp:
+          type: boolean
+        financial:
+          type: boolean
+        inventory:
+          type: boolean
+        surgeries:
+          type: boolean
+        multi_user:
+          type: boolean
+        vaccination:
+          type: boolean
+        appointments:
+          type: boolean
+        external_api:
+          type: boolean
+        integrations:
+          type: boolean
+        hospitalization:
+          type: boolean
+        advanced_dashboard:
+          type: boolean
+
+    Plan:
+      type: object
+      required:
+        - id
+        - name
+        - monthly_price
+        - yearly_price
+        - is_active
+        - created_at
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        short_description:
+          type: string
+        description:
+          type: string
+        monthly_price:
+          type: number
+        yearly_price:
+          type: number
+        yearly_discount_percent:
+          type: number
+        is_featured:
+          type: boolean
+        has_trial:
+          type: boolean
+        trial_days:
+          type: integer
+        display_order:
+          type: integer
+        badge:
+          type: string
+        color:
+          type: string
+        max_users:
+          type: integer
+          nullable: true
+        max_clients:
+          type: integer
+          nullable: true
+        max_pets:
+          type: integer
+          nullable: true
+        max_appointments:
+          type: integer
+          nullable: true
+        max_products:
+          type: integer
+          nullable: true
+        max_services:
+          type: integer
+          nullable: true
+        max_stock_items:
+          type: integer
+          nullable: true
+        max_documents:
+          type: integer
+          nullable: true
+        max_attachments:
+          type: integer
+          nullable: true
+        max_storage_mb:
+          type: integer
+          nullable: true
+        features:
+          $ref: '#/components/schemas/PlanFeatures'
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    CreatePlanPayload:
+      type: object
+      required:
+        - name
+        - monthly_price
+        - yearly_price
+      properties:
+        name:
+          type: string
+        short_description:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        monthly_price:
+          type: number
+        yearly_price:
+          type: number
+        yearly_discount_percent:
+          type: number
+          nullable: true
+        is_featured:
+          type: boolean
+        has_trial:
+          type: boolean
+        trial_days:
+          type: integer
+          nullable: true
+        display_order:
+          type: integer
+          nullable: true
+        badge:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        max_users:
+          type: integer
+          nullable: true
+        max_clients:
+          type: integer
+          nullable: true
+        max_pets:
+          type: integer
+          nullable: true
+        max_appointments:
+          type: integer
+          nullable: true
+        max_products:
+          type: integer
+          nullable: true
+        max_services:
+          type: integer
+          nullable: true
+        max_stock_items:
+          type: integer
+          nullable: true
+        max_documents:
+          type: integer
+          nullable: true
+        max_attachments:
+          type: integer
+          nullable: true
+        max_storage_mb:
+          type: integer
+          nullable: true
+        features:
+          $ref: '#/components/schemas/PlanFeatures'
+        is_active:
+          type: boolean
+
+    UpdatePlanPayload:
+      type: object
+      properties:
+        name:
+          type: string
+        short_description:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        monthly_price:
+          type: number
+        yearly_price:
+          type: number
+        yearly_discount_percent:
+          type: number
+          nullable: true
+        is_featured:
+          type: boolean
+        has_trial:
+          type: boolean
+        trial_days:
+          type: integer
+          nullable: true
+        display_order:
+          type: integer
+          nullable: true
+        badge:
+          type: string
+          nullable: true
+        color:
+          type: string
+          nullable: true
+        max_users:
+          type: integer
+          nullable: true
+        max_clients:
+          type: integer
+          nullable: true
+        max_pets:
+          type: integer
+          nullable: true
+        max_appointments:
+          type: integer
+          nullable: true
+        max_products:
+          type: integer
+          nullable: true
+        max_services:
+          type: integer
+          nullable: true
+        max_stock_items:
+          type: integer
+          nullable: true
+        max_documents:
+          type: integer
+          nullable: true
+        max_attachments:
+          type: integer
+          nullable: true
+        max_storage_mb:
+          type: integer
+          nullable: true
+        features:
+          $ref: '#/components/schemas/PlanFeatures'
+        is_active:
+          type: boolean
+
+    AdminPlansResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Plan'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    AdminUsersResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    CreateUserPayload:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        is_global_admin:
+          type: boolean
+
+    UpdateUserPayload:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        is_global_admin:
+          type: boolean
+
+    UserTenantAccess:
+      type: object
+      required:
+        - id
+        - tenant_id
+        - role
+        - active
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        tenant_name:
+          type: string
+        tenant_slug:
+          type: string
+        role:
+          type: string
+          enum: [owner, manager, user]
+        active:
+          type: boolean
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    UserTenantAccessListResponse:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserTenantAccess'
+
+    CreateUserTenantAccessPayload:
+      type: object
+      required:
+        - tenant_id
+        - role
+      properties:
+        tenant_id:
+          type: string
+        role:
+          type: string
+          enum: [owner, manager, user]
+        active:
+          type: boolean
+
+    UpdateUserTenantAccessPayload:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [owner, manager, user]
+        active:
+          type: boolean
+
+    PaymentGateway:
+      type: object
+      required:
+        - id
+        - name
+        - provider
+        - status
+        - is_sandbox
+        - is_default
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+          enum: [mercado_pago, pagseguro, iugu, stripe, asaas]
+        status:
+          type: string
+          enum: [active, inactive, testing, error]
+        is_sandbox:
+          type: boolean
+        is_default:
+          type: boolean
+        public_key:
+          type: string
+        access_token:
+          type: string
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        webhook_secret:
+          type: string
+        has_public_key:
+          type: boolean
+        has_access_token:
+          type: boolean
+        has_client_id:
+          type: boolean
+        has_client_secret:
+          type: boolean
+        has_webhook_secret:
+          type: boolean
+        config_json:
+          type: object
+          additionalProperties: true
+        status_message:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    CreatePaymentGatewayPayload:
+      type: object
+      required:
+        - name
+        - provider
+        - status
+        - is_sandbox
+      properties:
+        name:
+          type: string
+        provider:
+          type: string
+          enum: [mercado_pago, pagseguro, iugu, stripe, asaas]
+        status:
+          type: string
+          enum: [active, inactive, testing, error]
+        is_sandbox:
+          type: boolean
+        public_key:
+          type: string
+        access_token:
+          type: string
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        webhook_secret:
+          type: string
+        config_json:
+          type: object
+          additionalProperties: true
+
+    UpdatePaymentGatewayPayload:
+      type: object
+      properties:
+        name:
+          type: string
+        provider:
+          type: string
+          enum: [mercado_pago, pagseguro, iugu, stripe, asaas]
+        status:
+          type: string
+          enum: [active, inactive, testing, error]
+        is_sandbox:
+          type: boolean
+        public_key:
+          type: string
+        access_token:
+          type: string
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        webhook_secret:
+          type: string
+        config_json:
+          type: object
+          additionalProperties: true
+
+    AdminPaymentGatewaysResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentGateway'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    Subscription:
+      type: object
+      required:
+        - id
+        - tenant_id
+        - plan_id
+        - status
+        - billing_cycle
+        - price
+        - created_at
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        tenant:
+          $ref: '#/components/schemas/Tenant'
+        plan_id:
+          type: string
+        plan:
+          $ref: '#/components/schemas/Plan'
+        status:
+          type: string
+          enum: [pending, trialing, active, past_due, suspended, canceled, expired]
+        billing_cycle:
+          type: string
+          enum: [monthly, yearly]
+        price:
+          type: number
+        gateway:
+          type: string
+        trial_ends_at:
+          type: string
+        current_period_starts_at:
+          type: string
+        current_period_ends_at:
+          type: string
+        next_billing_at:
+          type: string
+        canceled_at:
+          type: string
+        suspended_at:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    AdminSubscriptionsResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Subscription'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    Payment:
+      type: object
+      required:
+        - id
+        - status
+        - method
+        - amount
+        - currency
+        - created_at
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        tenant:
+          $ref: '#/components/schemas/Tenant'
+        subscription_id:
+          type: string
+        subscription:
+          $ref: '#/components/schemas/Subscription'
+        invoice_id:
+          type: string
+        invoice:
+          $ref: '#/components/schemas/Invoice'
+        gateway:
+          type: string
+        gateway_payment_id:
+          type: string
+        gateway_transaction_id:
+          type: string
+        status:
+          type: string
+          enum: [pending, approved, rejected, cancelled, refunded, failed]
+        method:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string
+        paid_at:
+          type: string
+        failed_at:
+          type: string
+        refunded_at:
+          type: string
+        failure_reason:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    AdminPaymentsResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    Invoice:
+      type: object
+      required:
+        - id
+        - number
+        - status
+        - amount
+        - currency
+        - created_at
+      properties:
+        id:
+          type: string
+        number:
+          type: string
+        tenant_id:
+          type: string
+        tenant:
+          $ref: '#/components/schemas/Tenant'
+        subscription_id:
+          type: string
+        subscription:
+          $ref: '#/components/schemas/Subscription'
+        gateway:
+          type: string
+        status:
+          type: string
+          enum: [pending, paid, overdue, cancelled, refunded, failed]
+        amount:
+          type: number
+        currency:
+          type: string
+        due_at:
+          type: string
+        paid_at:
+          type: string
+        gateway_invoice_id:
+          type: string
+        invoice_url:
+          type: string
+        metadata:
+          type: object
+          additionalProperties: true
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    AdminInvoicesResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    WhatsAppTemplate:
+      type: object
+      required:
+        - key
+        - name
+        - meta_template_name
+        - language
+        - category
+        - is_active
+      properties:
+        key:
+          type: string
+        name:
+          type: string
+        meta_template_name:
+          type: string
+        language:
+          type: string
+        category:
+          type: string
+        description:
+          type: string
+        components:
+          type: array
+          items:
+            type: object
+        is_active:
+          type: boolean
+
+    WhatsAppNotification:
+      type: object
+      required:
+        - id
+        - phone
+        - template_key
+        - status
+        - created_at
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        client_id:
+          type: string
+        appointment_id:
+          type: string
+        phone:
+          type: string
+        template_key:
+          type: string
+        status:
+          type: string
+          enum: [pending, queued, sent, delivered, read, failed, cancelled]
+        error:
+          type: string
+        payload:
+          type: object
+        meta_message_id:
+          type: string
+        sent_at:
+          type: string
+        delivered_at:
+          type: string
+        read_at:
+          type: string
+        failed_at:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        tenant:
+          $ref: '#/components/schemas/Tenant'
+        client:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        pet:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+        appointment:
+          type: object
+          properties:
+            id:
+              type: string
+            date:
+              type: string
+
+    WhatsAppNotificationsResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WhatsAppNotification'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    WhatsAppSettings:
+      type: object
+      required:
+        - appointment_reminder_confirmation
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        appointment_reminder_confirmation:
+          type: boolean
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        tenant:
+          $ref: '#/components/schemas/Tenant'
+
+    NotificationTemplate:
+      type: object
+      required:
+        - id
+        - key
+        - name
+        - module
+        - event
+        - channel
+        - send_type
+        - body
+        - is_active
+        - is_default
+      properties:
+        id:
+          type: string
+        key:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        module:
+          type: string
+        event:
+          type: string
+        channel:
+          type: string
+        send_type:
+          type: string
+        subject:
+          type: string
+          nullable: true
+        body:
+          type: string
+        variables:
+          type: array
+          items:
+            type: string
+        is_active:
+          type: boolean
+        is_default:
+          type: boolean
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    CreateNotificationTemplatePayload:
+      type: object
+      required:
+        - key
+        - name
+        - module
+        - event
+        - channel
+        - send_type
+        - body
+      properties:
+        key:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        module:
+          type: string
+        event:
+          type: string
+        channel:
+          type: string
+        send_type:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        variables:
+          type: array
+          items:
+            type: string
+        is_active:
+          type: boolean
+        is_default:
+          type: boolean
+
+    UpdateNotificationTemplatePayload:
+      type: object
+      properties:
+        key:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        module:
+          type: string
+        event:
+          type: string
+        channel:
+          type: string
+        send_type:
+          type: string
+        subject:
+          type: string
+        body:
+          type: string
+        variables:
+          type: array
+          items:
+            type: string
+        is_active:
+          type: boolean
+        is_default:
+          type: boolean
+
+    NotificationTemplateStats:
+      type: object
+      properties:
+        total_templates:
+          type: integer
+        active_templates:
+          type: integer
+        inactive_templates:
+          type: integer
+        manual_templates:
+          type: integer
+        automatic_templates:
+          type: integer
+        whatsapp_manual_templates:
+          type: integer
+        email_templates:
+          type: integer
+        blocked_tenants_count:
+          type: integer
+
+    NotificationTemplatesResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationTemplate'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    TenantBlock:
+      type: object
+      required:
+        - id
+        - tenant_id
+        - notification_template_id
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        notification_template_id:
+          type: string
+        block_reason:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+        updated_at:
+          type: string
+        tenant:
+          $ref: '#/components/schemas/Tenant'
+
+    CreateTenantBlockPayload:
+      type: object
+      required:
+        - tenant_id
+      properties:
+        tenant_id:
+          type: string
+        block_reason:
+          type: string
+
+    NotificationDispatch:
+      type: object
+      required:
+        - id
+        - tenant_id
+        - notification_template_id
+        - module
+        - event
+        - channel
+        - recipient
+        - contact
+        - status
+        - body
+        - created_at
+      properties:
+        id:
+          type: string
+        tenant_id:
+          type: string
+        notification_template_id:
+          type: string
+        module:
+          type: string
+        event:
+          type: string
+        channel:
+          type: string
+        recipient:
+          type: string
+        contact:
+          type: string
+        status:
+          type: string
+        subject:
+          type: string
+          nullable: true
+        body:
+          type: string
+        error_message:
+          type: string
+          nullable: true
+        payload:
+          type: object
+          additionalProperties: true
+        created_at:
+          type: string
+        sent_at:
+          type: string
+          nullable: true
+        tenant:
+          $ref: '#/components/schemas/Tenant'
+        template:
+          $ref: '#/components/schemas/NotificationTemplate'
+
+    NotificationDispatchesResponse:
+      type: object
+      required:
+        - data
+        - total
+        - page
+        - perPage
+        - lastPage
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NotificationDispatch'
+        total:
+          type: integer
+        page:
+          type: integer
+        perPage:
+          type: integer
+        lastPage:
+          type: integer
+
+    NotificationDispatchStats:
+      type: object
+      properties:
+        total_dispatches:
+          type: integer
+        generated_count:
+          type: integer
+        pending_count:
+          type: integer
+        queued_count:
+          type: integer
+        sent_count:
+          type: integer
+        failed_count:
+          type: integer
+        cancelled_count:
+          type: integer
+        by_channel:
+          type: object
+          additionalProperties: true
+        by_module:
+          type: object
+          additionalProperties: true
+        by_event:
+          type: object
+          additionalProperties: true
+

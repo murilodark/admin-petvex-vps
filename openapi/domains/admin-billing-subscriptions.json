@@ -1,0 +1,1102 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "PetVex Admin - Admin Billing Subscriptions",
+    "version": "0.0.1",
+    "description": "Filtered OpenAPI specification for Admin Billing Subscriptions."
+  },
+  "servers": [
+    {
+      "url": "http://localhost/api"
+    }
+  ],
+  "paths": {
+    "/v1/admin/billing/subscriptions": {
+      "get": {
+        "operationId": "listAdminBillingSubscriptions",
+        "tags": [
+          "Admin Billing Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "tenant_id",
+            "in": "query",
+            "description": "Filter by tenant ID.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "plan_id",
+            "in": "query",
+            "description": "Filter by plan ID.",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "Filter by subscription status.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "billing_cycle",
+            "in": "query",
+            "description": "Filter by billing cycle.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "gateway",
+            "in": "query",
+            "description": "Filter by payment gateway.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "description": "Filter from creation date.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "description": "Filter to creation date.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "const": "Subscriptions fetched successfully."
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer",
+                      "const": 200
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "minItems": 0,
+                              "maxItems": 0,
+                              "additionalItems": false
+                            }
+                          ]
+                        },
+                        "meta": {
+                          "type": "string"
+                        },
+                        "links": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta",
+                        "links"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthorizationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/billing/subscriptions/{subscription}": {
+      "get": {
+        "operationId": "getAdminBillingSubscription",
+        "tags": [
+          "Admin Billing Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "subscription",
+            "in": "path",
+            "required": true,
+            "description": "The subscription ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription fetched successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/AdminSubscription"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthorizationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          }
+        }
+      }
+    },
+    "/v1/admin/billing/subscriptions/{subscription}/suspend": {
+      "patch": {
+        "operationId": "suspendAdminBillingSubscriptionSuspend",
+        "tags": [
+          "Admin Billing Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "subscription",
+            "in": "path",
+            "required": true,
+            "description": "The subscription ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SuspendSubscriptionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscription suspended successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/AdminSubscription"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthorizationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/billing/subscriptions/{subscription}/reactivate": {
+      "patch": {
+        "operationId": "reactivateAdminBillingSubscriptionReactivate",
+        "tags": [
+          "Admin Billing Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "subscription",
+            "in": "path",
+            "required": true,
+            "description": "The subscription ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription reactivated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/AdminSubscription"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthorizationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      }
+    },
+    "/v1/admin/billing/subscriptions/{subscription}/cancel": {
+      "patch": {
+        "operationId": "cancelAdminBillingSubscriptionCancel",
+        "tags": [
+          "Admin Billing Subscriptions"
+        ],
+        "parameters": [
+          {
+            "name": "subscription",
+            "in": "path",
+            "required": true,
+            "description": "The subscription ID",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelSubscriptionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscription cancelled successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/AdminSubscription"
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthorizationException"
+          },
+          "404": {
+            "$ref": "#/components/responses/ModelNotFoundException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "AuthenticationException": {
+        "description": "Unauthenticated",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "AuthorizationException": {
+        "description": "Authorization error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "ModelNotFoundException": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Error overview."
+                }
+              },
+              "required": [
+                "message"
+              ]
+            }
+          }
+        }
+      },
+      "ValidationException": {
+        "description": "Validation error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "Errors overview."
+                },
+                "errors": {
+                  "type": "object",
+                  "description": "A detailed description of each field that failed validation.",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "message",
+                "errors"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "AdminSubscription": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "plan_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "billing_cycle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "amount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "gateway": {
+            "type": "string"
+          },
+          "gateway_checkout_url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "trial_started_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "trial_ends_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "started_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "current_period_starts_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "current_period_ends_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "next_billing_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "canceled_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "cancel_reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "plan": {
+            "$ref": "#/components/schemas/PlanResource"
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "tenant_id": {
+            "type": "string"
+          },
+          "payment_gateway_id": {
+            "type": "string"
+          },
+          "billing_customer_id": {
+            "type": "string"
+          },
+          "gateway_customer_id": {
+            "type": "string"
+          },
+          "gateway_subscription_id": {
+            "type": "string"
+          },
+          "gateway_checkout_id": {
+            "type": "string"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 0,
+                "maxItems": 0,
+                "additionalItems": false
+              }
+            ]
+          },
+          "tenant": {
+            "$ref": "#/components/schemas/AdminTenantResource"
+          }
+        },
+        "required": [
+          "id",
+          "plan_id",
+          "status",
+          "billing_cycle",
+          "amount",
+          "currency",
+          "gateway",
+          "gateway_checkout_url",
+          "trial_started_at",
+          "trial_ends_at",
+          "started_at",
+          "current_period_starts_at",
+          "current_period_ends_at",
+          "next_billing_at",
+          "canceled_at",
+          "cancel_reason",
+          "created_at",
+          "updated_at",
+          "tenant_id",
+          "payment_gateway_id",
+          "billing_customer_id",
+          "gateway_customer_id",
+          "gateway_subscription_id",
+          "gateway_checkout_id",
+          "metadata"
+        ],
+        "title": "AdminSubscription"
+      },
+      "SuspendSubscriptionRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1000
+          }
+        },
+        "title": "SuspendSubscriptionRequest"
+      },
+      "CancelSubscriptionRequest": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "maxLength": 1000
+          }
+        },
+        "title": "CancelSubscriptionRequest"
+      },
+      "PlanResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "short_description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "monthly_price": {
+            "type": "number"
+          },
+          "yearly_price": {
+            "type": "number"
+          },
+          "yearly_discount_percent": {
+            "type": "number"
+          },
+          "is_featured": {
+            "type": "boolean"
+          },
+          "has_trial": {
+            "type": "boolean"
+          },
+          "trial_days": {
+            "type": "integer"
+          },
+          "display_order": {
+            "type": "integer"
+          },
+          "badge": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "max_users": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_clients": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_pets": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_appointments": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_products": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_services": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_stock_items": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_documents": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_attachments": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max_storage_mb": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "features": {
+            "type": "array",
+            "items": []
+          },
+          "is_active": {
+            "type": "boolean"
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "short_description",
+          "description",
+          "monthly_price",
+          "yearly_price",
+          "yearly_discount_percent",
+          "is_featured",
+          "has_trial",
+          "trial_days",
+          "display_order",
+          "badge",
+          "color",
+          "max_users",
+          "max_clients",
+          "max_pets",
+          "max_appointments",
+          "max_products",
+          "max_services",
+          "max_stock_items",
+          "max_documents",
+          "max_attachments",
+          "max_storage_mb",
+          "features",
+          "is_active",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "PlanResource"
+      },
+      "AdminTenantResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive"
+            ]
+          },
+          "access_status": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "document": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "plan": {
+            "type": "string"
+          },
+          "current_plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PlanResource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "trial_ends_at": {
+            "type": "string"
+          },
+          "trial_used_at": {
+            "type": "string"
+          },
+          "latest_subscription": {
+            "$ref": "#/components/schemas/TenantSubscriptionResource"
+          },
+          "users_count": {
+            "type": "integer"
+          },
+          "products_count": {
+            "type": "integer"
+          },
+          "product_categories_count": {
+            "type": "integer"
+          },
+          "clients_count": {
+            "type": "integer"
+          },
+          "pets_count": {
+            "type": "integer"
+          },
+          "services_count": {
+            "type": "integer"
+          },
+          "sales_count": {
+            "type": "integer"
+          },
+          "invoice_uploads_count": {
+            "type": "integer"
+          },
+          "stock_movements_count": {
+            "type": "integer"
+          },
+          "subscriptions_count": {
+            "type": "integer"
+          },
+          "appointments_count": {
+            "type": "integer"
+          },
+          "cashflow_entries_count": {
+            "type": "integer"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "status",
+          "access_status",
+          "domain",
+          "document",
+          "email",
+          "phone",
+          "active",
+          "plan",
+          "trial_ends_at",
+          "trial_used_at",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "AdminTenantResource"
+      },
+      "TenantSubscriptionResource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "tenant_id": {
+            "type": "integer"
+          },
+          "plan_id": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "string"
+          },
+          "trial_starts_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "trial_ends_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "starts_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "ends_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "cancelled_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "monthly_price": {
+            "type": "number"
+          },
+          "yearly_price": {
+            "type": "number"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/PlanResource"
+          },
+          "created_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "tenant_id",
+          "plan_id",
+          "status",
+          "trial_starts_at",
+          "trial_ends_at",
+          "starts_at",
+          "ends_at",
+          "cancelled_at",
+          "monthly_price",
+          "yearly_price",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "TenantSubscriptionResource"
+      }
+    }
+  }
+}

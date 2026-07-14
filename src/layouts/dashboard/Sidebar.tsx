@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../core/auth/auth.store';
-import { LayoutDashboard, User, LogOut, Loader2, Users, CreditCard, ShieldCheck, Wallet, ClipboardList, DollarSign, Receipt, MessageSquare, Bell } from 'lucide-react';
+import { LayoutDashboard, User, LogOut, Loader2, Users, CreditCard, ShieldCheck, Wallet, ClipboardList, DollarSign, Receipt, MessageSquare, Bell, Tag } from 'lucide-react';
 import { cn } from '../../shared/lib/cn';
 
 interface SidebarProps {
@@ -25,33 +25,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPath, onNavigate, isOpe
       icon: Users,
     },
     {
-      name: 'Usuários Globais',
-      path: '/usuarios',
-      icon: ShieldCheck,
-    },
-    {
       name: 'Planos',
       path: '/planos',
       icon: CreditCard,
     },
     {
+      name: 'Parceiros & Cupons',
+      path: '/admin/partners',
+      icon: Tag,
+    },
+    {
       isHeader: true,
-      name: 'Cobranças',
-    },
-    {
-      name: 'Assinaturas',
-      path: '/admin/billing/subscriptions',
-      icon: ClipboardList,
-    },
-    {
-      name: 'Pagamentos',
-      path: '/admin/billing/payments',
-      icon: DollarSign,
-    },
-    {
-      name: 'Faturas',
-      path: '/admin/billing/invoices',
-      icon: Receipt,
+      name: 'Comunicação',
     },
     {
       name: 'Notificações WhatsApp',
@@ -64,13 +49,37 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPath, onNavigate, isOpe
       icon: Bell,
     },
     {
-      name: 'Gateways de Pagamento',
+      isHeader: true,
+      name: 'Financeiro',
+    },
+    {
+      name: 'Assinaturas',
+      path: '/admin/billing/subscriptions',
+      icon: ClipboardList,
+    },
+    {
+      name: 'Faturas',
+      path: '/admin/billing/invoices',
+      icon: Receipt,
+    },
+    {
+      name: 'Pagamentos',
+      path: '/admin/billing/payments',
+      icon: DollarSign,
+    },
+    {
+      name: 'Gateways',
       path: '/admin/billing/payment-gateways',
       icon: Wallet,
     },
     {
       isHeader: true,
       name: 'Sistema',
+    },
+    {
+      name: 'Usuários Globais',
+      path: '/usuarios',
+      icon: ShieldCheck,
     },
     {
       name: 'Perfil',
@@ -122,14 +131,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPath, onNavigate, isOpe
             const isActive = 
               currentPath === item.path || 
               (item.path === '/clientes' && currentPath.startsWith('/clientes')) ||
-              (item.path === '/usuarios' && currentPath.startsWith('/usuarios')) ||
               (item.path === '/planos' && currentPath.startsWith('/planos')) ||
-              (item.path === '/admin/billing/payment-gateways' && currentPath.startsWith('/admin/billing/payment-gateways')) ||
-              (item.path === '/admin/billing/subscriptions' && currentPath.startsWith('/admin/billing/subscriptions')) ||
-              (item.path === '/admin/billing/payments' && currentPath.startsWith('/admin/billing/payments')) ||
-              (item.path === '/admin/billing/invoices' && currentPath.startsWith('/admin/billing/invoices')) ||
+              (item.path === '/admin/partners' && currentPath.startsWith('/admin/partners')) ||
               (item.path === '/admin/whatsapp/whatsapp-notifications' && currentPath.startsWith('/admin/whatsapp/whatsapp-notifications')) ||
               (item.path === '/admin/notifications' && currentPath.startsWith('/admin/notifications')) ||
+              (item.path === '/admin/billing/subscriptions' && currentPath.startsWith('/admin/billing/subscriptions')) ||
+              (item.path === '/admin/billing/invoices' && currentPath.startsWith('/admin/billing/invoices')) ||
+              (item.path === '/admin/billing/payments' && currentPath.startsWith('/admin/billing/payments')) ||
+              (item.path === '/admin/billing/payment-gateways' && currentPath.startsWith('/admin/billing/payment-gateways')) ||
+              (item.path === '/usuarios' && currentPath.startsWith('/usuarios')) ||
               (currentPath === '/me' && item.path === '/profile');
 
             const Icon = item.icon!;

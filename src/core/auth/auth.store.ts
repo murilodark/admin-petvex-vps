@@ -1,8 +1,17 @@
 import { useSyncExternalStore } from 'react';
 import { tokenStorage } from '../storage/token.storage';
 import { User } from '../http/generated/models/user';
-import { postAuthLogin, postAuthLogout, getMe } from '../http/generated/endpoints/endpoints';
-import { LoginCredentials } from '../http/generated/models/loginCredentials';
+import {
+  loginAdminAuthLogin,
+  logoutAdminAuthLogout,
+  meAdminAuthMe,
+} from '../http/generated/endpoints/admin-auth/admin-auth';
+import type {
+  AdminLoginRequest,
+  LoginAdminAuthLogin200,
+  LoginAdminAuthLogin200Data,
+} from '../http/generated/models/admin-auth';
+import type { LoginCredentials } from '../http/generated/models/loginCredentials';
 
 export interface AuthState {
   token: string | null;
@@ -39,27 +48,54 @@ export const authStore = {
     listeners.forEach((listener) => listener(state));
   },
 
-  async login(credentials: LoginCredentials) {
+  async login(credentials: LoginCredentials): Promise<LoginAdminAuthLogin200> {
     this._setState({ isLoading: true });
     try {
-      const response = await postAuthLogin(credentials);
-      const token = response.token;
+      const payload: AdminLoginRequest = {
+        email: credentials.email ?? '',
+        password: credentials.password ?? '',
+      };
+      const response = await loginAdminAuthLogin(payload);
       
-      this.setToken(token);
-      
-      let currentUser = response.user;
-      if (!currentUser) {
-        // fetch me if user wasn't returned in the response
-        currentUser = await getMe();
+      // Our customInstance mutator automatically unwraps response.data when the 'data' key exists.
+      // Therefore, at runtime, 'response' might be the unwrapped LoginAdminAuthLogin200Data or the wrapped LoginAdminAuthLogin200.
+      // We extract the token in a robust, type-safe manner without 'any'.
+      let token: string | undefined;
+
+      if (response && typeof response === 'object') {
+        if ('data' in response && response.data && typeof response.data === 'object' && 'token' in response.data) {
+          token = (response.data as LoginAdminAuthLogin200Data).token;
+        } else if ('token' in response) {
+          token = (response as unknown as LoginAdminAuthLogin200Data).token;
+        }
       }
-      
+
+      if (!token) {
+        throw new Error('Login response did not include a token.');
+      }
+
+      this.setToken(token);
+
+      const meResponse = await meAdminAuthMe();
+
+      // meAdminAuthMe is typed to return MeAdminAuthMe200, but at runtime the mutator unwraps meResponse.data.
+      // We safely resolve this to the User type.
+      let currentUser: User | null = null;
+      if (meResponse) {
+        if (typeof meResponse === 'object' && 'data' in meResponse) {
+          currentUser = (meResponse.data as unknown as User) ?? null;
+        } else {
+          currentUser = (meResponse as unknown as User) ?? null;
+        }
+      }
+
       this._setState({
         token,
         user: currentUser,
         isAuthenticated: true,
         isLoading: false,
       });
-      
+
       return response;
     } catch (error) {
       this._setState({ isLoading: false, isAuthenticated: false, token: null });
@@ -71,7 +107,7 @@ export const authStore = {
   async logout() {
     this._setState({ isLoading: true });
     try {
-      await postAuthLogout();
+      await logoutAdminAuthLogout();
     } catch (error) {
       console.warn('Logout API error:', error);
     } finally {
@@ -89,10 +125,20 @@ export const authStore = {
     }
     this._setState({ isLoading: true });
     try {
-      const user = await getMe();
+      const meResponse = await meAdminAuthMe();
+
+      let currentUser: User | null = null;
+      if (meResponse) {
+        if (typeof meResponse === 'object' && 'data' in meResponse) {
+          currentUser = (meResponse.data as unknown as User) ?? null;
+        } else {
+          currentUser = (meResponse as unknown as User) ?? null;
+        }
+      }
+
       this._setState({
         token,
-        user,
+        user: currentUser,
         isAuthenticated: true,
         isLoading: false,
       });
