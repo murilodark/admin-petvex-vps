@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Loader2, ZapOff } from 'lucide-react';
-import { Subscription } from '../../../core/http/generated/models';
+import { Subscription } from '../types/billing-admin.types';
 import { SuspendSubscriptionSchema } from '../schemas/billing-admin.schema';
 
 interface SuspendSubscriptionModalProps {

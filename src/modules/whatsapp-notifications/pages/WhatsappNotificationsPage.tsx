@@ -16,8 +16,7 @@ import { WhatsappTemplateTable } from '../components/WhatsappTemplateTable';
 import { WhatsappTemplateDetailsModal } from '../components/WhatsappTemplateDetailsModal';
 import { WhatsappSettingsForm } from '../components/WhatsappSettingsForm';
 import { whatsappNotificationService } from '../services/whatsapp-notification.service';
-import { ListWhatsAppNotificationsParams } from '../types/whatsapp-notification.types';
-import { WhatsAppNotification, WhatsAppTemplate, WhatsAppSettings } from '../../../core/http/generated/models';
+import { ListWhatsAppNotificationsParams, WhatsAppNotification, WhatsAppTemplate, WhatsAppSettings } from '../types/whatsapp-notification.types';
 
 type TabType = 'history' | 'templates' | 'settings';
 

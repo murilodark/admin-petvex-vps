@@ -1,4 +1,4 @@
-import { WhatsAppNotification } from '../../../core/http/generated/models';
+import { WhatsAppNotification } from '../types/whatsapp-notification.types';
 
 export interface UIWhatsAppNotification {
   id: string;

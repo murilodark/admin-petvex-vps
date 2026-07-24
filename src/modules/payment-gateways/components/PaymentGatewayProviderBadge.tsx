@@ -1,5 +1,5 @@
 import React from 'react';
-import { PaymentGatewayProvider } from '../../../core/http/generated/models';
+import { PaymentGatewayProvider } from '../../../core/http/generated/models/admin-payment-gateways';
 
 interface PaymentGatewayProviderBadgeProps {
   provider: PaymentGatewayProvider;

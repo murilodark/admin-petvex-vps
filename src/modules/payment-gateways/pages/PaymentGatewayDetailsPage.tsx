@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Edit, Zap, Star, AlertCircle, Shield, Key, FileJson, Clock, Loader2, CheckCircle2, AlertOctagon, Link2 } from 'lucide-react';
-import { PaymentGateway } from '../../../core/http/generated/models';
+import { PaymentGateway } from '../../../core/http/generated/models/admin-payment-gateways';
 import { paymentGatewaysService } from '../services/payment-gateways.service';
 import { PaymentGatewayProviderBadge } from '../components/PaymentGatewayProviderBadge';
 import { PaymentGatewayStatusBadge, EnvironmentBadge } from '../components/PaymentGatewayStatusBadge';

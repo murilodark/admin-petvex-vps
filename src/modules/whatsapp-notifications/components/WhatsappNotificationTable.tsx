@@ -1,6 +1,6 @@
 import React from 'react';
 import { Eye, ShieldAlert, ChevronLeft, ChevronRight } from 'lucide-react';
-import { WhatsAppNotification } from '../../../core/http/generated/models';
+import { WhatsAppNotification } from '../types/whatsapp-notification.types';
 import { Button } from '../../../shared/components/ui/Button';
 import { WhatsappStatusBadge } from './WhatsappStatusBadge';
 

@@ -1,38 +1,31 @@
 import { Tenant, TenantFormData } from '../types/tenant.types';
-import { CreateTenantPayload } from '../../../core/http/generated/models/createTenantPayload';
-import { UpdateTenantPayload } from '../../../core/http/generated/models/updateTenantPayload';
-import { Tenant as ApiTenant } from '../../../core/http/generated/models/tenant';
+import { 
+  StoreAdminTenantRequest, 
+  UpdateAdminTenantRequest 
+} from '../../../core/http/generated/models/admin-tenants';
 
 export const tenantMapper = {
-  toApiCreate(formData: TenantFormData): CreateTenantPayload {
+  toApiCreate(formData: TenantFormData): StoreAdminTenantRequest {
     return {
       name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      documento: formData.documento || undefined,
-      telefone: formData.telefone || undefined,
-      status: formData.status,
-      plano: formData.plano || undefined,
+      slug: (formData as any).slug || formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      document: formData.documento || undefined,
     };
   },
 
-  toApiUpdate(formData: Partial<TenantFormData>): UpdateTenantPayload {
+  toApiUpdate(formData: Partial<TenantFormData>): UpdateAdminTenantRequest {
     return {
       name: formData.name,
-      email: formData.email,
-      documento: formData.documento || undefined,
-      telefone: formData.telefone || undefined,
-      status: formData.status,
-      plano: formData.plano || undefined,
+      document: formData.documento || undefined,
     };
   },
 
-  toUi(apiData: ApiTenant): Tenant {
+  toUi(apiData: any): Tenant {
     return {
       id: apiData.id?.toString() || '',
       name: apiData.name || '',
       email: apiData.email || '',
-      documento: apiData.documento || '',
+      documento: apiData.document || apiData.documento || '',
       telefone: apiData.telefone || '',
       status: apiData.status === 'inactive' ? 'inactive' : 'active',
       plano: apiData.plano || 'Starter',

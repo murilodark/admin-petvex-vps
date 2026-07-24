@@ -1,37 +1,55 @@
-import { GetAdminBillingSubscriptionsParams } from '../../../core/http/generated/models/getAdminBillingSubscriptionsParams';
-import { GetAdminBillingPaymentsParams } from '../../../core/http/generated/models/getAdminBillingPaymentsParams';
-import { GetAdminBillingInvoicesParams } from '../../../core/http/generated/models/getAdminBillingInvoicesParams';
-import { Subscription } from '../../../core/http/generated/models/subscription';
-import { Payment } from '../../../core/http/generated/models/payment';
-import { Invoice } from '../../../core/http/generated/models/invoice';
+import { ListAdminBillingSubscriptionsParams, AdminSubscription } from '../../../core/http/generated/models/admin-billing-subscriptions';
+import { ListAdminBillingPaymentsParams, AdminPayment } from '../../../core/http/generated/models/admin-billing-payments';
+import { ListAdminBillingInvoicesParams, AdminInvoice } from '../../../core/http/generated/models/admin-billing-invoices';
 
-export type ListarSubscriptionsParams = GetAdminBillingSubscriptionsParams & {
+export type Subscription = AdminSubscription;
+export type Payment = AdminPayment;
+export type Invoice = AdminInvoice;
+
+export type ListarSubscriptionsParams = ListAdminBillingSubscriptionsParams & {
   is_sandbox?: string;
   plan_id?: string;
 };
 
 export interface ListarSubscriptionsResult {
-  data: Subscription[];
+  data: AdminSubscription[];
   total: number;
   page: number;
   perPage: number;
   lastPage: number;
 }
 
-export type ListarPaymentsParams = GetAdminBillingPaymentsParams;
+export type ListarPaymentsParams = ListAdminBillingPaymentsParams & {
+  page?: number;
+  perPage?: number;
+  tenant_id?: string;
+  subscription_id?: string;
+  status?: string;
+  gateway?: string;
+  date_from?: string;
+  date_to?: string;
+};
 
 export interface ListarPaymentsResult {
-  data: Payment[];
+  data: AdminPayment[];
   total: number;
   page: number;
   perPage: number;
   lastPage: number;
 }
 
-export type ListarInvoicesParams = GetAdminBillingInvoicesParams;
+export type ListarInvoicesParams = ListAdminBillingInvoicesParams & {
+  page?: number;
+  perPage?: number;
+  tenant_id?: string;
+  subscription_id?: string;
+  status?: string;
+  date_from?: string;
+  date_to?: string;
+};
 
 export interface ListarInvoicesResult {
-  data: Invoice[];
+  data: AdminInvoice[];
   total: number;
   page: number;
   perPage: number;

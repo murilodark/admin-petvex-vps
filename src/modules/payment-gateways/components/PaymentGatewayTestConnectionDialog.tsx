@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Wifi, WifiOff, Loader2, PlayCircle, CheckCircle, XCircle } from 'lucide-react';
-import { PaymentGateway } from '../../../core/http/generated/models';
+import { PaymentGateway } from '../../../core/http/generated/models/admin-payment-gateways';
 import { Button } from '../../../shared/components/ui/Button';
 import { paymentGatewaysService } from '../services/payment-gateways.service';
 

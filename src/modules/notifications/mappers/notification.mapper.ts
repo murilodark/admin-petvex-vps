@@ -1,4 +1,4 @@
-import { NotificationTemplate, NotificationDispatch, TenantBlock } from '../../../core/http/generated/models';
+import { NotificationTemplate, NotificationDispatch, TenantBlock } from '../types/notification';
 
 export interface UINotificationTemplate {
   id: string;

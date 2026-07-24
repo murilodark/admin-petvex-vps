@@ -1,4 +1,4 @@
-import { PaymentGateway, PaymentGatewayProvider, PaymentGatewayStatus } from '../../../core/http/generated/models';
+import { PaymentGateway, PaymentGatewayProvider, PaymentGatewayStatus } from '../../../core/http/generated/models/admin-payment-gateways';
 
 export interface ListarPaymentGatewaysParams {
   search?: string;

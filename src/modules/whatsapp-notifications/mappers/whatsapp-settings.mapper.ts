@@ -1,4 +1,4 @@
-import { WhatsAppSettings } from '../../../core/http/generated/models';
+import { WhatsAppSettings } from '../types/whatsapp-notification.types';
 
 export interface UIWhatsAppSettings {
   appointmentReminderConfirmation: boolean;

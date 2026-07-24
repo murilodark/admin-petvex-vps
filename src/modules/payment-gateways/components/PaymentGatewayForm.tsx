@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { KeyRound, ShieldAlert, AlertTriangle, Code, Play, CheckCircle2, XCircle } from 'lucide-react';
-import { PaymentGateway } from '../../../core/http/generated/models';
+import { PaymentGateway } from '../../../core/http/generated/models/admin-payment-gateways';
 import { PaymentGatewayFormData } from '../types/payment-gateway.types';
 import { Button } from '../../../shared/components/ui/Button';
 import { Input } from '../../../shared/components/ui/Input';

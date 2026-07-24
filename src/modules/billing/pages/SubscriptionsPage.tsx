@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ClipboardList, CheckCircle, ShieldAlert, RefreshCw } from 'lucide-react';
-import { Subscription } from '../../../core/http/generated/models';
+import { Subscription, ListarSubscriptionsParams } from '../types/billing-admin.types';
 import { billingAdminService } from '../services/billing-admin.service';
-import { ListarSubscriptionsParams } from '../types/billing-admin.types';
 import { SubscriptionFilters } from '../components/SubscriptionFilters';
 import { SubscriptionTable } from '../components/SubscriptionTable';
 import { SubscriptionDetailsModal } from '../components/SubscriptionDetailsModal';

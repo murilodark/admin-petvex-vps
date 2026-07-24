@@ -1,5 +1,5 @@
 import React from 'react';
-import { PaymentGatewayStatus } from '../../../core/http/generated/models';
+import { PaymentGatewayStatus } from '../../../core/http/generated/models/admin-payment-gateways';
 
 interface PaymentGatewayStatusBadgeProps {
   status: PaymentGatewayStatus;

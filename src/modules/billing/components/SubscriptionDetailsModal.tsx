@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, ClipboardList, Shield, DollarSign, Calendar, Sliders, Layers, Check, RefreshCw, Key } from 'lucide-react';
-import { Subscription } from '../../../core/http/generated/models';
+import { Subscription } from '../types/billing-admin.types';
 import { Badge } from '../../../shared/components/ui/Badge';
 
 interface SubscriptionDetailsModalProps {

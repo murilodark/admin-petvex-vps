@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Send, AlertCircle, Calendar, MessageSquare, Info, RefreshCw, Layers } from 'lucide-react';
-import { WhatsAppNotification } from '../../../core/http/generated/models';
+import { WhatsAppNotification } from '../types/whatsapp-notification.types';
 import { Button } from '../../../shared/components/ui/Button';
 import { WhatsappStatusBadge } from './WhatsappStatusBadge';
 import { whatsappNotificationService } from '../services/whatsapp-notification.service';

@@ -6,11 +6,15 @@ import {
   updateAdminWhatsappTenantSetting,
 } from '../../../core/http/generated/endpoints/admin-whats-app/admin-whats-app';
 import {
+  UpdateTenantWhatsappSettingsRequest,
+} from '../../../core/http/generated/models/admin-whats-app';
+import {
   WhatsAppNotification,
   WhatsAppTemplate,
   WhatsAppSettings,
-} from '../../../core/http/generated/models';
-import { UpdateTenantWhatsappSettingsRequest } from '../../../core/http/generated/models/admin-whats-app';
+  ListWhatsAppNotificationsParams,
+  ListWhatsAppNotificationsResult,
+} from '../types/whatsapp-notification.types';
 import {
   whatsappNotificationMapper,
   UIWhatsAppNotification
@@ -23,7 +27,6 @@ import {
   whatsappSettingsMapper,
   UIWhatsAppSettings
 } from '../mappers/whatsapp-settings.mapper';
-import { ListWhatsAppNotificationsParams, ListWhatsAppNotificationsResult } from '../types/whatsapp-notification.types';
 
 export const whatsappNotificationService = {
   async listNotifications(filters: ListWhatsAppNotificationsParams): Promise<ListWhatsAppNotificationsResult> {

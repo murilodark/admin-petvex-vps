@@ -1,6 +1,6 @@
 import React from 'react';
 import { Eye, AlertTriangle, RefreshCw } from 'lucide-react';
-import { Payment } from '../../../core/http/generated/models';
+import { Payment } from '../types/billing-admin.types';
 import { Badge } from '../../../shared/components/ui/Badge';
 
 interface PaymentTableProps {

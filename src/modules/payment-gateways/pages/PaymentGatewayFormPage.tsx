@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
-import { PaymentGateway } from '../../../core/http/generated/models';
+import { PaymentGateway } from '../../../core/http/generated/models/admin-payment-gateways';
 import { paymentGatewaysService } from '../services/payment-gateways.service';
 import { PaymentGatewayFormData } from '../types/payment-gateway.types';
 import { PaymentGatewayForm } from '../components/PaymentGatewayForm';

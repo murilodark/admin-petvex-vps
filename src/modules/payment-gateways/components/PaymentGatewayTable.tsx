@@ -1,6 +1,6 @@
 import React from 'react';
 import { Eye, Edit, Trash2, Zap, Star, ChevronLeft, ChevronRight, AlertCircle } from 'lucide-react';
-import { PaymentGateway } from '../../../core/http/generated/models';
+import { PaymentGateway } from '../../../core/http/generated/models/admin-payment-gateways';
 import { PaymentGatewayProviderBadge } from './PaymentGatewayProviderBadge';
 import { PaymentGatewayStatusBadge, EnvironmentBadge } from './PaymentGatewayStatusBadge';
 

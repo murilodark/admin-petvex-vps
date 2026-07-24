@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { RefreshCw, CheckCircle2, AlertTriangle, HelpCircle, Search, ShieldAlert, Check, X } from 'lucide-react';
-import { WhatsAppSettings } from '../../../core/http/generated/models';
+import { WhatsAppSettings } from '../types/whatsapp-notification.types';
 import { Button } from '../../../shared/components/ui/Button';
 import { whatsappNotificationService } from '../services/whatsapp-notification.service';
 

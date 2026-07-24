@@ -1,4 +1,6 @@
-import { WhatsAppNotification, WhatsAppTemplate, WhatsAppSettings } from '../../../core/http/generated/models';
+export type WhatsAppNotification = any;
+export type WhatsAppTemplate = any;
+export type WhatsAppSettings = any;
 
 export interface ListWhatsAppNotificationsParams {
   status?: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Eye, AlertTriangle } from 'lucide-react';
-import { Invoice } from '../../../core/http/generated/models';
+import { Invoice } from '../types/billing-admin.types';
 import { Badge } from '../../../shared/components/ui/Badge';
 
 interface InvoiceTableProps {

@@ -1,5 +1,3 @@
-import { TenantUser as ApiTenantUser } from '../../../../../core/http/generated/models/tenantUser';
-
 export interface TenantUser {
   id: string;
   name: string;

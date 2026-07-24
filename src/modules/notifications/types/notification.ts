@@ -1,24 +1,24 @@
 import {
-  NotificationTemplate,
-  NotificationDispatch,
-  TenantBlock,
-  NotificationTemplateStats,
-  NotificationDispatchStats,
-  CreateNotificationTemplatePayload,
-  UpdateNotificationTemplatePayload,
-  CreateTenantBlockPayload,
-} from '../../../core/http/generated/models';
+  StoreNotificationTemplateRequest,
+  UpdateNotificationTemplateRequest,
+  ListAdminNotificationTemplatesParams,
+} from '../../../core/http/generated/models/admin-notification-templates';
+import {
+  ListAdminNotificationDispatchesParams,
+} from '../../../core/http/generated/models/admin-notification-dispatches';
+import {
+  BlockTenantNotificationTemplateRequest,
+} from '../../../core/http/generated/models/admin-notification-template-tenant-blocks';
 
-export type {
-  NotificationTemplate,
-  NotificationDispatch,
-  TenantBlock,
-  NotificationTemplateStats,
-  NotificationDispatchStats,
-  CreateNotificationTemplatePayload,
-  UpdateNotificationTemplatePayload,
-  CreateTenantBlockPayload,
-};
+export type NotificationTemplate = any;
+export type NotificationDispatch = any;
+export type TenantBlock = any;
+export type NotificationTemplateStats = any;
+export type NotificationDispatchStats = any;
+
+export type CreateNotificationTemplatePayload = StoreNotificationTemplateRequest;
+export type UpdateNotificationTemplatePayload = UpdateNotificationTemplateRequest;
+export type CreateTenantBlockPayload = BlockTenantNotificationTemplateRequest;
 
 export interface ListTemplatesParams {
   module?: string;

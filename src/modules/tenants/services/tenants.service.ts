@@ -5,7 +5,6 @@ import {
   listAdminTenants,
   updateAdminTenant,
 } from '../../../core/http/generated/endpoints/admin-tenants/admin-tenants';
-import { Tenant as ApiTenant } from '../../../core/http/generated/models/tenant';
 import type {
   StoreAdminTenantRequest,
   UpdateAdminTenantRequest,
@@ -29,7 +28,7 @@ export interface TenantPaginationMeta {
 }
 
 export interface AdminTenantsPaginatedResponse {
-  data?: ApiTenant[];
+  data?: any[];
   meta?: TenantPaginationMeta;
   links?: unknown;
 }
@@ -80,73 +79,48 @@ export const tenantsService = {
   async buscarTenantPorId(id: string): Promise<Tenant> {
     const apiResponse = await getAdminTenant(id);
     
-    let apiTenant: ApiTenant;
+    let apiTenant: any;
     if (apiResponse && typeof apiResponse === 'object' && 'data' in apiResponse) {
-      apiTenant = (apiResponse.data as unknown as ApiTenant);
+      apiTenant = (apiResponse.data as unknown);
     } else {
-      apiTenant = (apiResponse as unknown as ApiTenant);
+      apiTenant = (apiResponse as unknown);
     }
     
     return tenantMapper.toUi(apiTenant);
   },
 
   async cadastrarTenant(formData: TenantFormData): Promise<Tenant> {
-    const slug = formData.name
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)+/g, '');
-
     const apiPayload: StoreAdminTenantRequest = {
       name: formData.name,
-      slug,
-      email: formData.email,
+      slug: (formData as any).slug || formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
       document: formData.documento || undefined,
-      phone: formData.telefone || undefined,
-      active: formData.status === 'active',
-      plan: formData.plano || undefined,
     };
 
     const apiResponse = await createAdminTenant(apiPayload);
     
-    let apiTenant: ApiTenant;
+    let apiTenant: any;
     if (apiResponse && typeof apiResponse === 'object' && 'data' in apiResponse) {
-      apiTenant = (apiResponse.data as unknown as ApiTenant);
+      apiTenant = (apiResponse.data as unknown);
     } else {
-      apiTenant = (apiResponse as unknown as ApiTenant);
+      apiTenant = (apiResponse as unknown);
     }
     
     return tenantMapper.toUi(apiTenant);
   },
 
   async atualizarTenant(id: string, formData: Partial<TenantFormData>): Promise<Tenant> {
-    const slug = formData.name
-      ? formData.name
-          .toLowerCase()
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .replace(/[^a-z0-9]+/g, '-')
-          .replace(/(^-|-$)+/g, '')
-      : undefined;
-
     const apiPayload: UpdateAdminTenantRequest = {
       name: formData.name,
-      slug,
-      email: formData.email,
       document: formData.documento || undefined,
-      phone: formData.telefone || undefined,
-      active: formData.status ? (formData.status === 'active') : undefined,
-      plan: formData.plano || undefined,
     };
 
     const apiResponse = await updateAdminTenant(id, apiPayload);
     
-    let apiTenant: ApiTenant;
+    let apiTenant: any;
     if (apiResponse && typeof apiResponse === 'object' && 'data' in apiResponse) {
-      apiTenant = (apiResponse.data as unknown as ApiTenant);
+      apiTenant = (apiResponse.data as unknown);
     } else {
-      apiTenant = (apiResponse as unknown as ApiTenant);
+      apiTenant = (apiResponse as unknown);
     }
     
     return tenantMapper.toUi(apiTenant);

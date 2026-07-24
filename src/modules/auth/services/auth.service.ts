@@ -1,8 +1,8 @@
 import { authStore } from '../../../core/auth/auth.store';
-import { LoginCredentials } from '../../../core/http/generated/models/loginCredentials';
+import { AdminLoginRequest } from '../../../core/http/generated/models/admin-auth';
 
 export const authService = {
-  async authenticate(credentials: LoginCredentials) {
+  async authenticate(credentials: AdminLoginRequest) {
     return authStore.login(credentials);
   },
   async logout() {

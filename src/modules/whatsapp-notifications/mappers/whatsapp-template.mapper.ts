@@ -1,4 +1,4 @@
-import { WhatsAppTemplate } from '../../../core/http/generated/models';
+import { WhatsAppTemplate } from '../types/whatsapp-notification.types';
 
 export interface UIWhatsAppTemplate {
   key: string;

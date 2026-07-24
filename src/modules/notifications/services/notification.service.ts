@@ -14,18 +14,23 @@ import {
   statsAdminNotificationDispatchStat,
 } from '../../../core/http/generated/endpoints/admin-notification-dispatches/admin-notification-dispatches';
 import {
+  ListAdminNotificationTemplatesParams as GetNotificationTemplatesParams,
+} from '../../../core/http/generated/models/admin-notification-templates';
+import {
+  ListAdminNotificationDispatchesParams as GetNotificationDispatchesParams,
+} from '../../../core/http/generated/models/admin-notification-dispatches';
+import {
   NotificationTemplate,
-  NotificationDispatch,
-  TenantBlock,
   NotificationTemplateStats,
-  NotificationDispatchStats,
   CreateNotificationTemplatePayload,
   UpdateNotificationTemplatePayload,
+  NotificationDispatch,
+  NotificationDispatchStats,
+  TenantBlock,
   CreateTenantBlockPayload,
-  GetNotificationTemplatesParams,
-  GetNotificationDispatchesParams,
-} from '../../../core/http/generated/models';
-import { ListTemplatesParams, ListDispatchesParams } from '../types/notification';
+  ListTemplatesParams,
+  ListDispatchesParams,
+} from '../types/notification';
 
 export const notificationService = {
   async listTemplates(filters?: ListTemplatesParams): Promise<{
@@ -35,7 +40,7 @@ export const notificationService = {
     perPage: number;
     lastPage: number;
   }> {
-    const params: GetNotificationTemplatesParams = {};
+    const params: any = {};
     if (filters) {
       if (filters.module && filters.module !== 'all') params.module = filters.module;
       if (filters.event && filters.event !== 'all') params.event = filters.event;
@@ -45,7 +50,7 @@ export const notificationService = {
       if (filters.is_default !== undefined) params.is_default = filters.is_default;
       if (filters.search) params.search = filters.search;
       if (filters.page) params.page = filters.page;
-      if (filters.perPage) params.perPage = filters.perPage;
+      if (filters.perPage) params.per_page = filters.perPage;
     }
 
     const response = (await listAdminNotificationTemplates(params as any)) as any;
@@ -108,11 +113,11 @@ export const notificationService = {
     perPage: number;
     lastPage: number;
   }> {
-    const params: GetNotificationDispatchesParams = {};
+    const params: any = {};
     if (filters) {
       if (filters.search) params.search = filters.search;
-      if (filters.tenant_id) params.tenant_id = filters.tenant_id;
-      if (filters.notification_template_id) params.notification_template_id = filters.notification_template_id;
+      if (filters.tenant_id) params.tenant_id = Number(filters.tenant_id) || filters.tenant_id;
+      if (filters.notification_template_id) params.notification_template_id = Number(filters.notification_template_id) || filters.notification_template_id;
       if (filters.module && filters.module !== 'all') params.module = filters.module;
       if (filters.event && filters.event !== 'all') params.event = filters.event;
       if (filters.channel && filters.channel !== 'all') params.channel = filters.channel;
@@ -121,7 +126,7 @@ export const notificationService = {
       if (filters.date_from) params.date_from = filters.date_from;
       if (filters.date_to) params.date_to = filters.date_to;
       if (filters.page) params.page = filters.page;
-      if (filters.perPage) params.perPage = filters.perPage;
+      if (filters.perPage) params.per_page = filters.perPage;
     }
 
     const response = (await listAdminNotificationDispatches(params as any)) as any;

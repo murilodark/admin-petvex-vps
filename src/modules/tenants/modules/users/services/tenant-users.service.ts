@@ -7,7 +7,6 @@ import {
   listAdminTenantUsers,
   updateAdminTenantUser,
 } from '../../../../../core/http/generated/endpoints/admin-tenant-users/admin-tenant-users';
-import { TenantUser as ApiTenantUser } from '../../../../../core/http/generated/models/tenantUser';
 import { TenantUser, TenantUserFormData } from '../types/tenant-user.types';
 import { tenantUserMapper } from '../mappers/tenant-user.mapper';
 
@@ -43,7 +42,7 @@ export const tenantUsersService = {
 
     const response = (await listAdminTenantUsers(Number(tenantId), cleanParams)) as any;
 
-    const usersArray: ApiTenantUser[] = Array.isArray(response?.data) ? response.data : [];
+    const usersArray: any[] = Array.isArray(response?.data) ? response.data : [];
     const meta = response?.meta && typeof response.meta === 'object' ? response.meta : undefined;
 
     const total = Number(meta?.total ?? usersArray.length);
@@ -63,11 +62,11 @@ export const tenantUsersService = {
   async buscarUsuarioPorId(tenantId: string, userId: string): Promise<TenantUser> {
     const response = await getAdminTenantUser(Number(tenantId), Number(userId));
     
-    let apiUser: ApiTenantUser;
+    let apiUser: any;
     if (response && typeof response === 'object' && 'data' in response) {
-      apiUser = (response.data as unknown as ApiTenantUser);
+      apiUser = (response.data as unknown);
     } else {
-      apiUser = (response as unknown as ApiTenantUser);
+      apiUser = (response as unknown);
     }
     
     return tenantUserMapper.toUi(apiUser);
@@ -78,11 +77,11 @@ export const tenantUsersService = {
 
     const response = await createAdminTenantUser(Number(tenantId), payload);
     
-    let apiUser: ApiTenantUser;
+    let apiUser: any;
     if (response && typeof response === 'object' && 'data' in response) {
-      apiUser = (response.data as unknown as ApiTenantUser);
+      apiUser = (response.data as unknown);
     } else {
-      apiUser = (response as unknown as ApiTenantUser);
+      apiUser = (response as unknown);
     }
     
     return tenantUserMapper.toUi(apiUser);
@@ -93,11 +92,11 @@ export const tenantUsersService = {
 
     const response = await updateAdminTenantUser(Number(tenantId), Number(userId), payload);
     
-    let apiUser: ApiTenantUser;
+    let apiUser: any;
     if (response && typeof response === 'object' && 'data' in response) {
-      apiUser = (response.data as unknown as ApiTenantUser);
+      apiUser = (response.data as unknown);
     } else {
-      apiUser = (response as unknown as ApiTenantUser);
+      apiUser = (response as unknown);
     }
     
     return tenantUserMapper.toUi(apiUser);

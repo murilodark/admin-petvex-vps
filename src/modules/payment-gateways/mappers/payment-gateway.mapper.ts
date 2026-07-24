@@ -1,8 +1,15 @@
-import { PaymentGateway, CreatePaymentGatewayPayload, UpdatePaymentGatewayPayload } from '../../../core/http/generated/models';
+import { 
+  PaymentGateway, 
+  StorePaymentGatewayRequest as CreatePaymentGatewayPayload, 
+  UpdatePaymentGatewayRequest as UpdatePaymentGatewayPayload,
+  PaymentGatewayProvider,
+  PaymentGatewayStatus,
+} from '../../../core/http/generated/models/admin-payment-gateways';
 import { PaymentGatewayFormData } from '../types/payment-gateway.types';
 
 export const paymentGatewayMapper = {
   toFormData(gateway: PaymentGateway): PaymentGatewayFormData {
+    const gwAny = gateway as any;
     const formatJsonField = (fieldValue: any): string => {
       if (fieldValue === undefined || fieldValue === null) return '{}';
       if (Array.isArray(fieldValue) && fieldValue.length === 0) return '{}';
@@ -11,19 +18,19 @@ export const paymentGatewayMapper = {
 
     return {
       name: gateway.name || '',
-      provider: gateway.provider || 'mercado_pago',
-      status: gateway.status || 'testing',
+      provider: (gateway.provider as PaymentGatewayProvider) || 'mercado_pago',
+      status: (gateway.status as PaymentGatewayStatus) || 'testing',
       is_sandbox: !!gateway.is_sandbox,
       is_default: !!gateway.is_default,
-      webhook_url: (gateway as any).webhook_url || '',
-      public_key: gateway.public_key || '',
+      webhook_url: gwAny.webhook_url || '',
+      public_key: gwAny.public_key || '',
       access_token: '', // Do not display sensitive value
-      client_id: gateway.client_id || '',
+      client_id: gwAny.client_id || '',
       client_secret: '', // Do not display sensitive value
       webhook_secret: '', // Do not display sensitive value
-      config_json_string: formatJsonField(gateway.config_json),
-      checkout_config_string: formatJsonField((gateway as any).checkout_config),
-      metadata_string: formatJsonField((gateway as any).metadata),
+      config_json_string: formatJsonField(gwAny.config_json),
+      checkout_config_string: formatJsonField(gwAny.checkout_config),
+      metadata_string: formatJsonField(gwAny.metadata),
     };
   },
 

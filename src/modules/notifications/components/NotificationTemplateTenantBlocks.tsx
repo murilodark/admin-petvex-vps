@@ -78,8 +78,8 @@ export const NotificationTemplateTenantBlocks: React.FC<NotificationTemplateTena
 
     try {
       await notificationService.blockTenant(template.id, {
-        tenant_id: selectedTenantId,
-        block_reason: blockReason || 'Bloqueio preventivo administrativo',
+        tenant_id: Number(selectedTenantId),
+        reason: blockReason || 'Bloqueio preventivo administrativo',
       });
       setSelectedTenantId('');
       setBlockReason('');

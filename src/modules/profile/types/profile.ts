@@ -1,3 +1,3 @@
-import { User } from '../../../core/http/generated/models/user';
+import { AuthUser } from '../../../core/auth/auth.store';
 
-export type UserProfile = User;
+export type UserProfile = AuthUser;

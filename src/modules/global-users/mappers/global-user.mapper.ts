@@ -1,9 +1,11 @@
-import { User as ApiUser } from '../../../core/http/generated/models/user';
-import { CreateUserPayload } from '../../../core/http/generated/models/createUserPayload';
-import { UpdateUserPayload } from '../../../core/http/generated/models/updateUserPayload';
-import { UserTenantAccess as ApiUserTenantAccess } from '../../../core/http/generated/models/userTenantAccess';
-import { CreateUserTenantAccessPayload } from '../../../core/http/generated/models/createUserTenantAccessPayload';
-import { UpdateUserTenantAccessPayload } from '../../../core/http/generated/models/updateUserTenantAccessPayload';
+import { 
+  StoreAdminUserRequest, 
+  UpdateAdminUserRequest 
+} from '../../../core/http/generated/models/admin-users';
+import { 
+  StoreAdminTenantUserRequest, 
+  UpdateAdminTenantUserRequest 
+} from '../../../core/http/generated/models/admin-tenant-users';
 import { 
   GlobalUser, 
   GlobalUserFormData, 
@@ -12,37 +14,34 @@ import {
 } from '../types/global-user.types';
 
 export const globalUserMapper = {
-  toUiUser(apiData: ApiUser): GlobalUser {
+  toUiUser(apiData: any): GlobalUser {
     return {
       id: apiData.id?.toString() || '',
       name: apiData.name || '',
       email: apiData.email || '',
       isGlobalAdmin: apiData.is_global_admin !== false,
       active: true, // index mock has true
-      createdAt: new Date().toISOString(), // default or mock placeholder
+      createdAt: apiData.created_at || new Date().toISOString(),
     };
   },
 
-  toApiCreateUser(formData: GlobalUserFormData): CreateUserPayload {
+  toApiCreateUser(formData: GlobalUserFormData): StoreAdminUserRequest {
     return {
       name: formData.name,
       email: formData.email,
       password: formData.password || undefined,
-      is_global_admin: formData.isGlobalAdmin,
     };
   },
 
-  toApiUpdateUser(formData: Partial<GlobalUserFormData>): UpdateUserPayload {
-    const payload: UpdateUserPayload = {};
+  toApiUpdateUser(formData: Partial<GlobalUserFormData>): UpdateAdminUserRequest {
+    const payload: UpdateAdminUserRequest = {};
     if (formData.name !== undefined) payload.name = formData.name;
     if (formData.email !== undefined) payload.email = formData.email;
     if (formData.password !== undefined && formData.password !== '') payload.password = formData.password;
-    if (formData.isGlobalAdmin !== undefined) payload.is_global_admin = formData.isGlobalAdmin;
     return payload;
   },
 
-  toUiTenantAccess(apiData: ApiUserTenantAccess, userId: string): GlobalUserTenantAccess {
-    // Cast role as appropriate
+  toUiTenantAccess(apiData: any, userId: string): GlobalUserTenantAccess {
     const roleMap: Record<string, 'owner' | 'manager' | 'user'> = {
       owner: 'owner',
       manager: 'manager',
@@ -63,18 +62,17 @@ export const globalUserMapper = {
     };
   },
 
-  toApiCreateTenantAccess(formData: GlobalUserTenantAccessFormData): CreateUserTenantAccessPayload {
+  toApiCreateTenantAccess(formData: GlobalUserTenantAccessFormData): StoreAdminTenantUserRequest {
     return {
-      tenant_id: formData.tenantId,
+      tenant_id: Number(formData.tenantId) || 0,
+      user_id: 0,
       role: formData.role,
-      active: formData.active,
-    };
+    } as any;
   },
 
-  toApiUpdateTenantAccess(formData: Partial<GlobalUserTenantAccessFormData>): UpdateUserTenantAccessPayload {
-    const payload: UpdateUserTenantAccessPayload = {};
+  toApiUpdateTenantAccess(formData: Partial<GlobalUserTenantAccessFormData>): UpdateAdminTenantUserRequest {
+    const payload: UpdateAdminTenantUserRequest = {};
     if (formData.role !== undefined) payload.role = formData.role;
-    if (formData.active !== undefined) payload.active = formData.active;
     return payload;
   },
 };

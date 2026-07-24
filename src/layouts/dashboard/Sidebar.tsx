@@ -74,7 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentPath, onNavigate, isOpe
     },
     {
       isHeader: true,
-      name: 'Sistema',
+      name: 'Config Sistema',
     },
     {
       name: 'Usuários Globais',

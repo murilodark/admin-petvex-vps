@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PlusCircle, AlertCircle, RefreshCw } from 'lucide-react';
-import { PaymentGateway } from '../../../core/http/generated/models';
+import { PaymentGateway } from '../../../core/http/generated/models/admin-payment-gateways';
 import { paymentGatewaysService } from '../services/payment-gateways.service';
 import { ListarPaymentGatewaysParams } from '../types/payment-gateway.types';
 import { PaymentGatewayFilters } from '../components/PaymentGatewayFilters';

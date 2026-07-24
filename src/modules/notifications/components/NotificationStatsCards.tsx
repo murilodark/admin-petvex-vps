@@ -13,7 +13,7 @@ import {
   History,
   Activity,
 } from 'lucide-react';
-import { NotificationTemplateStats, NotificationDispatchStats } from '../../../core/http/generated/models';
+import { NotificationTemplateStats, NotificationDispatchStats } from '../types/notification';
 
 interface NotificationStatsCardsProps {
   templateStats: NotificationTemplateStats | null;

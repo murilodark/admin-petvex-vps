@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, CheckCircle, Receipt, ExternalLink, Calendar, ShieldCheck } from 'lucide-react';
-import { Invoice } from '../../../core/http/generated/models';
+import { Invoice } from '../types/billing-admin.types';
 import { Badge } from '../../../shared/components/ui/Badge';
 
 interface InvoiceDetailsModalProps {

@@ -1,41 +1,25 @@
-import { TenantUser as ApiTenantUser } from '../../../../../core/http/generated/models/tenantUser';
-import { CreateTenantUserPayload } from '../../../../../core/http/generated/models/createTenantUserPayload';
-import { UpdateTenantUserPayload } from '../../../../../core/http/generated/models/updateTenantUserPayload';
+import { 
+  StoreAdminTenantUserRequest, 
+  UpdateAdminTenantUserRequest 
+} from '../../../../../core/http/generated/models/admin-tenant-users';
 import { TenantUser, TenantUserFormData } from '../types/tenant-user.types';
 
 export const tenantUserMapper = {
-  toApiCreate(formData: TenantUserFormData): CreateTenantUserPayload {
+  toApiCreate(formData: TenantUserFormData): StoreAdminTenantUserRequest {
     return {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password || undefined,
-      password_confirmation: formData.password_confirmation || undefined,
+      user_id: 0,
       role: formData.role || undefined,
-      active: formData.active,
-      phone: formData.phone || undefined,
-      document: formData.document || undefined,
-    };
+    } as any;
   },
 
-  toApiUpdate(formData: Partial<TenantUserFormData>): UpdateTenantUserPayload {
-    const payload: UpdateTenantUserPayload = {
-      name: formData.name,
-      email: formData.email,
+  toApiUpdate(formData: Partial<TenantUserFormData>): UpdateAdminTenantUserRequest {
+    const payload: UpdateAdminTenantUserRequest = {
       role: formData.role || undefined,
-      active: formData.active,
-      phone: formData.phone || undefined,
-      document: formData.document || undefined,
     };
-    if (formData.password) {
-      payload.password = formData.password;
-    }
-    if (formData.password_confirmation) {
-      payload.password_confirmation = formData.password_confirmation;
-    }
     return payload;
   },
 
-  toUi(apiData: ApiTenantUser): TenantUser {
+  toUi(apiData: any): TenantUser {
     return {
       id: apiData.id?.toString() || '',
       name: apiData.name || '',

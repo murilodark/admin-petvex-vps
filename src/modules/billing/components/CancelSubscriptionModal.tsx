@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Loader2, ShieldAlert } from 'lucide-react';
-import { Subscription } from '../../../core/http/generated/models';
+import { Subscription } from '../types/billing-admin.types';
 import { CancelSubscriptionSchema } from '../schemas/billing-admin.schema';
 
 interface CancelSubscriptionModalProps {

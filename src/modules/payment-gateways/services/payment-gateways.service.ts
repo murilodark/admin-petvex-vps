@@ -9,7 +9,7 @@ import {
   testAdminBillingPaymentGatewayTest,
   updateAdminBillingPaymentGateway,
 } from '../../../core/http/generated/endpoints/admin-payment-gateways/admin-payment-gateways';
-import { PaymentGateway } from '../../../core/http/generated/models';
+import { PaymentGateway } from '../../../core/http/generated/models/admin-payment-gateways';
 import { 
   ListarPaymentGatewaysParams, 
   ListarPaymentGatewaysResult, 
@@ -119,7 +119,7 @@ export const paymentGatewaysService = {
     } catch (e) {
       console.warn(`API error showing payment gateway ${id}, using local fallback:`, e);
       const list = getStoredGateways();
-      const found = list.find(g => g.id === id);
+      const found = list.find((g: any) => String(g.id) === String(id));
       if (!found) {
         throw new Error('Gateway de pagamento não encontrado.');
       }
@@ -153,7 +153,7 @@ export const paymentGatewaysService = {
       const newId = Math.floor(Math.random() * 1000000).toString();
       
       const newGateway: PaymentGateway = {
-        id: newId,
+        id: Number(newId) || 1,
         name: formData.name,
         provider: formData.provider,
         status: formData.status,
@@ -169,10 +169,10 @@ export const paymentGatewaysService = {
         client_id: formData.client_id,
         client_secret: formData.client_secret,
         webhook_secret: formData.webhook_secret,
-        config_json: payload.config_json || {},
+        config_json: (payload as any).config_json || {},
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
-      };
+      } as any;
 
       const updatedList = list.map(g => formData.is_default ? { ...g, is_default: false } : g);
       saveStoredGateways([newGateway, ...updatedList]);
@@ -189,7 +189,7 @@ export const paymentGatewaysService = {
       const result = (resAny && resAny.data) ? resAny.data : response;
 
       const list = getStoredGateways();
-      const updatedList = list.map(g => g.id === id ? { ...g, ...result } : g);
+      const updatedList = list.map((g: any) => String(g.id) === String(id) ? { ...g, ...result } : g);
       saveStoredGateways(updatedList);
       return result;
     } catch (e: any) {
@@ -198,12 +198,12 @@ export const paymentGatewaysService = {
       }
       console.warn(`API error updating payment gateway ${id}, simulating locally:`, e);
       const list = getStoredGateways();
-      const itemIndex = list.findIndex(g => g.id === id);
+      const itemIndex = list.findIndex((g: any) => String(g.id) === String(id));
       if (itemIndex === -1) {
         throw new Error('Gateway não localizado para atualização.');
       }
 
-      const existing = list[itemIndex];
+      const existing = list[itemIndex] as any;
       const updatedItem: PaymentGateway = {
         ...existing,
         name: formData.name,
@@ -221,9 +221,9 @@ export const paymentGatewaysService = {
         has_client_id: formData.client_id ? true : existing.has_client_id,
         has_client_secret: formData.client_secret ? true : existing.has_client_secret,
         has_webhook_secret: formData.webhook_secret ? true : existing.has_webhook_secret,
-        config_json: payload.config_json || existing.config_json,
+        config_json: (payload as any).config_json || existing.config_json,
         updated_at: new Date().toISOString()
-      };
+      } as any;
 
       const updatedList = [...list];
       updatedList[itemIndex] = updatedItem;
@@ -236,12 +236,12 @@ export const paymentGatewaysService = {
     try {
       await deleteAdminBillingPaymentGateway(Number(id));
       const list = getStoredGateways();
-      const updated = list.filter(g => g.id !== id);
+      const updated = list.filter((g: any) => String(g.id) !== String(id));
       saveStoredGateways(updated);
     } catch (e) {
       console.warn(`API error deleting payment gateway ${id}, removing locally:`, e);
       const list = getStoredGateways();
-      const updated = list.filter(g => g.id !== id);
+      const updated = list.filter((g: any) => String(g.id) !== String(id));
       saveStoredGateways(updated);
     }
   },
@@ -279,7 +279,7 @@ export const paymentGatewaysService = {
       
       // Simulate connection logic based on provider/is_sandbox and if it has access keys
       const list = getStoredGateways();
-      const found = list.find(g => g.id === id);
+      const found = list.find((g: any) => String(g.id) === String(id));
       
       if (!found) {
         return {
@@ -291,10 +291,10 @@ export const paymentGatewaysService = {
       // Simulate delay for realism
       await new Promise(resolve => setTimeout(resolve, 800));
       
-      if (found.status === 'error') {
+      if (found.status === ('error' as any)) {
         return {
           success: false,
-          message: found.status_message || 'Erro de conexão: Chave API de produção informada está inválida ou expirada nos servidores centrais do provedor.'
+          message: (found as any).status_message || 'Erro de conexão: Chave API de produção informada está inválida ou expirada nos servidores centrais do provedor.'
         };
       }
       
@@ -309,18 +309,18 @@ export const paymentGatewaysService = {
     try {
       await setDefaultAdminBillingPaymentGatewaySetDefault(Number(id));
       const list = getStoredGateways();
-      const updated = list.map(g => ({
+      const updated = list.map((g: any) => ({
         ...g,
-        is_default: g.id === id
+        is_default: String(g.id) === String(id)
       }));
       saveStoredGateways(updated);
       return { success: true, message: 'Gateway definido como padrão global com sucesso.' };
     } catch (e) {
       console.warn(`API error setting default gateway ${id}, updating locally:`, e);
       const list = getStoredGateways();
-      const updated = list.map(g => ({
+      const updated = list.map((g: any) => ({
         ...g,
-        is_default: g.id === id
+        is_default: String(g.id) === String(id)
       }));
       saveStoredGateways(updated);
       return { success: true, message: 'Gateway definido como padrão global com sucesso (Local Storage).' };
@@ -334,15 +334,15 @@ export const paymentGatewaysService = {
       const result = (resAny && resAny.data) ? resAny.data : response;
       
       const list = getStoredGateways();
-      const updatedList = list.map(g => g.id === id ? { ...g, status: 'active' as any } : g);
+      const updatedList = list.map((g: any) => String(g.id) === String(id) ? { ...g, status: 'active' as any } : g);
       saveStoredGateways(updatedList);
       return result;
     } catch (e) {
       console.warn('API error activating gateway, updating locally:', e);
       const list = getStoredGateways();
-      const updatedList = list.map(g => g.id === id ? { ...g, status: 'active' as any } : g);
+      const updatedList = list.map((g: any) => String(g.id) === String(id) ? { ...g, status: 'active' as any } : g);
       saveStoredGateways(updatedList);
-      const found = updatedList.find(g => g.id === id);
+      const found = updatedList.find((g: any) => String(g.id) === String(id));
       if (!found) throw new Error('Gateway não localizado.');
       return found;
     }
@@ -355,15 +355,15 @@ export const paymentGatewaysService = {
       const result = (resAny && resAny.data) ? resAny.data : response;
       
       const list = getStoredGateways();
-      const updatedList = list.map(g => g.id === id ? { ...g, status: 'inactive' as any } : g);
+      const updatedList = list.map((g: any) => String(g.id) === String(id) ? { ...g, status: 'inactive' as any } : g);
       saveStoredGateways(updatedList);
       return result;
     } catch (e) {
       console.warn('API error deactivating gateway, updating locally:', e);
       const list = getStoredGateways();
-      const updatedList = list.map(g => g.id === id ? { ...g, status: 'inactive' as any } : g);
+      const updatedList = list.map((g: any) => String(g.id) === String(id) ? { ...g, status: 'inactive' as any } : g);
       saveStoredGateways(updatedList);
-      const found = updatedList.find(g => g.id === id);
+      const found = updatedList.find((g: any) => String(g.id) === String(id));
       if (!found) throw new Error('Gateway não localizado.');
       return found;
     }

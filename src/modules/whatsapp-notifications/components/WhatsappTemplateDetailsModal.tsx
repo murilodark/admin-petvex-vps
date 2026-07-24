@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, MessageSquare, Info, Code, FileText, Layers } from 'lucide-react';
-import { WhatsAppTemplate } from '../../../core/http/generated/models';
+import { WhatsAppTemplate } from '../types/whatsapp-notification.types';
 import { Button } from '../../../shared/components/ui/Button';
 import { Badge } from '../../../shared/components/ui/Badge';
 

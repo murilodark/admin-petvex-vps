@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Receipt, ShieldAlert, RefreshCw } from 'lucide-react';
-import { Invoice } from '../../../core/http/generated/models';
+import { Invoice, ListarInvoicesParams } from '../types/billing-admin.types';
 import { billingAdminService } from '../services/billing-admin.service';
-import { ListarInvoicesParams } from '../types/billing-admin.types';
 import { InvoiceFilters } from '../components/InvoiceFilters';
 import { InvoiceTable } from '../components/InvoiceTable';
 import { InvoiceDetailsModal } from '../components/InvoiceDetailsModal';

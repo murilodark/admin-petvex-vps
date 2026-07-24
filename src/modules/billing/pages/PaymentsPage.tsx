@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DollarSign, ShieldAlert, RefreshCw, CheckCircle } from 'lucide-react';
-import { Payment } from '../../../core/http/generated/models';
+import { Payment, ListarPaymentsParams } from '../types/billing-admin.types';
 import { billingAdminService } from '../services/billing-admin.service';
-import { ListarPaymentsParams } from '../types/billing-admin.types';
 import { PaymentFilters } from '../components/PaymentFilters';
 import { PaymentTable } from '../components/PaymentTable';
 import { PaymentDetailsModal } from '../components/PaymentDetailsModal';

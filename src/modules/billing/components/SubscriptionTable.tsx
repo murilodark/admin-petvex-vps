@@ -1,6 +1,6 @@
 import React from 'react';
 import { Eye, ShieldAlert, ZapOff, CheckCircle2, AlertTriangle } from 'lucide-react';
-import { Subscription } from '../../../core/http/generated/models';
+import { Subscription } from '../types/billing-admin.types';
 import { Badge } from '../../../shared/components/ui/Badge';
 
 interface SubscriptionTableProps {
