@@ -5,6 +5,7 @@
  * Filtered OpenAPI specification for Admin Billing Invoices.
  * OpenAPI spec version: 0.0.1
  */
+import type { AdminSubscriptionCoupon } from './adminSubscriptionCoupon.ts';
 import type { AdminTenantResource } from './adminTenantResource.ts';
 import type { PlanResource } from './planResource.ts';
 
@@ -41,6 +42,7 @@ export interface AdminSubscription {
   created_at: string | null;
   /** @nullable */
   updated_at: string | null;
+  coupon: AdminSubscriptionCoupon;
   tenant_id: string;
   payment_gateway_id: string;
   billing_customer_id: string;

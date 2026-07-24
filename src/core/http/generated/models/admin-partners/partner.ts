@@ -10,6 +10,7 @@ import type { PartnerCoupon } from './partnerCoupon.ts';
 export interface Partner {
   id: number;
   name: string;
+  slug: string;
   /** @nullable */
   company_name: string | null;
   /** @nullable */

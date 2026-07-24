@@ -26,6 +26,7 @@ import type {
 
 import type {
   ActivateAdminPlanActivate200,
+  AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog200,
   AuthenticationExceptionResponse,
   AuthorizationExceptionResponse,
   CreateAdminPlan200,
@@ -190,6 +191,99 @@ const {mutation: mutationOptions, request: requestOptions} = options ?
       > => {
       return useMutation(getCreateAdminPlanMutationOptions(options), queryClient);
     }
+
+/**
+ * @summary Get plan capability catalog
+ */
+export const AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog = (
+
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+
+
+      return customInstance<AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog200>(
+      {url: `/v1/admin/plans/capability-catalog`, method: 'GET', signal
+    },
+      options);
+    }
+
+
+
+
+export const getAppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalogQueryKey = () => {
+    return [
+    `/v1/admin/plans/capability-catalog`
+    ] as const;
+    }
+
+
+export const getAppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalogQueryOptions = <TData = Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError = AuthenticationExceptionResponse | AuthorizationExceptionResponse>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getAppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalogQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>> = ({ signal }) => AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog(requestOptions, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalogQueryResult = NonNullable<Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>>
+export type AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalogQueryError = AuthenticationExceptionResponse | AuthorizationExceptionResponse
+
+
+export function useAppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog<TData = Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError = AuthenticationExceptionResponse | AuthorizationExceptionResponse>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>,
+          TError,
+          Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useAppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog<TData = Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError = AuthenticationExceptionResponse | AuthorizationExceptionResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>,
+          TError,
+          Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useAppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog<TData = Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError = AuthenticationExceptionResponse | AuthorizationExceptionResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get plan capability catalog
+ */
+
+export function useAppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog<TData = Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError = AuthenticationExceptionResponse | AuthorizationExceptionResponse>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof AppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalog>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getAppHttpControllersApiV1AdminPlansPlanCapabilityCatalogControllerAdminPlanCapabilityCatalogQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
 
 export const getAdminPlan = (
     id: string | number,

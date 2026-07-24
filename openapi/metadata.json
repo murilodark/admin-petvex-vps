@@ -110,6 +110,7 @@
       "specification": "openapi/domains/admin-plans.json",
       "paths": [
         "/v1/admin/plans",
+        "/v1/admin/plans/capability-catalog",
         "/v1/admin/plans/{id}",
         "/v1/admin/plans/{id}/activate",
         "/v1/admin/plans/{id}/deactivate"

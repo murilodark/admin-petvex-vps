@@ -8,6 +8,7 @@
 
 export * from './adminInvoice.ts';
 export * from './adminSubscription.ts';
+export * from './adminSubscriptionCoupon.ts';
 export * from './adminTenantResource.ts';
 export * from './adminTenantResourceStatus.ts';
 export * from './authenticationExceptionResponse.ts';

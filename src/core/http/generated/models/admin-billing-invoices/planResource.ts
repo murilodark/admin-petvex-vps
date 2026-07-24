@@ -25,26 +25,7 @@ export interface PlanResource {
   badge: string | null;
   /** @nullable */
   color: string | null;
-  /** @nullable */
-  max_users: number | null;
-  /** @nullable */
-  max_clients: number | null;
-  /** @nullable */
-  max_pets: number | null;
-  /** @nullable */
-  max_appointments: number | null;
-  /** @nullable */
-  max_products: number | null;
-  /** @nullable */
-  max_services: number | null;
-  /** @nullable */
-  max_stock_items: number | null;
-  /** @nullable */
-  max_documents: number | null;
-  /** @nullable */
-  max_attachments: number | null;
-  /** @nullable */
-  max_storage_mb: number | null;
+  limits: unknown[];
   features: unknown[];
   is_active: boolean;
   /** @nullable */

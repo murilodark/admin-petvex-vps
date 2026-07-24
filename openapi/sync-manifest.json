@@ -7,19 +7,19 @@
       "generatedAt": "2026-07-13T22:34:18.079Z"
     },
     "admin-billing-invoices": {
-      "hash": "e5733662d2ff3b713665fabb1e8f2ceecb405e6f3dd0687656d3fda0f1504f5e",
+      "hash": "c029c1b2c27cb61a9e83e0e59256d899d7b59d989966cc7f25c6364496b1b232",
       "specification": "openapi/domains/admin-billing-invoices.json",
-      "generatedAt": "2026-07-13T22:34:18.081Z"
+      "generatedAt": "2026-07-23T22:14:57.205Z"
     },
     "admin-billing-payments": {
-      "hash": "0831c31b0488dac3317ad1d07310545ca8e20e14a7fc6b27bc12c944a0c3267d",
+      "hash": "3dd6c9fd22874a08023da0642be8ad1a115533a7336c237f9909146cbc1ebc78",
       "specification": "openapi/domains/admin-billing-payments.json",
-      "generatedAt": "2026-07-13T22:34:18.082Z"
+      "generatedAt": "2026-07-23T22:14:57.207Z"
     },
     "admin-billing-subscriptions": {
-      "hash": "3a0a5accb22385eceb77bb98c9d88288a76558666d63bdf60bc3a0d94abf97f0",
+      "hash": "229f41dc85d6a9f17fa4e546448cf002771d078bac3728738b0202982ce6f505",
       "specification": "openapi/domains/admin-billing-subscriptions.json",
-      "generatedAt": "2026-07-13T22:34:18.083Z"
+      "generatedAt": "2026-07-23T22:14:57.209Z"
     },
     "admin-notification-dispatches": {
       "hash": "78bd4d41776b9cbe0d7a88913133e3f4363d508938c8abd8861b3dcece2291cf",
@@ -37,9 +37,9 @@
       "generatedAt": "2026-07-13T22:34:18.087Z"
     },
     "admin-partners": {
-      "hash": "998cf847f39c1cbc44cf2c385f00fe961b22091fdb9f97cad8503a951b460e33",
+      "hash": "615ac5b3ae18d0c2ba215e357356ef01ae527e274d6d47e92878b6dc12cd91fb",
       "specification": "openapi/domains/admin-partners.json",
-      "generatedAt": "2026-07-13T22:34:18.088Z"
+      "generatedAt": "2026-07-23T22:14:57.214Z"
     },
     "admin-payment-gateways": {
       "hash": "96d8991cfecf17312e46536c11e0ccf7ae914c555442914336e2a12ea2a8e18e",
@@ -47,9 +47,9 @@
       "generatedAt": "2026-07-13T22:34:18.089Z"
     },
     "admin-plans": {
-      "hash": "fc1d2d8ce8df6c5caa85cccf1351facb492cfb76866e4b50831da84d41d1c651",
+      "hash": "a8bcc5dd4e93d26940e928d6389f7c3ba69b1e944a56a6b6802b7a4c73347595",
       "specification": "openapi/domains/admin-plans.json",
-      "generatedAt": "2026-07-13T22:34:18.091Z"
+      "generatedAt": "2026-07-23T22:14:57.215Z"
     },
     "admin-tenant-users": {
       "hash": "671835d8d904814885b8b30b344ba099cbd97c31c46dc7e3100718155445d6dd",

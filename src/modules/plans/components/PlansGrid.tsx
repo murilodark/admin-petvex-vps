@@ -1,16 +1,17 @@
 import React from 'react';
-import { Plan } from '../types/plans.types';
+import { Plan, CapabilityCatalogData } from '../types/plans.types';
 import { PlanPreviewCard } from './PlanPreviewCard';
 import { ChevronLeft, ChevronRight, CreditCard } from 'lucide-react';
 
 interface PlansGridProps {
   plans: Plan[];
+  catalog?: CapabilityCatalogData;
   loading: boolean;
   viewMode: 'grid' | 'table';
   onEdit: (plan: Plan) => void;
   onToggleStatus: (plan: Plan) => void;
   onDelete: (plan: Plan) => void;
-  
+
   // Pagination
   page: number;
   lastPage: number;
@@ -21,6 +22,7 @@ interface PlansGridProps {
 
 export const PlansGrid: React.FC<PlansGridProps> = ({
   plans,
+  catalog,
   loading,
   viewMode,
   onEdit,
@@ -32,7 +34,6 @@ export const PlansGrid: React.FC<PlansGridProps> = ({
   perPage,
   onPageChange,
 }) => {
-
   const formatCurrency = (val: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -40,21 +41,22 @@ export const PlansGrid: React.FC<PlansGridProps> = ({
     }).format(val);
   };
 
-  const formatLimit = (val: number | null | undefined) => {
-    if (val === null || val === undefined || val === 0) {
+  const formatLimitVal = (val: unknown, unit?: string) => {
+    if (val === null || val === undefined) {
       return 'Ilim.';
     }
-    return val.toString();
-  };
-
-  const formatStorage = (val: number | null | undefined) => {
-    if (val === null || val === undefined || val === 0) {
-      return 'Ilim.';
+    const num = Number(val);
+    if (isNaN(num)) return 'Ilim.';
+    if (num === 0) {
+      return 'Bloq.';
     }
-    if (val >= 1024) {
-      return `${(val / 1024).toFixed(1).replace('.0', '')} GB`;
+    if (unit && unit.toLowerCase() === 'mb') {
+      if (num >= 1024) {
+        return `${(num / 1024).toFixed(1).replace('.0', '')} GB`;
+      }
+      return `${num} MB`;
     }
-    return `${val} MB`;
+    return num.toString();
   };
 
   if (loading) {
@@ -93,6 +95,8 @@ export const PlansGrid: React.FC<PlansGridProps> = ({
     );
   }
 
+  const limitDefs = catalog?.limits || [];
+
   return (
     <div className="space-y-6" id="plans-grid-and-pagination">
       {viewMode === 'grid' ? (
@@ -102,6 +106,7 @@ export const PlansGrid: React.FC<PlansGridProps> = ({
             <PlanPreviewCard
               key={plan.id}
               plan={plan}
+              catalog={catalog}
               onEdit={onEdit}
               onToggleStatus={onToggleStatus}
               onDelete={onDelete}
@@ -109,7 +114,7 @@ export const PlansGrid: React.FC<PlansGridProps> = ({
           ))}
         </div>
       ) : (
-        /* Classic Highly-Formatted Table Admin layout */
+        /* Table View */
         <div className="bg-white border border-slate-200 rounded-[4px] shadow-xs overflow-hidden" id="plans-table-layout-wrapper">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[950px] border-collapse text-left" id="plans-admin-table">
@@ -118,7 +123,6 @@ export const PlansGrid: React.FC<PlansGridProps> = ({
                   <th className="py-4 px-6 border-r border-slate-100 last:border-r-0">Plano / Identificação</th>
                   <th className="py-4 px-6 border-r border-slate-100 items-center last:border-r-0">Preço Regular (Mensal / Anual)</th>
                   <th className="py-4 px-6 border-r border-slate-100 last:border-r-0">Limites Operacionais</th>
-                  <th className="py-4 px-6 border-r border-slate-100 last:border-r-0">Espaço Disco</th>
                   <th className="py-4 px-5 border-r border-slate-100 last:border-r-0">Status</th>
                   <th className="py-4 px-6 text-right">Controles</th>
                 </tr>
@@ -170,15 +174,20 @@ export const PlansGrid: React.FC<PlansGridProps> = ({
 
                     <td className="py-4.5 px-6">
                       <div className="grid grid-cols-2 gap-x-4 gap-y-1 font-mono text-[10px] text-slate-500">
-                        <span><strong>Pets:</strong> {formatLimit(plan.max_pets)}</span>
-                        <span><strong>Users:</strong> {formatLimit(plan.max_users)}</span>
-                        <span><strong>Cli:</strong> {formatLimit(plan.max_clients)}</span>
-                        <span><strong>Cons:</strong> {formatLimit(plan.max_appointments)}</span>
+                        {limitDefs.length > 0 ? (
+                          limitDefs.slice(0, 4).map((def) => (
+                            <span key={def.key}>
+                              <strong>{def.name}:</strong> {formatLimitVal(plan.limits?.[def.key], def.unit)}
+                            </span>
+                          ))
+                        ) : (
+                          Object.entries(plan.limits || {}).slice(0, 4).map(([k, v]) => (
+                            <span key={k}>
+                              <strong>{k}:</strong> {formatLimitVal(v)}
+                            </span>
+                          ))
+                        )}
                       </div>
-                    </td>
-
-                    <td className="py-4.5 px-6 font-mono font-bold text-slate-800">
-                      {formatStorage(plan.max_storage_mb)}
                     </td>
 
                     <td className="py-4.5 px-5">

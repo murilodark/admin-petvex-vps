@@ -1248,6 +1248,9 @@
           "name": {
             "type": "string"
           },
+          "slug": {
+            "type": "string"
+          },
           "company_name": {
             "type": [
               "string",
@@ -1320,6 +1323,7 @@
         "required": [
           "id",
           "name",
+          "slug",
           "company_name",
           "document",
           "email",

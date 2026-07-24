@@ -4,30 +4,57 @@ set -euo pipefail
 AI_REPO="/home/murilo/Documentos/projetos/petvex/adm-petvex-aistudio"
 TARGET_REPO="/home/murilo/Documentos/projetos/petvex/adm-petvex"
 
+# RSYNC_FILTERS=(
+#   # --include='/src/***'
+#   # --include='/index.html'
+#   # --include='/metadata.json'
+#   # --include='/orval.config.ts'
+#   # --include='/package-lock.json'
+#   # --include='/package.json'
+#   # --include='/tsconfig.json'
+#   # --include='/vite.config.ts'
+#   # --exclude='*'
+ 
+#   --exclude='.git'
+#   --exclude='.env'
+#   --exclude='.env.*'
+#   --exclude='dist/***'
+#   --exclude='.codex/***'
+#   --exclude='node_modules/***'
+#   --exclude='.github/***'
+#   --exclude='docker/***'
+#   --exclude='scripts/***'
+#   --exclude='/docker-compose.yml '
+#   --exclude='/docker-compose.homolog.yml'
+#   --exclude='/docker-compose.production.yml'
+#   --include='*'
+# )
+
+
 RSYNC_FILTERS=(
-  # --include='/src/***'
-  # --include='/index.html'
-  # --include='/metadata.json'
-  # --include='/orval.config.ts'
-  # --include='/package-lock.json'
+  # Documentação principal
+  --include='/AGENTS.md'
+
+  # Código fonte
+  --include='/src/***'
+
+  # Infraestrutura OpenAPI / Orval
+  --include='/openapi/***'
+  --include='/openapi-generation.config.ts'
+  --include='/fetch-openapi.ts'
+  --include='/fetch-openapi-slugs.ts'
+  --include='/finalize-openapi-sync.ts'
+  --include='/metadata.json'
+  --include='/orval.config.ts'
+
+  # Configuração do projeto
+  --include='/index.html'
   # --include='/package.json'
+  # --include='/package-lock.json'
   # --include='/tsconfig.json'
   # --include='/vite.config.ts'
-  # --exclude='*'
- 
-  --exclude='.git'
-  --exclude='.env'
-  --exclude='.env.*'
-  --exclude='dist/***'
-  --exclude='.codex/***'
-  --exclude='node_modules/***'
-  --exclude='.github/***'
-  --exclude='docker/***'
-  --exclude='scripts/***'
-  --exclude='/docker-compose.yml '
-  --exclude='/docker-compose.homolog.yml'
-  --exclude='/docker-compose.production.yml'
-  --include='*'
+
+  --exclude='*'
 )
 
 RSYNC_ARGS=(

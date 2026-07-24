@@ -42,56 +42,6 @@ export interface StorePlanRequest {
      * @nullable
      */
   color?: string | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_users?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_clients?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_pets?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_appointments?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_products?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_services?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_stock_items?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_documents?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_attachments?: number | null;
-  /**
-     * @minimum 0
-     * @nullable
-     */
-  max_storage_mb?: number | null;
   is_active?: boolean;
   /** @maxLength 255 */
   name: string;
@@ -101,6 +51,8 @@ export interface StorePlanRequest {
   monthly_price: number;
   /** @minimum 0 */
   yearly_price: number;
+  /** @items.minimum 0 */
+  limits?: (number | null)[];
   /** @minItems 1 */
   features: boolean[];
 }

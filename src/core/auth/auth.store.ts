@@ -1,6 +1,5 @@
 import { useSyncExternalStore } from 'react';
 import { tokenStorage } from '../storage/token.storage';
-import { User } from '../http/generated/models/user';
 import {
   loginAdminAuthLogin,
   logoutAdminAuthLogout,
@@ -11,11 +10,17 @@ import type {
   LoginAdminAuthLogin200,
   LoginAdminAuthLogin200Data,
 } from '../http/generated/models/admin-auth';
-import type { LoginCredentials } from '../http/generated/models/loginCredentials';
+
+export interface AuthUser {
+  id?: number | string;
+  name?: string;
+  email?: string;
+  is_global_admin?: boolean;
+}
 
 export interface AuthState {
   token: string | null;
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -48,7 +53,7 @@ export const authStore = {
     listeners.forEach((listener) => listener(state));
   },
 
-  async login(credentials: LoginCredentials): Promise<LoginAdminAuthLogin200> {
+  async login(credentials: AdminLoginRequest): Promise<LoginAdminAuthLogin200> {
     this._setState({ isLoading: true });
     try {
       const payload: AdminLoginRequest = {
@@ -79,13 +84,13 @@ export const authStore = {
       const meResponse = await meAdminAuthMe();
 
       // meAdminAuthMe is typed to return MeAdminAuthMe200, but at runtime the mutator unwraps meResponse.data.
-      // We safely resolve this to the User type.
-      let currentUser: User | null = null;
+      // We safely resolve this to the AuthUser type.
+      let currentUser: AuthUser | null = null;
       if (meResponse) {
         if (typeof meResponse === 'object' && 'data' in meResponse) {
-          currentUser = (meResponse.data as unknown as User) ?? null;
+          currentUser = (meResponse.data as unknown as AuthUser) ?? null;
         } else {
-          currentUser = (meResponse as unknown as User) ?? null;
+          currentUser = (meResponse as unknown as AuthUser) ?? null;
         }
       }
 
@@ -127,12 +132,12 @@ export const authStore = {
     try {
       const meResponse = await meAdminAuthMe();
 
-      let currentUser: User | null = null;
+      let currentUser: AuthUser | null = null;
       if (meResponse) {
         if (typeof meResponse === 'object' && 'data' in meResponse) {
-          currentUser = (meResponse.data as unknown as User) ?? null;
+          currentUser = (meResponse.data as unknown as AuthUser) ?? null;
         } else {
-          currentUser = (meResponse as unknown as User) ?? null;
+          currentUser = (meResponse as unknown as AuthUser) ?? null;
         }
       }
 
@@ -172,7 +177,7 @@ export function useAuth() {
 
   return {
     ...authState,
-    login: (credentials: LoginCredentials) => authStore.login(credentials),
+    login: (credentials: AdminLoginRequest) => authStore.login(credentials),
     logout: () => authStore.logout(),
     loadMe: () => authStore.loadMe(),
     setToken: (token: string) => authStore.setToken(token),

@@ -190,6 +190,212 @@
         }
       }
     },
+    "/v1/admin/plans/capability-catalog": {
+      "get": {
+        "operationId": "App\\Http\\Controllers\\Api\\V1\\Admin\\Plans\\PlanCapabilityCatalogControllerAdminPlanCapabilityCatalog",
+        "summary": "Get plan capability catalog",
+        "tags": [
+          "Admin Plans"
+        ],
+        "responses": {
+          "200": {
+            "description": "Catálogo de recursos recuperado com sucesso.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "boolean"
+                    },
+                    "code": {
+                      "type": "integer"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "modules": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "display_order": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "key",
+                              "name",
+                              "description",
+                              "category",
+                              "display_order"
+                            ]
+                          }
+                        },
+                        "features": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "module": {
+                                "type": "string"
+                              },
+                              "display_order": {
+                                "type": "integer"
+                              },
+                              "dependencies": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "key",
+                              "name",
+                              "description",
+                              "module",
+                              "display_order",
+                              "dependencies"
+                            ]
+                          }
+                        },
+                        "capabilities": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              },
+                              "display_order": {
+                                "type": "integer"
+                              },
+                              "dependencies": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            },
+                            "required": [
+                              "key",
+                              "name",
+                              "description",
+                              "category",
+                              "display_order",
+                              "dependencies"
+                            ]
+                          }
+                        },
+                        "limits": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "key": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "module_key": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "feature_key": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "unit": {
+                                "type": "string"
+                              },
+                              "display_order": {
+                                "type": "integer"
+                              }
+                            },
+                            "required": [
+                              "key",
+                              "name",
+                              "description",
+                              "module_key",
+                              "feature_key",
+                              "unit",
+                              "display_order"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "modules",
+                        "features",
+                        "capabilities",
+                        "limits"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "message",
+                    "status",
+                    "code",
+                    "data"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "403": {
+            "$ref": "#/components/responses/AuthorizationException"
+          }
+        }
+      }
+    },
     "/v1/admin/plans/{id}": {
       "get": {
         "operationId": "getAdminPlan",
@@ -658,76 +864,6 @@
             ],
             "maxLength": 32
           },
-          "max_users": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_clients": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_pets": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_appointments": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_products": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_services": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_stock_items": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_documents": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_attachments": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_storage_mb": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
           "is_active": {
             "type": "boolean"
           },
@@ -746,6 +882,16 @@
           "yearly_price": {
             "type": "number",
             "minimum": 0
+          },
+          "limits": {
+            "type": "array",
+            "items": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
           },
           "features": {
             "type": "array",
@@ -838,78 +984,18 @@
             ],
             "maxLength": 32
           },
-          "max_users": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_clients": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_pets": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_appointments": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_products": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_services": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_stock_items": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_documents": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_attachments": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
-          "max_storage_mb": {
-            "type": [
-              "integer",
-              "null"
-            ],
-            "minimum": 0
-          },
           "is_active": {
             "type": "boolean"
+          },
+          "limits": {
+            "type": "array",
+            "items": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
           },
           "features": {
             "type": "array",

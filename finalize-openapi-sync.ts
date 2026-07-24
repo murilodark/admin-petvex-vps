@@ -3,6 +3,8 @@ import {
   readFileSync,
   readdirSync,
   writeFileSync,
+  unlinkSync,
+  rmSync,
 } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { join } from 'node:path';
@@ -25,6 +27,56 @@ function stableStringify(value: unknown): string {
   return `{${keys
     .map((key) => `${JSON.stringify(key)}:${stableStringify(record[key])}`)
     .join(',')}}`;
+}
+
+function cleanupLooseModelsAndBuildIndex(): void {
+  const modelsRoot = openApiGenerationConfig.generated.modelsRoot;
+  if (!existsSync(modelsRoot)) return;
+
+  const entries = readdirSync(modelsRoot, { withFileTypes: true });
+  const domainDirs: string[] = [];
+
+  for (const entry of entries) {
+    const fullPath = join(modelsRoot, entry.name);
+    if (entry.isDirectory()) {
+      domainDirs.push(entry.name);
+    } else if (entry.isFile() && entry.name !== 'index.ts' && entry.name.endsWith('.ts')) {
+      unlinkSync(fullPath);
+    }
+  }
+
+  // Remove leftover 'default' directory and loose endpoints.ts in endpoints if exists
+  const defaultEndpointDir = join(openApiGenerationConfig.generated.endpointsRoot, 'default');
+  if (existsSync(defaultEndpointDir)) {
+    rmSync(defaultEndpointDir, { recursive: true, force: true });
+  }
+  const legacyEndpointsFile = join(openApiGenerationConfig.generated.endpointsRoot, 'endpoints.ts');
+  if (existsSync(legacyEndpointsFile)) {
+    unlinkSync(legacyEndpointsFile);
+  }
+
+  // Generate clean models/index.ts exporting domain namespaces to prevent duplicate type collisions (TS2308)
+  domainDirs.sort();
+  const indexLines: string[] = [
+    '/**',
+    ' * Generated domain models index by finalize-openapi-sync',
+    ' * Do not edit manually.',
+    ' */',
+    '',
+  ];
+
+  for (const dirName of domainDirs) {
+    const pascalName = dirName
+      .split('-')
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join('');
+    indexLines.push(`export * as ${pascalName}Models from './${dirName}';`);
+  }
+
+  indexLines.push('');
+
+  writeFileSync(join(modelsRoot, 'index.ts'), indexLines.join('\n'), 'utf8');
+  console.log(`Cleaned loose models and updated models/index.ts with ${domainDirs.length} domain barrels.`);
 }
 
 function checkOutputValid(slug: string): boolean {
@@ -172,6 +224,8 @@ function finalizeSync(): void {
 `,
       'utf8',
     );
+
+    cleanupLooseModelsAndBuildIndex();
 
     console.log('Admin OpenAPI synchronization finalized successfully.');
   } catch (error: unknown) {
